@@ -30,23 +30,25 @@ document
  ;
 misc_seq_opt
  : misc_seq_opt misc
- | /*empty*/
+ | /* empty */
  ;
 misc
  : COMMENT		
  ;
 
 declarations
- : declaration
+ : declarations declaration
  | /*empty*/
  ;
  
 declaration
- : DOCTYPE NAME NAME VALUE CLOSE 
+ : DOCTYPE NAME NAME VALUE CLOSE
+ | STARTSPECIAL attribut CLOSESPECIAL
  ;
 
 element
- : start          
+ : start
+   attribut
    empty_or_content 
  ;
 start
@@ -73,6 +75,11 @@ content
  | content misc        
  | content element      
  | /*empty*/         
+ ;
+
+attribut
+ : attribut NAME EQ VALUE
+ | /* empty */
  ;
 %%
 
