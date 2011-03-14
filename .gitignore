@@ -1,6 +1,7 @@
 *.sable
 
 algo.tex
+*.pdf
 *.toc
 *.out
 
