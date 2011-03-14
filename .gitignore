@@ -1,8 +1,19 @@
 *.sable
 
+# TEX
 algo.tex
 *.pdf
 *.toc
 *.out
 
+# DIA
 *.dia~
+
+# PROGRA
+analyseXML
+analyseDTD
+axd
+*.o
+*.output
+*.yy.c
+*.tab.*
