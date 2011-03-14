@@ -10,7 +10,10 @@ algo.tex
 *.dia~
 
 # PROGRA
-analyseurXML
-analyseurDTD
+analyseXML
+analyseDTD
 axd
 *.o
+*.output
+*.yy.c
+*.tab.*
