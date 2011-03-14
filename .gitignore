@@ -1,1 +1,6 @@
-.sable
+*.sable
+
+algo.tex
+*.toc
+*.out
+
