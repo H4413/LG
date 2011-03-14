@@ -1,8 +1,13 @@
 *.sable
 
+# TEX
 algo.tex
 *.pdf
 *.toc
 *.out
 
+# DIA
 *.dia~
+
+# PROGRA
+*.o
