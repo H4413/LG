@@ -9,6 +9,22 @@ using namespace std;
 
 /* Classes */
 
+class XmlDoc
+{
+	string DocName;
+	
+	XmlDoc *Root;  
+	
+	
+	XmlDoc(){Root= NULL;};
+	
+	
+	XmlDoc *GetRoot(){return Root ;}
+	XmlDoc *SetRoot(){ ;}
+	
+
+};
+
 class XmlAtt
 {
     public:
