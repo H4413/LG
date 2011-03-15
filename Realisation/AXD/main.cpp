@@ -2,7 +2,7 @@
 
 // system includes
 #include <iostream>
-#include <cstdio>
+#include <fstream>
 #include <string>
 
 // projet includes
@@ -37,18 +37,27 @@ int main
     }
 
     // Retrieve the dtd's filename
-    FILE * pXmlFile = fopen( argv[ 1 ], "r" );
+    fstream  xmlFile;
+    char     dtdHeader[ 100 ];
 
-    if( pXmlFile == NULL )
+    cout << argv[ 1 ] << endl;
+
+    xmlFile.open( argv[ 1 ] );
+
+    if( !xmlFile.is_open() )
     {
 	cerr << "fichier spécifié introuvable" << endl;
 	
 	return -1;
     }
 
-    fclose( pXmlFile );
+    xmlFile >> dtdHeader; 
 
-    cout << "hello\n" << endl;
+    cout << dtdHeader << endl;
+
+    xmlFile.close();
+
+    cout << "hello" << endl;
 
     return 0;
 }
