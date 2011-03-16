@@ -6,7 +6,7 @@
 
 /* XmlAtt */
 
-void XmlAtt::Display()
+void XmlAtt::Display() const
 {
     cout << Name << " = \"" << Value << "\""; 
 }
@@ -30,7 +30,7 @@ void XmlElement::AddAttribute( string n, string v )
     attList.push_back( XmlAtt att(n, v) );
 }
 
-void XmlElement::Display();
+void XmlElement::Display() const
 {
     // Indentation
     cout << "\t";
@@ -39,7 +39,12 @@ void XmlElement::Display();
     cout << "<" << name << " ";
 
     // Attributes
-    for_each( attList.begin(), attList.end(), ); 
+    for_each( attList.begin(), attList.end(), Display); 
+
+    // Elements
+
+    // Closing
+    cout << "/>" <<endl;
 }
 
 /* XmlContent */

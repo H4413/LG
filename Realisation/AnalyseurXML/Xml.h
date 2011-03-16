@@ -39,7 +39,7 @@ class XmlAtt
             string Name;
             string Value;
                 
-            void Display();
+            void Display() const;
 
             // [Cons,Des]tructors 
             XmlAtt( string n, String v ) : Name( n ), Value( v );
@@ -48,10 +48,10 @@ class XmlAtt
 class XmlNode
 {
     public:
-                virtual bool isElement();
-                virtual bool isContent();
+                virtual bool isElement() = 0;
+                virtual bool isContent() = 0;
 
-                virtual void Display();
+                virtual void Display() = 0 const;
                 
                 XmlElement * GetParent()   { return parent; };
 
@@ -73,8 +73,10 @@ class XmlElement : XmlNode
                 void AddAttribute( string n, String v );
                 
                 // Override
-                bool isElement() { return true; };
-                bool isContent() { return false; };
+                virtual bool isElement() { return true; };
+                virtual bool isContent() { return false; };
+
+                virtual void Display() const;
 
                 // [Cons,Des]tructors 
                 XmlElement( string n = "noname" ) : name( n );
@@ -93,8 +95,10 @@ class XmlContent : XmlNode
                 string GetContent() { return content; };
                 
                 // Override
-                bool isElement() { return false; };
-                bool isContent() { return true; };
+                virtual bool isElement() { return false; };
+                virtual bool isContent() { return true; };
+
+                virtual void Display() const;
 
                 // [Cons,Des]tructors 
                 XmlContent( string cont ) : content ( cont );
