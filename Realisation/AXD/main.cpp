@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <string>
+#include <cstdlib>
 
 // projet includes
 // nothing yet
@@ -52,6 +53,16 @@ int main
     string dtdName;
 
     retrieveDTDFileName( argv[ 1 ], &dtdName );
+
+    string commandLine( "../AnalyseurXML/analyseXML < " );
+    commandLine += argv[ 1 ];
+
+    system( commandLine.c_str() );
+
+    commandLine = "../AnalyseurDTD/analyseDTD < ";
+    commandLine += dtdName;
+
+    system( commandLine.c_str() );
 
     return 0;
 }
