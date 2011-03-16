@@ -3,7 +3,9 @@
 // system includes
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include <string>
+#include <cstdlib>
 
 // projet includes
 // nothing yet
@@ -15,6 +17,18 @@ using namespace std;
 
 
 // ### LOCAL FUNCTIONS PROTOTYPE ###
+
+int retrieveDTDFileName
+(
+    char   * const xmlFileName,
+    string *       dtdFileName
+);
+
+int escapeCharUntil
+(
+    fstream    & textFile,
+    char const   delim
+);
 
 
 // ### LOCAL FUNCTIONS IMPLEMENTATIONS ###
@@ -36,13 +50,38 @@ int main
 	return -1;
     }
 
-    // Retrieve the dtd's filename
+    string dtdName;
+
+    retrieveDTDFileName( argv[ 1 ], &dtdName );
+
+    string commandLine( "../AnalyseurXML/analyseXML < " );
+    commandLine += argv[ 1 ];
+
+    system( commandLine.c_str() );
+
+    commandLine = "../AnalyseurDTD/analyseDTD < ";
+    commandLine += dtdName;
+
+    system( commandLine.c_str() );
+
+    return 0;
+}
+
+/**************************************************************************/
+/*!
+***************************************************************************/
+int retrieveDTDFileName
+(
+    char   * const xmlFileName,
+    string *       dtdFileName
+)
+{
+    dtdFileName->clear();
+    
     fstream  xmlFile;
-    char     dtdHeader[ 100 ];
+    string   curLine;
 
-    cout << argv[ 1 ] << endl;
-
-    xmlFile.open( argv[ 1 ] );
+    xmlFile.open( xmlFileName, ios::in );
 
     if( !xmlFile.is_open() )
     {
@@ -51,13 +90,43 @@ int main
 	return -1;
     }
 
-    xmlFile >> dtdHeader; 
+    getline( xmlFile, curLine );
 
-    cout << dtdHeader << endl;
+    while( curLine.find( "DOCTYPE" ) == string::npos )
+    {
+	getline( xmlFile, curLine );
+    }
+
+    if( xmlFile.eof() )
+    {
+	return -2;
+    }
+    
+    size_t   firstQuotePos = curLine.find( '"' );
+
+    if( xmlFile.eof() )
+    {
+	return -2;
+    }
+
+    size_t   lastQuotePos  = curLine.rfind( '"' );
+
+    cout << lastQuotePos << endl;
+    dtdFileName->assign( curLine.substr( firstQuotePos + 1, lastQuotePos - firstQuotePos - 1 ) );
+
+    cout << *dtdFileName << endl;
+
+    /*
+     * Procédure
+     * 1. tant que la ligne courante ne commence pas par <!DOCTYPE (ou <!)
+     * aller à la ligne suivante
+     * 2. consommer des caractères jusqu'au 1er " rencontré.
+     * 3. lire jusqu'au " suivant
+     * 4. tadaaa
+     */
 
     xmlFile.close();
 
-    cout << "hello" << endl;
-
     return 0;
 }
+
