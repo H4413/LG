@@ -41,7 +41,7 @@ class DTDSequence : public DTDChildren {
 	public :
     DTDSequence();
     void Display() const;
-    bool Add(DTDChildren * child);
+    bool Add(string child);
 
 	protected :
 
@@ -53,7 +53,7 @@ class DTDChoice : public DTDChildren {
 
     DTDChoice();
     void Display() const;
-    bool Add(DTDChildren* child);
+    bool Add(string child);
 
 	private :
 	
@@ -99,7 +99,7 @@ class DTDElement {
     DTDElement();
     DTDElement(string name) : name(name) {};
     void Display() const;
-    bool Add(DTDContentspec* content);
+    bool Add(string content);
 
 	private:
 	string name;
@@ -113,7 +113,8 @@ class DTDDocument {
     DTDDocument();
     DTDDocument(string name) : name(name) {};
     void Display() const;
-    bool Add(DTDElement element);
+    bool AddElement(string element);
+    bool AddAttribute(string attribute); 
 
 	private :
 

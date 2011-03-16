@@ -14,6 +14,18 @@ void DTDDocument::Display() const
 	cout << endl << "]>";
 }
 
+bool DTDDocument::AddElement(string element) 
+{
+    DTDElement el(element);
+    elements.add(el);
+    return True;
+}
+
+bool DTDDocument::AddAttributes(string attribute)
+{
+    DTDAttributes
+}
+
 /************************** DTDElement ******************************/
 void DTDElement::Display() const
 {
