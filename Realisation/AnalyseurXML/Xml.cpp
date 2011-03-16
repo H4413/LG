@@ -1,10 +1,15 @@
 /* Xml.cpp */
 
 #include "Xml.h"
+#include <algorithm>
+#include <iostream>
 
 /* XmlAtt */
 
-//XmlAtt::
+void XmlAtt::Display()
+{
+    cout << Name << " = \"" << Value << "\""; 
+}
 
 /* XmlNode */
 
@@ -23,6 +28,18 @@ void XmlElement::AddAttribute( XmlAtt att )
 void XmlElement::AddAttribute( string n, string v )
 {
     attList.push_back( XmlAtt att(n, v) );
+}
+
+void XmlElement::Display();
+{
+    // Indentation
+    cout << "\t";
+    
+    // Opening
+    cout << "<" << name << " ";
+
+    // Attributes
+    for_each( attList.begin(), attList.end(), ); 
 }
 
 /* XmlContent */

@@ -9,6 +9,9 @@
 #define XML_H
 
 #include <string>
+#include <vector>
+
+using namespace std;
 
 class XmlNode;
 class XmlElement;
@@ -35,39 +38,38 @@ class XmlAtt
     public:
             string Name;
             string Value;
-
+                
+            void Display();
 
             // [Cons,Des]tructors 
-            XmlAtt( string n, String v ) { Name = n; Value = v };
+            XmlAtt( string n, String v ) : Name( n ), Value( v );
 };
 
 class XmlNode
 {
-    protected:
-                XmlElement * parent;
-
     public:
                 virtual bool isElement();
                 virtual bool isContent();
 
+                virtual void Display();
+                
+                XmlElement * GetParent()   { return parent; };
+
                 // [Cons,Des]tructors 
                 XmlNode( XmlElement * par = null ) : parent( par );
+
+    protected:
+                XmlElement * parent;
 
 };
 
 class XmlElement : XmlNode
 {
-    private:
-                std::
-                std::vector<XmlAtt>   attList;
-                std::vector<XmlNode>  nodeList;
-                
     public:
-                XmlElement      * GetParent()   { return parent; };
                 vector<XmlNode>   GetChildren() { return nodeList; };
 
                 void AddNode( XmlNode node );  
-                void AddAttribute( XmlAtt att ) { attList.push_back( att ); };
+                void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, String v );
                 
                 // Override
@@ -75,16 +77,20 @@ class XmlElement : XmlNode
                 bool isContent() { return false; };
 
                 // [Cons,Des]tructors 
-                XmlElement();
+                XmlElement( string n = "noname" ) : name( n );
                 ~XmlElement();
+    
+    private:
+                string           name;
+                vector<XmlAtt>   attList;
+                vector<XmlNode>  nodeList;
+                
 };
 
 class XmlContent : XmlNode
 {
-    private:
-                string content;
     public:
-                string GetContent()     { return content; };
+                string GetContent() { return content; };
                 
                 // Override
                 bool isElement() { return false; };
@@ -92,6 +98,9 @@ class XmlContent : XmlNode
 
                 // [Cons,Des]tructors 
                 XmlContent( string cont ) : content ( cont );
+    
+    private:
+                string content;
 };
 
 #endif // XML_H
