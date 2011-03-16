@@ -38,12 +38,12 @@ class DTDSequence : public DTDChildren {
 
 	public :
 
-	DTDSequence(string seq) : seq(seq) {};
+	DTDSequence(vector<DTDChildren> seq) : seq(seq) {};
     void Display();
 
 	protected :
 
-	string seq;
+	vector<DTDChildren> seq;
 };
 
 class DTDChoice : public DTDChildren {
@@ -93,11 +93,11 @@ class DTDElement {
 
 	public :
 
-	DTDElement(map<string, DTDContentspec> contentspec) : contentspec(contentspec) {};
+	DTDElement(vector<DTDContentspec> contentspec) : contentspec(contentspec) {};
 
 	private:
 	
-	map<string, DTDContentspec> contentspec;
+	vector<DTDContentspec> contentspec;
 	
 };
 
