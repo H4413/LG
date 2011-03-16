@@ -37,20 +37,20 @@ class XmlNode
 
 };
 
-class XmlElt : XmlNode
+class XmlElement : XmlNode
 {
     private:
                 Vector<XmlAtt>   attList;
                 Vector<XmlNode>  nodeList;
-                XmlElt         * parent;
+                XmlElement         * parent;
                 
     public:
-                XmlElt          * GetParent()   { return parent };
+                XmlElement          * GetParent()   { return parent };
                 Vector<XmlNode>   GetChildren() { return nodeList };
 
-                XmlElt();
-                XmlElt( XmlElt parElt );
-                ~XmlElt();
+                XmlElement();
+                XmlElement( XmlElement parElement );
+                ~XmlElement();
 };
 
 class XmlCont : XmlNode
