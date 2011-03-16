@@ -5,6 +5,14 @@
 #include <string>
 using namespace std;
 
+enum Mark
+{
+	NO_MARK,
+	M_AST,
+	M_PLUS,
+	M_Q
+};
+
 class DTDContentspec {
 
 	public :
@@ -29,19 +37,26 @@ class DTDAttributes {
 
 };
 
-class DTDChildren : public DTDContentspec {
-
+class DTDChildren : public DTDContentspec 
+{
+	protected:
+	Mark mark;
+	
 	public :
-
+	DTDChildren() : mark(NO_MARK) {}
+	virtual void Add(DTDChildren * child) {}
+	virtual void AddMark(Mark a_mark) {mark = a_mark;}
     virtual void Display() const = 0;
+    bool HasAMark() const {return mark != NO_MARK;}
 };
 
 class DTDSequence : public DTDChildren {
 
 	public :
-    DTDSequence();
+    DTDSequence() {}
     void Display() const;
-    bool Add(string child);
+    void Add(DTDChildren* child);
+    void Add(string name);
 
 	protected :
 
@@ -51,19 +66,21 @@ class DTDSequence : public DTDChildren {
 class DTDChoice : public DTDChildren {
 	public :
 
-    DTDChoice();
+    DTDChoice() {}
     void Display() const;
-    bool Add(string child);
+    void Add(DTDChildren* child);
+    void Add(string name);
 
+	vector<DTDChildren*> choice;
 	private :
 	
-	vector<DTDChildren*> choice;
+	
 };
 
-class DTDNom : public DTDChildren {
+class DTDName : public DTDChildren {
 	public :
 
-	DTDNom(string name) : name(name){};
+	DTDName(string name) : name(name){};
     void Display() const;
 
 	private :
@@ -96,10 +113,10 @@ class DTDElement {
 
 	public :
     
-    DTDElement();
+    DTDElement() {}
     DTDElement(string name) : name(name) {};
     void Display() const;
-    bool Add(string content);
+    void Add(DTDContentspec * content);
 
 	private:
 	string name;
@@ -110,15 +127,15 @@ class DTDElement {
 class DTDDocument {
 	public :
     
-    DTDDocument();
+    DTDDocument() {}
     DTDDocument(string name) : name(name) {};
     void Display() const;
-    bool AddElement(string element);
-    bool AddAttribute(string attribute); 
+    void AddElement(DTDElement* element);
+    void AddAttribute(string attribute); 
 
 	private :
 
-	map<string, DTDElement> elements;
-    map<string, DTDAttributes> attributes;
+	vector<DTDElement> elements;
+    vector<DTDAttributes> attributes;
     string name;
 };
