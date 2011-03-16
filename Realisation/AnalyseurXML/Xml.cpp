@@ -64,7 +64,7 @@ void XmlElement::Display() const
     for ( eltIt = eltIt.begin(); eltIt != eltIt.end(); ++eltIt )
         eltIt->Display();
 	
-=======
+
 
     // Elements
 
