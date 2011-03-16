@@ -1,7 +1,7 @@
 /* Xml.cpp */
 
 #include "Xml.h"
-#include <algorithm>
+
 #include <iostream>
 
 /* XmlAtt */
@@ -55,6 +55,7 @@ void XmlElement::Display() const
 
 /* XmlContent */
 
-//XmlContent::
+void XmlContent::Display()
 {
+    cout << "\"" << content << "\"" << endl;
 }
