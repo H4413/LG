@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-<<<<<<< HEAD
+
 /*DTD*/
 void DTD::Display() const
 {
@@ -17,8 +17,7 @@ void StyleSheet::Display() const
 {
 	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
 }
-=======
->>>>>>> 37201ad429c38cd89f300a5996a26a0f3d4281b5
+
 /* XmlAtt */
 
 void XmlAtt::Display() const
@@ -52,16 +51,12 @@ void XmlElement::Display() const
     
     // Opening
     cout << "<" << name << " ";
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 37201ad429c38cd89f300a5996a26a0f3d4281b5
     // Attributes
     vector<XmlAtt>::const_iterator attIt;
     for ( attIt = attList.begin(); attIt != attList.end(); ++attIt )
         attIt->Display();
-<<<<<<< HEAD
+
 	
     // Elements
 	
@@ -77,7 +72,6 @@ void XmlElement::Display() const
     for ( eltIt = eltIt.begin(); eltIt != eltIt.end(); ++eltIt )
         eltIt->Display();
 
->>>>>>> 37201ad429c38cd89f300a5996a26a0f3d4281b5
     // Closing
     cout << "/>" <<endl;
 }
