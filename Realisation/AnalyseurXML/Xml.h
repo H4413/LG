@@ -38,33 +38,29 @@ class XmlAtt
             string Name;
             string Value;
 
-
             // [Cons,Des]tructors 
-            XmlAtt( string n, String v ) { Name = n; Value = v };
+            XmlAtt( string n, String v ) : Name( n ), Value( v );
 };
 
 class XmlNode
 {
-    protected:
-                XmlElement * parent;
-
     public:
                 virtual bool isElement();
                 virtual bool isContent();
+                
+                XmlElement * GetParent()   { return parent; };
 
                 // [Cons,Des]tructors 
                 XmlNode( XmlElement * par = null ) : parent( par );
+
+    protected:
+                XmlElement * parent;
 
 };
 
 class XmlElement : XmlNode
 {
-    private:
-                vector<XmlAtt>   attList;
-                vector<XmlNode>  nodeList;
-                
     public:
-                XmlElement      * GetParent()   { return parent; };
                 vector<XmlNode>   GetChildren() { return nodeList; };
 
                 void AddNode( XmlNode node );  
@@ -78,14 +74,17 @@ class XmlElement : XmlNode
                 // [Cons,Des]tructors 
                 XmlElement();
                 ~XmlElement();
+    
+    private:
+                vector<XmlAtt>   attList;
+                vector<XmlNode>  nodeList;
+                
 };
 
 class XmlContent : XmlNode
 {
-    private:
-                string content;
     public:
-                string GetContent()     { return content; };
+                string GetContent() { return content; };
                 
                 // Override
                 bool isElement() { return false; };
@@ -93,6 +92,9 @@ class XmlContent : XmlNode
 
                 // [Cons,Des]tructors 
                 XmlContent( string cont ) : content ( cont );
+    
+    private:
+                string content;
 };
 
 #endif // XML_H
