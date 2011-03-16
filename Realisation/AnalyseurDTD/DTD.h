@@ -9,22 +9,23 @@ class DTDContentspec {
 
 	public :
 
-	virtual void Display() = 0;
+	virtual void Display() const = 0;
 
 };
 
 class DTDAttributes {
-    
-    public:
-
-    DTDAttributes(string name, type = "CDATA", att = "#IMPLIED") : name(name),type(type),att(att){};
-    void Display();
     
     private :
 
     string name;
     string type;
     string att;
+      
+    public:
+
+    DTDAttributes(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
+    void Display() const;
+  
 
 };
 
@@ -32,38 +33,38 @@ class DTDChildren : public DTDContentspec {
 
 	public :
 
-    virtual void Display() = 0;
+    virtual void Display() const = 0;
 };
 
 class DTDSequence : public DTDChildren {
 
 	public :
     DTDSequence();
-    void Display();
-    bool Add(DTDChildren child);
+    void Display() const;
+    bool Add(string child);
 
 	protected :
 
-	vector<DTDChildren> seq;
+	vector<DTDChildren*> seq;
 };
 
 class DTDChoice : public DTDChildren {
 	public :
 
     DTDChoice();
-    void Display();
-    bool Add(DTDChildren child);
+    void Display() const;
+    bool Add(string child);
 
 	private :
 	
-	vector<DTDChildren> choice;
+	vector<DTDChildren*> choice;
 };
 
 class DTDNom : public DTDChildren {
 	public :
 
 	DTDNom(string name) : name(name){};
-    void Display();
+    void Display() const;
 
 	private :
 
@@ -75,7 +76,7 @@ class DTDEmpty : public DTDContentspec {
 	public :
 	
 	DTDEmpty();
-	void Display();
+	void Display() const;
 
 };
 
@@ -84,7 +85,7 @@ class DTDAny : public DTDContentspec {
 	public :
 
 	DTDAny(string content): content(content){};
-	void Display();
+	void Display() const;
 
 	private : 
 
@@ -97,12 +98,12 @@ class DTDElement {
     
     DTDElement();
     DTDElement(string name) : name(name) {};
-    void Display();
-    bool Add(DTDContentspec content);
+    void Display() const;
+    bool Add(string content);
 
 	private:
 	string name;
-	vector<DTDContentspec> contentspec;
+	vector<DTDContentspec*> contentspec;
 	
 };
 
@@ -111,8 +112,9 @@ class DTDDocument {
     
     DTDDocument();
     DTDDocument(string name) : name(name) {};
-    void Display();
-    bool Add(DTDElement element);
+    void Display() const;
+    bool AddElement(string element);
+    bool AddAttribute(string attribute); 
 
 	private :
 
