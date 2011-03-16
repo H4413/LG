@@ -9,6 +9,7 @@
 #define XML_H
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ class XmlAtt
     public:
             string Name;
             string Value;
+                
+            void Display();
 
             // [Cons,Des]tructors 
             XmlAtt( string n, String v ) : Name( n ), Value( v );
@@ -47,6 +50,8 @@ class XmlNode
     public:
                 virtual bool isElement();
                 virtual bool isContent();
+
+                virtual void Display();
                 
                 XmlElement * GetParent()   { return parent; };
 
@@ -72,10 +77,11 @@ class XmlElement : XmlNode
                 bool isContent() { return false; };
 
                 // [Cons,Des]tructors 
-                XmlElement();
+                XmlElement( string n = "noname" ) : name( n );
                 ~XmlElement();
     
     private:
+                string           name;
                 vector<XmlAtt>   attList;
                 vector<XmlNode>  nodeList;
                 
