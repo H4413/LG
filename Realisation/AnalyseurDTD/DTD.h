@@ -109,4 +109,5 @@ class DTDDocument {
 	private :
 
 	map<string, DTDElement> elements;
+    map<string, DTDAttributes> attributes;
 };
