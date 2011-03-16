@@ -19,20 +19,6 @@ class XmlContent;
 
 /* Classes */
 
-class XmlDoc
-{
-	string DocName;
-	
-	XmlDoc *Root;  
-	
-	
-	XmlDoc(){Root= NULL;};
-	
-	
-	XmlDoc *GetRoot(){ return Root; }
-
-};
-
 class XmlAtt
 {
     public:
@@ -42,7 +28,7 @@ class XmlAtt
             void Display() const;
 
             // [Cons,Des]tructors 
-            XmlAtt( string n, String v ) : Name( n ), Value( v );
+            XmlAtt( string n, string v );
 };
 
 class XmlNode
@@ -51,26 +37,27 @@ class XmlNode
                 virtual bool isElement() = 0;
                 virtual bool isContent() = 0;
 
-                virtual void Display() = 0 const;
+                virtual void Display() const = 0;
                 
                 XmlElement * GetParent()   { return parent; };
 
                 // [Cons,Des]tructors 
-                XmlNode( XmlElement * par = null ) : parent( par );
+                XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
                 XmlElement * parent;
 
 };
 
-class XmlElement : XmlNode
+class XmlElement : public XmlNode
 {
     public:
                 vector<XmlNode>   GetChildren() { return nodeList; };
 
-                void AddNode( XmlNode node );  
+                void AddElement( XmlElement elt  );  
+                void AddContent( XmlContent cont );  
                 void AddAttribute( XmlAtt att );
-                void AddAttribute( string n, String v );
+                void AddAttribute( string n, string v );
                 
                 // Override
                 virtual bool isElement() { return true; };
@@ -79,7 +66,7 @@ class XmlElement : XmlNode
                 virtual void Display() const;
 
                 // [Cons,Des]tructors 
-                XmlElement( string n = "noname" ) : name( n );
+                XmlElement( string n = "noname" ) : name( n ) {};
                 ~XmlElement();
     
     private:
@@ -89,7 +76,7 @@ class XmlElement : XmlNode
                 
 };
 
-class XmlContent : XmlNode
+class XmlContent : public XmlNode
 {
     public:
                 string GetContent() { return content; };
@@ -101,7 +88,7 @@ class XmlContent : XmlNode
                 virtual void Display() const;
 
                 // [Cons,Des]tructors 
-                XmlContent( string cont ) : content ( cont );
+                XmlContent( string cont ) : content ( cont ) {};
     
     private:
                 string content;

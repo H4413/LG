@@ -11,13 +11,20 @@ void XmlAtt::Display() const
     cout << Name << " = \"" << Value << "\" "; 
 }
 
+XmlAtt::XmlAtt( string n, string v ) : Name( n ), Value( v ){}
+
 /* XmlNode */
 
 /* XmlElement */
 
-void XmlElement::AddNode( XmlNode node )
+void XmlElement::AddElement( XmlElement elt )
 {
-    nodeList.push_back( node );
+    nodeList.push_back( elt );
+}
+
+void XmlElement::AddContent( XmlContent cont )
+{
+    nodeList.push_back( cont );
 }
 
 void XmlElement::AddAttribute( XmlAtt att )
@@ -27,7 +34,7 @@ void XmlElement::AddAttribute( XmlAtt att )
 
 void XmlElement::AddAttribute( string n, string v )
 {
-    attList.push_back( XmlAtt att(n, v) );
+    attList.push_back( XmlAtt(n, v) );
 }
 
 void XmlElement::Display() const
@@ -55,7 +62,7 @@ void XmlElement::Display() const
 
 /* XmlContent */
 
-void XmlContent::Display()
+virtual void XmlContent::Display()
 {
     cout << "\"" << content << "\"" << endl;
 }
