@@ -8,7 +8,7 @@
 
 void XmlAtt::Display() const
 {
-    cout << Name << " = \"" << Value << "\""; 
+    cout << Name << " = \"" << Value << "\" "; 
 }
 
 /* XmlNode */
@@ -39,9 +39,15 @@ void XmlElement::Display() const
     cout << "<" << name << " ";
 
     // Attributes
-    for_each( attList.begin(), attList.end(), Display); 
+    vector<XmlAtt>::const_iterator attIt;
+    for ( attIt = attList.begin(); attIt != attList.end(); ++attIt )
+        attIt->Display();
 
     // Elements
+
+    vector<XmlElement>::const_iterator eltIt;
+    for ( eltIt = eltIt.begin(); eltIt != eltIt.end(); ++eltIt )
+        eltIt->Display();
 
     // Closing
     cout << "/>" <<endl;
