@@ -3,8 +3,8 @@
 #ifndef XML_H
 #define XML_H
 
-#include <vector>
-
+#include <Vector>
+#include <String>
 using namespace std;
 
 /* Classes */
@@ -19,7 +19,7 @@ class XmlDoc
 	XmlDoc(){Root= NULL;};
 	
 	
-	XmlDoc *GetRoot(){return Root ;}
+	XmlDoc *GetRoot(){ return Root; }
 	XmlDoc *SetRoot(){ ;}
 	
 
@@ -30,10 +30,24 @@ class XmlAtt
     public:
             String Name;
             String Value;
+
+
+            // [Cons,Des]tructors 
+            XmlAtt( String n, String v ) { Name = n; Value = v };
 };
 
 class XmlNode
 {
+    protected:
+                XmlElement * parent;
+
+    public:
+                virtual bool isElement();
+                virtual bool isContent();
+
+                // [Cons,Des]tructors 
+                XmlNode() { parent = null };
+                XmlNode( XmlElement * parElement ) { parent = parElement; };
 
 };
 
@@ -42,26 +56,34 @@ class XmlElement : XmlNode
     private:
                 Vector<XmlAtt>   attList;
                 Vector<XmlNode>  nodeList;
-                XmlElement         * parent;
                 
     public:
-                XmlElement          * GetParent()   { return parent };
-                Vector<XmlNode>   GetChildren() { return nodeList };
+                XmlElement      * GetParent()   { return parent; };
+                Vector<XmlNode>   GetChildren() { return nodeList; };
 
+                // Override
+                bool isElement() { return true; };
+                bool isContent() { return false; };
+
+                // [Cons,Des]tructors 
                 XmlElement();
-                XmlElement( XmlElement parElement );
                 ~XmlElement();
 };
 
-class XmlCont : XmlNode
+class XmlContent : XmlNode
 {
     private:
                 String content;
     public:
-                String GetContent()     { return content };
+                String GetContent()     { return content; };
                 
-                XmlNode();
-                XmlNode( String cont )  { content = cont };
+                // Override
+                bool isElement() { return false; };
+                bool isContent() { return true; };
+
+                // [Cons,Des]tructors 
+                XmlContent();
+                XmlContent( String cont )  { content = cont; };
 };
 
 #endif // XML_H
