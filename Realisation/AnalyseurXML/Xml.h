@@ -10,6 +10,8 @@
 
 #include <string>
 
+using namespace std;
+
 class XmlNode;
 class XmlElement;
 class XmlContent;
@@ -58,16 +60,15 @@ class XmlNode
 class XmlElement : XmlNode
 {
     private:
-                std::
-                std::vector<XmlAtt>   attList;
-                std::vector<XmlNode>  nodeList;
+                vector<XmlAtt>   attList;
+                vector<XmlNode>  nodeList;
                 
     public:
                 XmlElement      * GetParent()   { return parent; };
                 vector<XmlNode>   GetChildren() { return nodeList; };
 
                 void AddNode( XmlNode node );  
-                void AddAttribute( XmlAtt att ) { attList.push_back( att ); };
+                void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, String v );
                 
                 // Override
