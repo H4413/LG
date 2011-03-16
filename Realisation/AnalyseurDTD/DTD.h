@@ -17,8 +17,9 @@ class DTDAttributes {
     
     public:
 
-    DTDAttributs(string name, type = "CDATA", att = "#IMPLIED") : name(name),type(type),att(att){};
-
+    DTDAttributes(string name, type = "CDATA", att = "#IMPLIED") : name(name),type(type),att(att){};
+    void Display();
+    
     private :
 
     string name;
@@ -31,15 +32,15 @@ class DTDChildren : public DTDContentspec {
 
 	public :
 
-    void Display();
+    virtual void Display() = 0;
 };
 
 class DTDSequence : public DTDChildren {
 
 	public :
-
-	DTDSequence(vector<DTDChildren> seq) : seq(seq) {};
+    DTDSequence();
     void Display();
+    bool Add(DTDChildren child);
 
 	protected :
 
@@ -49,8 +50,9 @@ class DTDSequence : public DTDChildren {
 class DTDChoice : public DTDChildren {
 	public :
 
-	DTDChoice(vector<DTDChildren> choice) choice(choice){};
+    DTDChoice();
     void Display();
+    bool Add(DTDChildren child);
 
 	private :
 	
@@ -92,22 +94,29 @@ class DTDAny : public DTDContentspec {
 class DTDElement {
 
 	public :
-
-	DTDElement(vector<DTDContentspec> contentspec) : contentspec(contentspec) {};
+    
+    DTDElement();
+    DTDElement(string name) : name(name) {};
+    void Display();
+    bool Add(DTDContentspec content);
 
 	private:
-	
+	string name;
 	vector<DTDContentspec> contentspec;
 	
 };
 
 class DTDDocument {
 	public :
-
-	DTDDocument(map<string, DTDElement> & elements) : elements(elements){};
+    
+    DTDDocument();
+    DTDDocument(string name) : name(name) {};
+    void Display();
+    bool Add(DTDElement element);
 
 	private :
 
 	map<string, DTDElement> elements;
     map<string, DTDAttributes> attributes;
+    string name;
 };
