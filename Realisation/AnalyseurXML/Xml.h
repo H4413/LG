@@ -33,8 +33,6 @@ class DTD
 
                 // [Cons,Des]tructors 
                 DTD( string n = "" ) : name( n ) {};
-               
-               // string& name(){return dtdname;}
 };
 
 /****************************************************************************/
@@ -167,17 +165,13 @@ class XmlDoc
 
                 void setDTD( DTD * dtd ) {this->dtd = dtd;}
                 
-                //void AddElement();
-                //void AddStyleSheet();
-                //void AddDTD();
-                
                 bool ValidateDocument(bool verbose) const;  
                 
                 void Display() const;
 
                 // [Cons,Des]tructors 
                 XmlDoc( XmlNode * root = NULL ) {};
-                ~XmlDoc() { delete root; };
+                ~XmlDoc() { delete root; delete DTD; };
         
         private: 
                 XmlNode *  root;
