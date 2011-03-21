@@ -1,15 +1,13 @@
-<!ELEMENT xsl:stylesheet>
-<!ATTLIST xsl:stylesheet 
-  version #PCDATA #IMPLIED
-  xmlns:xsl #PCDATA #IMPLIED>
+<!ELEMENT value-of EMPTY>
+<!ATTLIST value-of select CDATA #REQUIRED>
 
-<!ELEMENT xsl:template (#PCDATA | xsl:value-of)* >
-<!ATTLIST xsl:template match; #IMPLIED>
+<!ELEMENT template (text | value-of)* >
+<!ATTLIST template match CDATA #IMPLIED>
 
-<!ELEMENT xsl:apply-templates EMPTY>
+<!ELEMENT text (#PCDATA) >
 
-<!ELEMENT xsl:value-of EMPTY>
-<!ATTLIST xsl:value-of select #PCDATA #REQUIRED>
+<!ELEMENT stylesheet (template)* >
+<!ATTLIST stylesheet version CDATA #REQUIRED>
+<!ATTLIST stylesheet xmlns CDATA #REQUIRED>
 
-
-
+<!ELEMENT apply-templates EMPTY>
