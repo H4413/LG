@@ -4,6 +4,11 @@
 
 #include <iostream>
 
+void XmlDoc::Display() const
+{
+	root->Display();
+}
+
 /* XmlAtt */
 
 void XmlAtt::Display() const
