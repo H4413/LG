@@ -17,7 +17,8 @@ enum ChildType
 {
     DTDSEQUENCE,
     DTDCHOICE,
-    DTDNAME
+    DTDNAME,
+    DTDCHILD
 };
 
 class DTDContentspec {
@@ -48,10 +49,13 @@ class DTDAttList
 {
 	protected:
 		vector<DTDAttribute> attList;
+		string name;
 		
 	public:
 		DTDAttList () {}
 		void Add (DTDAttribute * att);
+		void SetName (string a_name) { name = a_name; }
+		void Display() const;
 		
 };
 
@@ -66,7 +70,7 @@ class DTDChildren : public DTDContentspec
 	virtual void AddMark(Mark a_mark) {mark = a_mark;}
     virtual void Display() const = 0;
     bool HasAMark() const {return mark != NO_MARK;}
-    virtual ChildType getType() = 0;
+    virtual ChildType getType() {return DTDCHILD;}
 
 };
 
@@ -154,11 +158,11 @@ class DTDDocument {
     DTDDocument(string name) : name(name) {};
     void Display() const;
     void AddElement(DTDElement* element);
-    void AddAttribute(string attribute); 
+    void AddAttList(DTDAttList* attList); 
 
 	private :
 
 	vector<DTDElement> elements;
-    DTDAttList attributes;
+    vector<DTDAttList> attList;
     string name;
 };
