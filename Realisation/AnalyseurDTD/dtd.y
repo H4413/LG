@@ -83,7 +83,7 @@ sequence : OPENPAR liste_seq CLOSEPAR 		{$$ = new DTDSequence();
    ;
 
 choice : OPENPAR liste_choice CLOSEPAR 		{$$ = new DTDChoice(); 
-											 $$-> AddList($2);}
+											 $$->AddList($2);}
    ;
 
 liste_seq : liste_seq COMMA choice_plus 	{$$ = $1;
