@@ -50,7 +50,8 @@ void XmlElement::Display() const
 
     // Elements and content
     vector <XmlNode>::const_iterator nIt;
-    for ( nIt =  )	
+    for ( nIt = nodeList.begin(); nIt != nodeList.end(); ++nIt )
+        nIt->Display();	
 
     // Closing
     cout << "/>" <<endl;
