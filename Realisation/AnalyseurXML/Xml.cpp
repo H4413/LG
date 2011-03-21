@@ -68,6 +68,11 @@ void XmlElement::Display(int ident) const
     cout << "</" << name << ">" << endl;
 }
 
+bool XmlElement::ValidateNode(bool verbose) const
+{
+    return true;
+}
+
 XmlElement::~XmlElement()
 {
     for (int i( 0 ); i < nodeList.size(); i++ )
@@ -81,12 +86,13 @@ XmlElement::~XmlElement()
 
 void XmlContent::Display(int ident) const
 {
-	char delims[] = "\n\t";
-	char *result = NULL;
-	result = strtok( content, delims );
-	while( result != NULL ) 
-	{		
-		cout << result;
-		result = strtok( NULL, delims );
-	}
+    char delims[] = "\n\t";
+    char *result = NULL;
+    result = strtok( content, delims );
+
+    while( result != NULL ) 
+    {		
+        cout << result;
+        result = strtok( NULL, delims );
+    }
 }
