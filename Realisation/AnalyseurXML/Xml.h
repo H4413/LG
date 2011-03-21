@@ -26,14 +26,14 @@ class XmlContent;
 class DTD
 {
     public:
-		//string filename;
-		string dtdname;
-		
-		
-		void Display() const;
+                //string filename;
+                string dtdname;
+                
+                
+                void Display() const;
 
-		DTD(string name);
-		string& name(){return dtdname;}
+                DTD(string name);
+                string& name(){return dtdname;}
 }
 
 /****************************************************************************/
@@ -43,10 +43,10 @@ class StyleSheet
 {
     public:
 
-		string filename;
-		string type;
-		
-		void dis() const;
+                string filename;
+                string type;
+                
+                void dis() const;
 }
 
 };
@@ -56,31 +56,32 @@ class StyleSheet
 *****************************************************************************/
 class XmlDoc
 {
-	
-	public: 
-		//string DocName;
-		
-		XmlElement&  XmlElement;
-		DTD& dtd;
-		
-		//XmlDoc doc = new XmlDoc();
-		
-		
-		XmlDoc(){root= NULL;};
-		
-		XmlElement& root(){return XmlElement;}
-		void setroot(XmlElement& root);
-		
-		DTD& dtd(){return dtd;}
-		void setDTD(DTD& dtd);
-		
-		//void AddElement();
-		//void AddStyleSheet();
-		//void AddDTD();
-		
-		
-		//XmlDoc *Getroot(){ return root; }
-	
+        
+        public: 
+                //string DocName;
+                
+                XmlElement&  XmlElement;
+                DTD& dtd;
+                
+                //XmlDoc doc = new XmlDoc();
+                
+                
+                XmlDoc(){root= NULL;};
+                
+                XmlElement& root(){return XmlElement;}
+                void setroot(XmlElement& root);
+                
+                DTD& dtd(){return dtd;}
+                void setDTD(DTD& dtd);
+                
+                //void AddElement();
+                //void AddStyleSheet();
+                //void AddDTD();
+                
+                
+                //XmlDoc *Getroot(){ return root; }
+                
+                bool ValidateDocument(bool verbose) const;        
 };
 
 /****************************************************************************/
@@ -89,13 +90,13 @@ class XmlDoc
 class XmlAtt
 {
     public:
-		string Name;
-		string Value;
-		
-		void Display() const;
-		
-		// [Cons,Des]tructors 
-		XmlAtt( string n, String v ) : Name( n ), Value( v );
+                string Name;
+                string Value;
+                
+                void Display() const;
+                
+                // [Cons,Des]tructors 
+                XmlAtt( string n, string v ) : Name( n ), Value( v ){};
 };
 
 /****************************************************************************/
@@ -104,18 +105,20 @@ class XmlAtt
 class XmlNode
 {
     public:
-		virtual bool isElement() = 0;
-		virtual bool isContent() = 0;
+                virtual bool isElement() = 0;
+                virtual bool isContent() = 0;
 
-		virtual void Display() const = 0;
+                virtual void Display() const = 0;
 
-		XmlElement * GetParent()   { return parent; };
+                virtual bool ValidateNode(bool verbose) const;
 
-		// [Cons,Des]tructors 
-		XmlNode( XmlElement * par = NULL ) : parent( par ){};
+                XmlElement * GetParent()   { return parent; };
+
+                // [Cons,Des]tructors 
+                XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
-		XmlElement * parent;
+                    XmlElement * parent;
 };
 
 /****************************************************************************/
@@ -124,97 +127,28 @@ class XmlNode
 class XmlElement : XmlNode
 {
     public:
-		vector<XmlNode>   GetChildren() { return nodeList; };
-
-		void AddElement( XmlElement element );  
-		void AddContent( string cont );  
-		void AddAttribute( XmlAtt att );
-		void AddAttribute( string n, String v );
-
-		// Override
-		virtual bool isElement() { return true; };
-		virtual bool isContent() { return false; };
-
-		virtual void Display() const;
-
-		// [Cons,Des]tructors 
-		XmlElement( string n = "noname" ) : name( n );
-		~XmlElement();
-
-    private:
-		string           name;
-		vector<XmlAtt>   attList;
-		vector<XmlNode>  nodeList;
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
-class XmlContent : XmlNode
-{
-    public:
-		string GetContent() { return content; };
-
-		// Override
-		virtual bool isElement() { return false; };
-		virtual bool isContent() { return true; };
-
-		virtual void Display() const;
-
-		// [Cons,Des]tructors 
-		XmlContent( string cont ) : content ( cont );
-
-    private:
-		string content;
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
-
-class XmlNode
-{
-    public:
-                virtual bool isElement() = 0;
-                virtual bool isContent() = 0;
-
-                virtual void Display() const = 0;
-                
-                XmlElement * GetParent()   { return parent; };
-
-                // [Cons,Des]tructors 
-                XmlNode( XmlElement * par = NULL ) : parent( par ){};
-
-    protected:
-                XmlElement * parent;
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
-class XmlElement : public XmlNode
-{
-    public:
                 vector<XmlNode>   GetChildren() { return nodeList; };
 
-                void AddElement( XmlElement elt  );  
+                void AddElement( XmlElement elt );  
                 void AddContent( XmlContent cont );  
                 void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, string v );
-                
+
                 // Override
                 virtual bool isElement() { return true; };
                 virtual bool isContent() { return false; };
 
                 virtual void Display() const;
 
+                virtual bool ValidateNode(bool verbose) const;
+
                 // [Cons,Des]tructors 
                 XmlElement( string n = "noname" ) : name( n ) {};
                 ~XmlElement();
-    
+
     private:
-                string           name;
-                vector<XmlAtt>   attList;
+                    string           name;
+                    vector<XmlAtt>   attList;
                 vector<XmlNode>  nodeList;
 };
 
@@ -231,6 +165,8 @@ class XmlContent : public XmlNode
                 virtual bool isContent() { return true; };
 
                 virtual void Display() const;
+
+                virtual bool ValidateNode(bool verbose) const;
 
                 // [Cons,Des]tructors 
                 XmlContent( string cont ) : content ( cont ) {};

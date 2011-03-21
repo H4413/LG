@@ -49,10 +49,13 @@ class DTDAttList
 {
 	protected:
 		vector<DTDAttribute> attList;
+		string name;
 		
 	public:
 		DTDAttList () {}
 		void Add (DTDAttribute * att);
+		void SetName (string a_name) { name = a_name; }
+		void Display() const;
 		
 };
 
@@ -155,11 +158,11 @@ class DTDDocument {
     DTDDocument(string name) : name(name) {};
     void Display() const;
     void AddElement(DTDElement* element);
-    void AddAttribute(string attribute); 
+    void AddAttList(DTDAttList* attList); 
 
 	private :
 
 	vector<DTDElement> elements;
-    DTDAttList attributes;
+    vector<DTDAttList> attList;
     string name;
 };

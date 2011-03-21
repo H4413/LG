@@ -25,8 +25,14 @@ void DTDDocument::Display() const
 {
 	cout << "<!DOCTYPE " << name << " [ " << endl << endl;
 	vector <DTDElement>::const_iterator it;
+	
 	for (it = elements.begin(); it != elements.end(); ++it)
 		it->Display();
+		
+	vector <DTDAttList>::const_iterator it_att;
+	for (it_att = attList.begin(); it_att != attList.end(); ++it_att)
+		it_att->Display();
+		
 	cout << endl << "]>" << endl;
 }
 
@@ -35,9 +41,9 @@ void DTDDocument::AddElement(DTDElement* element)
     elements.push_back(*element);
 }
 
-void DTDDocument::AddAttribute(string attribute)
+void DTDDocument::AddAttList(DTDAttList* atts)
 {
-	//attributes.push_back(*(new DTDAttributes(attribute)));
+	attList.push_back(*atts);
 }
 
 /************************** DTDElement ******************************/
@@ -146,4 +152,19 @@ ChildType DTDName::getType()
 void DTDAttList::Add(DTDAttribute * att)
 {
 	attList.push_back(*att);
+}
+
+void DTDAttList::Display() const
+{
+	cout << "<!ATTLIST " << name << endl;
+	vector <DTDAttribute>::const_iterator it;
+	for (it = attList.begin(); it != attList.end(); ++it)
+		it->Display();
+	cout << ">" << endl;
+}
+
+/************************** DTDAttribute ******************************/
+void DTDAttribute::Display() const
+{
+	cout << "\t" << name << " " << type << " " << att << endl;
 }
