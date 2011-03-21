@@ -6,7 +6,7 @@
 
 
 /*DTD*/
-/*
+
 DTD::DTD(string name):dtdname(name){}
 
 void DTD::Display() const
@@ -14,7 +14,7 @@ void DTD::Display() const
 	cout << "<!DOCTYPE " << dtdname << " SYSTEM " << filename << ">" << endl;
 }
 
-//StyleSheet
+/*StyleSheet*/
 
 void StyleSheet::Display() const
 {
@@ -30,7 +30,12 @@ void XmlDoc::setroot(XmlElement& elt)
 void XmlDoc::setDTD(DTD& dtd)
 {
 	dtd=&dtd;
-}*/
+}
+
+bool ValidateDocument(bool verbose) const
+{
+    return true;
+}
 /* XmlAtt */
 
 void XmlAtt::Display() const
