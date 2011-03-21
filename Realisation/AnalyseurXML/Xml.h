@@ -115,7 +115,6 @@ class XmlNode
 		
     protected:
 		XmlElement * parent;
-		
 };
 
 /****************************************************************************/
@@ -144,7 +143,6 @@ class XmlElement : XmlNode
 		string           name;
 		vector<XmlAtt>   attList;
 		vector<XmlNode>  nodeList;
-		
 };
 
 /****************************************************************************/
@@ -186,7 +184,6 @@ class XmlNode
 
     protected:
                 XmlElement * parent;
-
 };
 
 /****************************************************************************/
@@ -216,7 +213,6 @@ class XmlElement : public XmlNode
                 string           name;
                 vector<XmlAtt>   attList;
                 vector<XmlNode>  nodeList;
-                
 };
 
 /****************************************************************************/
