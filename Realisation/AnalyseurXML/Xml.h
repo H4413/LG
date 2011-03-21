@@ -59,39 +59,6 @@ class StyleSheet
 /****************************************************************************/
 /*!
 *****************************************************************************/
-class XmlDoc
-{
-        
-        public:
-                XmlNode * GetRoot(){ return root; };
-                
-                void setRoot( XmlNode * nRoot ) { root = nRoot; };
-                
-                DTD * GetDTD() { return dtd; }
-
-                void setDTD( DTD * dtd ) {this->dtd = dtd;}
-                
-                //void AddElement();
-                //void AddStyleSheet();
-                //void AddDTD();
-                
-                bool ValidateDocument(bool verbose) const;  
-                
-                void Display() const;
-
-                // [Cons,Des]tructors 
-                XmlDoc( XmlNode * root = NULL ) {};
-        
-        private: 
-                XmlNode *  root;
-                DTD * dtd;
-                
-                     
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
 class XmlAtt
 {
     public:
@@ -136,8 +103,11 @@ class XmlElement : public XmlNode
 
                 void AddElement( XmlElement* elt );  
                 void AddContent( XmlContent* cont );  
+                
                 void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, string v );
+                void SetAttList( vector<XmlAtt>* aList )
+                                        { attList = (*aList); };
 
                 // Override
                 virtual bool isElement() { return true; };
@@ -151,10 +121,9 @@ class XmlElement : public XmlNode
                 XmlElement( XmlElement * par, string n = "noname" )
                                     : XmlNode( par ), name( n ) {};
                 ~XmlElement();
-
     private:
-                string           name;
-                vector<XmlAtt>   attList;
+                string            name;
+                vector<XmlAtt>    attList;
                 vector<XmlNode*>  nodeList;
 };
 
@@ -180,6 +149,40 @@ class XmlContent : public XmlNode
     
     private:
                 string content;
+};
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
+class XmlDoc
+{
+        
+        public:
+                XmlNode * GetRoot(){ return root; };
+                
+                void setRoot( XmlNode * nRoot ) { root = nRoot; };
+                
+                DTD * GetDTD() { return dtd; }
+
+                void setDTD( DTD * dtd ) {this->dtd = dtd;}
+                
+                //void AddElement();
+                //void AddStyleSheet();
+                //void AddDTD();
+                
+                bool ValidateDocument(bool verbose) const;  
+                
+                void Display() const;
+
+                // [Cons,Des]tructors 
+                XmlDoc( XmlNode * root = NULL ) {};
+                ~XmlDoc() { delete root; };
+        
+        private: 
+                XmlNode *  root;
+                DTD * dtd;
+                
+                     
 };
 
 #endif // XML_H
