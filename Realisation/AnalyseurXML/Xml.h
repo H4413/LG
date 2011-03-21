@@ -80,7 +80,8 @@ class XmlDoc
 		
 		
 		//XmlDoc *Getroot(){ return root; }
-	
+		
+		bool ValidateDocument(bool verbose) const;	
 };
 
 /****************************************************************************/
