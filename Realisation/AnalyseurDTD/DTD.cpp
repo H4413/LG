@@ -72,7 +72,14 @@ void DTDSequence::Display() const
 
 void DTDSequence::Add(DTDChildren * child)
 {
-	seq.push_back(child);
+	if (child->getType() == DTDSEQUENCE)
+    {
+	    seq.push_back(child);
+    }
+    else
+    {
+        seq.push_back(child);
+    }
 }
 
 void DTDSequence::Add(string name)
@@ -103,7 +110,14 @@ void DTDChoice::Display() const
 
 void DTDChoice::Add(DTDChildren * child)
 {
-	choice.push_back(child);
+    if (child->getType() == DTDCHOICE)
+    {
+	    choice.push_back(child);
+    }
+    else
+    {
+        choice.push_back(child);
+    }
 }
 
 void DTDChoice::Add(string name)

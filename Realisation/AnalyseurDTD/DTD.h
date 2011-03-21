@@ -17,7 +17,8 @@ enum ChildType
 {
     DTDSEQUENCE,
     DTDCHOICE,
-    DTDNAME
+    DTDNAME,
+    DTDCHILD
 };
 
 class DTDContentspec {
@@ -66,7 +67,7 @@ class DTDChildren : public DTDContentspec
 	virtual void AddMark(Mark a_mark) {mark = a_mark;}
     virtual void Display() const = 0;
     bool HasAMark() const {return mark != NO_MARK;}
-    virtual ChildType getType() = 0;
+    virtual ChildType getType() {return DTDCHILD;}
 
 };
 
