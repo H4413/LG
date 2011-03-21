@@ -37,7 +37,7 @@ void DTDDocument::AddElement(DTDElement* element)
 
 void DTDDocument::AddAttribute(string attribute)
 {
-	attributes.push_back(*(new DTDAttributes(attribute)));
+	//attributes.push_back(*(new DTDAttributes(attribute)));
 }
 
 /************************** DTDElement ******************************/
@@ -111,4 +111,10 @@ void DTDName::Display() const
 {
 	cout << name;
 	PRINT_MARK
+}
+
+/************************** DTDAttList ******************************/
+void DTDAttList::Add(DTDAttribute * att)
+{
+	attList.push_back(*att);
 }
