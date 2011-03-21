@@ -2,6 +2,7 @@
 
 /* Project includes */
 #include "Xml.h"
+#include "DTD.h"
 
 /* System includes */
 #include <string.h>
