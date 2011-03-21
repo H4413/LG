@@ -22,10 +22,15 @@ class XmlContent;
 class DTD
 {
 public:
-	string filename;
+	//string filename;
 	string dtdname;
 	
+	
 	void Display() const;
+
+	DTD(string name);
+	string& name(){return dtdname;}
+	
 	
 }
 class StyleSheet
@@ -41,15 +46,31 @@ public:
 
 class XmlDoc
 {
-	string DocName;
 	
-	XmlDoc *Root;  
+public:
+	
+	//string DocName;
+	
+	XmlElement&  XmlElement;
+	DTD& dtd;
+	
+	//XmlDoc doc = new XmlDoc();
 	
 	
-	XmlDoc(){Root= NULL;};
+	XmlDoc(){root= NULL;};
+	
+	XmlElement& root(){return XmlElement;}
+	void setroot(XmlElement& root);
+	
+	DTD& dtd(){return dtd;}
+	void setDTD(DTD& dtd);
+	
+	//void AddElement();
+	//void AddStyleSheet();
+	//void AddDTD();
 	
 	
-	XmlDoc *GetRoot(){ return Root; }
+	//XmlDoc *Getroot(){ return root; }
 	
 };
 
@@ -63,7 +84,7 @@ public:
 	
 	// [Cons,Des]tructors 
 	XmlAtt( string n, String v ) : Name( n ), Value( v );
-	};
+};
 	
 	class XmlNode
 	{
