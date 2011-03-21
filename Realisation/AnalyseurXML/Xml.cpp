@@ -21,7 +21,7 @@ void StyleSheet::Display() const
 	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
 }
 
-/*XmlDoc*/
+XmlDoc
 void XmlDoc::setroot(XmlElement& elt)
 {
 	XmlElement=elt;
@@ -37,9 +37,6 @@ void XmlAtt::Display() const
 {
     cout << Name << " = \"" << Value << "\" "; 
 }
-
-
-XmlAtt::XmlAtt( string n, string v ) : Name( n ), Value( v ){}
 
 /* XmlNode */
 
@@ -62,7 +59,7 @@ void XmlElement::AddAttribute( XmlAtt att )
 
 void XmlElement::AddAttribute( string n, string v )
 {
-    attList.push_back( XmlAtt(n, v) );
+    attList.push_back( XmlAtt( n, v ));
 }
 
 void XmlElement::Display() const
