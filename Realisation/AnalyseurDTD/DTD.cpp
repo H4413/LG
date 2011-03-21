@@ -86,6 +86,11 @@ void DTDSequence::Add(string name)
 	seq.push_back(new DTDName(name));
 }
 
+ChildType DTDSequence::getType()
+{
+    return DTDSEQUENCE;
+}
+
 /************************** DTDChoice ******************************/
 void DTDChoice::Display() const
 {
@@ -112,11 +117,21 @@ void DTDChoice::Add(string name)
 	choice.push_back(new DTDName(name));
 }
 
+ChildType DTDChoice::getType()
+{
+    return DTDCHOICE;
+}
+
 /************************** DTDName ******************************/
 void DTDName::Display() const
 {
 	cout << name;
 	PRINT_MARK
+}
+
+ChildType DTDName::getType()
+{
+    return DTDNAME;
 }
 
 /************************** DTDAttList ******************************/
