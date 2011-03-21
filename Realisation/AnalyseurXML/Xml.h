@@ -2,6 +2,7 @@
 
 /*TODO
  *   Display
+ *   Validation du document XML
  */
 
 
@@ -18,74 +19,86 @@ class XmlElement;
 class XmlContent;
 
 /* Classes */
-/*
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class DTD
 {
-public:
-//string filename;
-string dtdname;
+    public:
+		//string filename;
+		string dtdname;
+		
+		
+		void Display() const;
 
-
-void Display() const;
-
-DTD(string name);
-string& name(){return dtdname;}
-
-
+		DTD(string name);
+		string& name(){return dtdname;}
 }
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class StyleSheet
-
 {
-public:
-string filename;
-string type;
+    public:
 
-void dis() const;
+		string filename;
+		string type;
+		
+		void dis() const;
 }
 
-
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlDoc
 {
-
-public:
-
-//string DocName;
-
-XmlElement&  XmlElement;
-DTD& dtd;
-
-//XmlDoc doc = new XmlDoc();
-
-
-XmlDoc(){root= NULL;};
-
-XmlElement& root(){return XmlElement;}
-void setroot(XmlElement& root);
-
-DTD& dtd(){return dtd;}
-void setDTD(DTD& dtd);
-
-//void AddElement();
-//void AddStyleSheet();
-//void AddDTD();
-
-
-//XmlDoc *Getroot(){ return root; }
-
+	
+	public: 
+		//string DocName;
+		
+		XmlElement&  XmlElement;
+		DTD& dtd;
+		
+		//XmlDoc doc = new XmlDoc();
+		
+		
+		XmlDoc(){root= NULL;};
+		
+		XmlElement& root(){return XmlElement;}
+		void setroot(XmlElement& root);
+		
+		DTD& dtd(){return dtd;}
+		void setDTD(DTD& dtd);
+		
+		//void AddElement();
+		//void AddStyleSheet();
+		//void AddDTD();
+		
+		
+		//XmlDoc *Getroot(){ return root; }
+	
 };
-*/
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlAtt
 {
     public:
-            string Name;
-            string Value;
-
-    void Display() const;
-
-    // [Cons,Des]tructors 
-    XmlAtt( string n, string v ) : Name( n ), Value( v ){};
+		string Name;
+		string Value;
+		
+		void Display() const;
+		
+		// [Cons,Des]tructors 
+		XmlAtt( string n, String v ) : Name( n ), Value( v );
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlNode
 {
     public:
@@ -103,6 +116,9 @@ class XmlNode
             XmlElement * parent;
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlElement : XmlNode
 {
     public:
@@ -148,6 +164,10 @@ private:
 string content;
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
+
 class XmlNode
 {
     public:
@@ -166,6 +186,9 @@ class XmlNode
 
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlElement : public XmlNode
 {
     public:
@@ -193,6 +216,9 @@ class XmlElement : public XmlNode
                 
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlContent : public XmlNode
 {
     public:
@@ -210,6 +236,5 @@ class XmlContent : public XmlNode
     private:
                 string content;
 };
-
 
 #endif // XML_H
