@@ -1,0 +1,15 @@
+<!ELEMENT xsl:stylesheet>
+<!ATTLIST xsl:stylesheet 
+  version #PCDATA #IMPLIED
+  xmlns:xsl #PCDATA #IMPLIED>
+
+<!ELEMENT xsl:template (#PCDATA | xsl:value-of)* >
+<!ATTLIST xsl:template match; #IMPLIED>
+
+<!ELEMENT xsl:apply-templates EMPTY>
+
+<!ELEMENT xsl:value-of EMPTY>
+<!ATTLIST xsl:value-of select #PCDATA #REQUIRED>
+
+
+
