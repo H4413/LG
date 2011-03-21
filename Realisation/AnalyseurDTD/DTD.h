@@ -13,6 +13,13 @@ enum Mark
 	M_Q
 };
 
+enum ChildType
+{
+    SEQUENCE,
+    CHOICE,
+    NAME
+};
+
 class DTDContentspec {
 
 	public :
@@ -59,6 +66,8 @@ class DTDChildren : public DTDContentspec
 	virtual void AddMark(Mark a_mark) {mark = a_mark;}
     virtual void Display() const = 0;
     bool HasAMark() const {return mark != NO_MARK;}
+    virtual ChildType getType() = 0;
+
 };
 
 class DTDSequence : public DTDChildren {
@@ -68,6 +77,7 @@ class DTDSequence : public DTDChildren {
     void Display() const;
     void Add(DTDChildren* child);
     void Add(string name);
+    ChildType getType();
 
 	protected :
 
@@ -81,10 +91,11 @@ class DTDChoice : public DTDChildren {
     void Display() const;
     void Add(DTDChildren* child);
     void Add(string name);
+    ChildType getType();
+
+    protected:
 
 	vector<DTDChildren*> choice;
-	private :
-	
 	
 };
 
@@ -93,6 +104,7 @@ class DTDName : public DTDChildren {
 
 	DTDName(string name) : name(name){};
     void Display() const;
+    ChildType getType();
 
 	private :
 
