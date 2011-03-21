@@ -77,24 +77,13 @@ void XmlElement::Display() const
     cout << "<" << name << " ";
 
     // Attributes
-    vector<XmlAtt>::const_iterator attIt;
+    vector  <XmlAtt>::const_iterator attIt;
     for ( attIt = attList.begin(); attIt != attList.end(); ++attIt )
         attIt->Display();
 
-	
-    // Elements
-	
-    vector<XmlElement>::const_iterator eltIt;
-    for ( eltIt = eltIt.begin(); eltIt != eltIt.end(); ++eltIt )
-        eltIt->Display();
-	
-
-
-    // Elements
-
-    vector<XmlElement>::const_iterator eltIt;
-    for ( eltIt = eltIt.begin(); eltIt != eltIt.end(); ++eltIt )
-        eltIt->Display();
+    // Elements and content
+    vector <XmlNode>::const_iterator nIt;
+    for ( nIt =  )	
 
     // Closing
     cout << "/>" <<endl;
