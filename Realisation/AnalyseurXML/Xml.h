@@ -108,7 +108,7 @@ class XmlElement : public XmlNode
                 void SetAttList( vector<XmlAtt*>* aList )
                                         { attList = (*aList); }
 		void SetChildren( vector<XmlNode*>* children)
-					{nodeList = *children; }
+					{ nodeList = *children; }
 
                 // Override
                 virtual bool isElement() { return true; }
