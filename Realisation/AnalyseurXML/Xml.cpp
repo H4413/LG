@@ -6,7 +6,7 @@
 
 
 /*DTD*/
-
+/*
 DTD::DTD(string name):dtdname(name){}
 
 void DTD::Display() const
@@ -14,13 +14,14 @@ void DTD::Display() const
 	cout << "<!DOCTYPE " << dtdname << " SYSTEM " << filename << ">" << endl;
 }
 
-/*StyleSheet*/
+//StyleSheet
 
 void StyleSheet::Display() const
 {
 	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
 }
 
+XmlDoc
 void XmlDoc::setroot(XmlElement& elt)
 {
 	XmlElement=elt;
@@ -29,16 +30,13 @@ void XmlDoc::setroot(XmlElement& elt)
 void XmlDoc::setDTD(DTD& dtd)
 {
 	dtd=&dtd;
-}
+}*/
 /* XmlAtt */
 
 void XmlAtt::Display() const
 {
     cout << Name << " = \"" << Value << "\" "; 
 }
-
-
-XmlAtt::XmlAtt( string n, string v ) : Name( n ), Value( v ){}
 
 /* XmlNode */
 
@@ -61,7 +59,7 @@ void XmlElement::AddAttribute( XmlAtt att )
 
 void XmlElement::AddAttribute( string n, string v )
 {
-    attList.push_back( XmlAtt(n, v) );
+    attList.push_back( XmlAtt( n, v ));
 }
 
 void XmlElement::Display() const
