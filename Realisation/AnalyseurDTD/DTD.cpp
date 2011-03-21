@@ -82,7 +82,7 @@ void DTDSequence::Add(string name)
 
 ChildType DTDSequence::getType()
 {
-    return SEQUENCE;
+    return DTDSEQUENCE;
 }
 
 /************************** DTDChoice ******************************/
@@ -113,7 +113,7 @@ void DTDChoice::Add(string name)
 
 ChildType DTDChoice::getType()
 {
-    return CHOICE;
+    return DTDCHOICE;
 }
 
 /************************** DTDName ******************************/
@@ -125,7 +125,7 @@ void DTDName::Display() const
 
 ChildType DTDName::getType()
 {
-    return NAME;
+    return DTDNAME;
 }
 
 /************************** DTDAttList ******************************/
