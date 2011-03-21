@@ -101,6 +101,7 @@ class XmlElement : public XmlNode
     public:
                 vector<XmlNode*>   GetChildren() { return nodeList; };
 
+                void AddNode( XmlNode* n );  
                 void AddElement( XmlElement* elt );  
                 void AddContent( XmlContent* cont );  
                 

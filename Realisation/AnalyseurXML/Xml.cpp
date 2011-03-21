@@ -6,11 +6,6 @@
 
 /* XmlAtt */
 
-int main()
-{
-    return 0;
-}
-
 void XmlAtt::Display() const
 {
     cout << Name << " = \"" << Value << "\" "; 
