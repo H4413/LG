@@ -15,9 +15,9 @@ enum Mark
 
 enum ChildType
 {
-    SEQUENCE,
-    CHOICE,
-    NAME
+    DTDSEQUENCE,
+    DTDCHOICE,
+    DTDNAME
 };
 
 class DTDContentspec {
