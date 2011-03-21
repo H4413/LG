@@ -28,7 +28,7 @@ class DTDContentspec {
 
 };
 
-class DTDAttributes {
+class DTDAttribute {
     
     private :
 
@@ -38,10 +38,21 @@ class DTDAttributes {
       
     public:
 
-    DTDAttributes(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
+    DTDAttribute(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
     void Display() const;
   
 
+};
+
+class DTDAttList 
+{
+	protected:
+		vector<DTDAttribute> attList;
+		
+	public:
+		DTDAttList () {}
+		void Add (DTDAttribute * att);
+		
 };
 
 class DTDChildren : public DTDContentspec 
@@ -148,6 +159,6 @@ class DTDDocument {
 	private :
 
 	vector<DTDElement> elements;
-    vector<DTDAttributes> attributes;
+    DTDAttList attributes;
     string name;
 };

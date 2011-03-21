@@ -37,7 +37,7 @@ void DTDDocument::AddElement(DTDElement* element)
 
 void DTDDocument::AddAttribute(string attribute)
 {
-	attributes.push_back(*(new DTDAttributes(attribute)));
+	//attributes.push_back(*(new DTDAttributes(attribute)));
 }
 
 /************************** DTDElement ******************************/
@@ -128,3 +128,8 @@ ChildType DTDName::getType()
     return NAME;
 }
 
+/************************** DTDAttList ******************************/
+void DTDAttList::Add(DTDAttribute * att)
+{
+	attList.push_back(*att);
+}
