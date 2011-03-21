@@ -59,37 +59,6 @@ class StyleSheet
 /****************************************************************************/
 /*!
 *****************************************************************************/
-class XmlDoc
-{
-        public:
-                XmlElement * GetRoot(){ return root; };
-                
-                void setRoot( XmlElement * nRoot ) { root = nRoot; };
-                
-                DTD GetDTD() { return dtd; }
-
-                void SetDTD( DTD ndtd ){ dtd = ndtd };
-                
-                //void AddElement();
-                //void AddStyleSheet();
-                //void AddDTD();
-                
-                bool ValidateDocument(bool verbose) const;  
-
-                // [Cons,Des]tructors 
-                XmlDoc( XmlElement * root = NULL ) {};
-                ~XmlDoc() {delete root;};
-        
-        private: 
-                XmlElement *  root;
-                DTD dtd;
-                
-                     
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
 class XmlAtt
 {
     public:
@@ -180,6 +149,37 @@ class XmlContent : public XmlNode
     
     private:
                 string content;
+};
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
+class XmlDoc
+{
+        public:
+                XmlElement * GetRoot(){ return root; };
+                
+                void setRoot( XmlElement * nRoot ) { root = nRoot; };
+                
+                DTD GetDTD() { return dtd; };
+
+                void SetDTD( DTD ndtd ){ dtd = ndtd; };
+                
+                //void AddElement();
+                //void AddStyleSheet();
+                //void AddDTD();
+                
+                bool ValidateDocument(bool verbose) const;  
+
+                // [Cons,Des]tructors 
+                XmlDoc( XmlElement * root = NULL ) {};
+                ~XmlDoc() { delete root; };
+        
+        private: 
+                XmlElement *  root;
+                DTD dtd;
+                
+                     
 };
 
 #endif // XML_H
