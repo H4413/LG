@@ -4,39 +4,6 @@
 
 #include <iostream>
 
-
-/*DTD*/
-
-DTD::DTD(string name):dtdname(name){}
-
-void DTD::Display() const
-{
-	cout << "<!DOCTYPE " << dtdname << " SYSTEM " << filename << ">" << endl;
-}
-
-/*StyleSheet*/
-
-void StyleSheet::Display() const
-{
-	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
-}
-
-XmlDoc
-void XmlDoc::setroot(XmlElement& elt)
-{
-	XmlElement=elt;
-}
-
-void XmlDoc::setDTD(DTD& dtd)
-{
-	dtd=&dtd;
-}
-
-bool ValidateDocument(bool verbose) const
-{
-    return true;
-}
-
 /* XmlAtt */
 
 void XmlAtt::Display() const
