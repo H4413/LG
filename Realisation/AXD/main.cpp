@@ -24,12 +24,6 @@ int retrieveDTDFileName
     string *       dtdFileName
 );
 
-int escapeCharUntil
-(
-    fstream    & textFile,
-    char const   delim
-);
-
 
 // ### LOCAL FUNCTIONS IMPLEMENTATIONS ###
 
@@ -50,10 +44,12 @@ int main
 	return -1;
     }
 
+    // Retrieve dtd filename
     string dtdName;
 
     retrieveDTDFileName( argv[ 1 ], &dtdName );
 
+    // Calling the other tools
     string commandLine( "../AnalyseurXML/analyseXML < " );
     commandLine += argv[ 1 ];
 
