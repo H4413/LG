@@ -96,7 +96,7 @@ class XmlAtt
 		void Display() const;
 		
 		// [Cons,Des]tructors 
-		XmlAtt( string n, String v ) : Name( n ), Value( v );
+		XmlAtt( string n, string v ) : Name( n ), Value( v ){};
 };
 
 /****************************************************************************/
@@ -118,7 +118,7 @@ class XmlNode
 		XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
-		XmlElement * parent;
+    		XmlElement * parent;
 };
 
 /****************************************************************************/
@@ -129,10 +129,10 @@ class XmlElement : XmlNode
     public:
 		vector<XmlNode>   GetChildren() { return nodeList; };
 
-		void AddElement( XmlElement element );  
-		void AddContent( string cont );  
-		void AddAttribute( XmlAtt att );
-		void AddAttribute( string n, String v );
+            void AddElement( XmlElement elt );  
+            void AddContent( XmlContent cont );  
+            void AddAttribute( XmlAtt att );
+            void AddAttribute( string n, string v );
 
 		// Override
 		virtual bool isElement() { return true; };
@@ -142,14 +142,14 @@ class XmlElement : XmlNode
 
 		virtual bool ValidateNode(bool verbose) const;
 
-		// [Cons,Des]tructors 
-		XmlElement( string n = "noname" ) : name( n );
-		~XmlElement();
+            // [Cons,Des]tructors 
+            XmlElement( string n = "noname" ) : name( n ) {};
+            ~XmlElement();
 
     private:
-		string           name;
-		vector<XmlAtt>   attList;
-		vector<XmlNode>  nodeList;
+    		string           name;
+	    	vector<XmlAtt>   attList;
+		    vector<XmlNode>  nodeList;
 };
 
 /****************************************************************************/
