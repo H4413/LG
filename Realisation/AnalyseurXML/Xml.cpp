@@ -62,6 +62,15 @@ void XmlElement::Display() const
     cout << "/>" <<endl;
 }
 
+XmlElement::~XmlElement()
+{
+    for (int i( 0 ); i < nodeList.size(); i++ )
+        delete nodeList[i];
+
+    nodeList.clear();
+}
+
+
 /* XmlContent */
 
 void XmlContent::Display() const

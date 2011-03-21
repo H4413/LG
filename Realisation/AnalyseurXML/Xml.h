@@ -61,7 +61,6 @@ class StyleSheet
 *****************************************************************************/
 class XmlDoc
 {
-        
         public:
                 XmlElement * GetRoot(){ return root; };
                 
@@ -69,7 +68,7 @@ class XmlDoc
                 
                 DTD GetDTD() { return dtd; }
 
-                void setDTD( DTD dtd );
+                void SetDTD( DTD ndtd ){ dtd = ndtd };
                 
                 //void AddElement();
                 //void AddStyleSheet();
@@ -134,8 +133,11 @@ class XmlElement : public XmlNode
 
                 void AddElement( XmlElement* elt );  
                 void AddContent( XmlContent* cont );  
+                
                 void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, string v );
+                void SetAttList( vector<XmlAtt>* aList )
+                                        { attList = (*aList); };
 
                 // Override
                 virtual bool isElement() { return true; };
@@ -149,10 +151,9 @@ class XmlElement : public XmlNode
                 XmlElement( XmlElement * par, string n = "noname" )
                                     : XmlNode( par ), name( n ) {};
                 ~XmlElement();
-
     private:
-                string           name;
-                vector<XmlAtt>   attList;
+                string            name;
+                vector<XmlAtt>    attList;
                 vector<XmlNode*>  nodeList;
 };
 
