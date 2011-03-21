@@ -21,6 +21,8 @@ DTDDocument * document = new DTDDocument();
 	DTDElement * elem;
 	DTDContentspec * spec;
 	DTDChildren * child;
+	DTDAttList * attList;
+	DTDAttribute * att;
 	DTDName * name;
 	char *s; 
 	Mark mrk;
@@ -31,6 +33,8 @@ DTDDocument * document = new DTDDocument();
 %type <child> children mixed choice choice_plus liste_choice sequence liste_seq
 %type <spec> contentspec
 %type <mrk> plus
+%type <att> attribut
+%type <attList> att_definition
 
 %token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA
 %token <s> NAME TOKENTYPE DECLARATION STRING
@@ -39,7 +43,8 @@ DTDDocument * document = new DTDDocument();
 main: dtd               
     ;
 
-dtd: dtd ATTLIST NAME att_definition CLOSE 	{document->AddAttribute($3);}
+dtd: dtd ATTLIST NAME att_definition CLOSE 	{$4->SetName($3); 
+											 document->AddAttList($4);}
    | dtd element 							{document->AddElement($2);}
    | /* empty */                     
    ;
@@ -97,12 +102,12 @@ mixed : OPENPAR PCDATA PIPE
    ;
 
 att_definition
-: att_definition attribut
-| /* empty */
+: att_definition attribut				{$$ = $1; $$->Add($2);}
+| /* empty */							{$$ = new DTDAttList();}
 ;
 
 attribut
-: NAME att_type defaut_declaration
+: NAME att_type defaut_declaration		{$$ = new DTDAttribute($1);}
 ;
 
 att_type
