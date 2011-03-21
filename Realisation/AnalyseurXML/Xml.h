@@ -18,7 +18,7 @@ class XmlElement;
 class XmlContent;
 
 /* Classes */
-
+/*
 class DTD
 {
 public:
@@ -73,7 +73,7 @@ public:
 	//XmlDoc *Getroot(){ return root; }
 	
 };
-
+*/
 class XmlAtt
 {
 public:
@@ -83,7 +83,7 @@ public:
 	void Display() const;
 	
 	// [Cons,Des]tructors 
-	XmlAtt( string n, String v ) : Name( n ), Value( v );
+	XmlAtt( string n, string v ) : Name( n ), Value( v ){};
 };
 	
 	class XmlNode
@@ -93,12 +93,12 @@ public:
 		virtual bool isElement() = 0;
 		virtual bool isContent() = 0;
 		
-		virtual void Display() = 0 const;
+		virtual void Display() const = 0;
 		
 		XmlElement * GetParent()   { return parent; };
 		
 		// [Cons,Des]tructors 
-		XmlNode( XmlElement * par = null ) : parent( par );
+		XmlNode( XmlElement * par = NULL ) : parent( par ){};
 		
     protected:
 		XmlElement * parent;
@@ -110,7 +110,8 @@ public:
     public:
 		vector<XmlNode>   GetChildren() { return nodeList; };
 		
-		void AddNode( XmlNode node );  
+		void AddElement( XmlElement element );  
+		void AddContent( string cont );  
 		void AddAttribute( XmlAtt att );
 		void AddAttribute( string n, String v );
 		
@@ -129,7 +130,7 @@ public:
 		vector<XmlAtt>   attList;
 		vector<XmlNode>  nodeList;
 		
-		};
+};
 		
 		class XmlContent : XmlNode
 		{
