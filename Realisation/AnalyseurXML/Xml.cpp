@@ -4,40 +4,12 @@
 
 #include <iostream>
 
-
-/*DTD*/
-
-DTD::DTD(string name):dtdname(name){}
-
-void DTD::Display() const
-{
-	cout << "<!DOCTYPE " << dtdname << " SYSTEM " << filename << ">" << endl;
-}
-
-/*StyleSheet*/
-
-void StyleSheet::Display() const
-{
-	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
-}
-
-XmlDoc
-void XmlDoc::setroot(XmlElement& elt)
-{
-	XmlElement=elt;
-}
-
-void XmlDoc::setDTD(DTD& dtd)
-{
-	dtd=&dtd;
-}
-
-bool ValidateDocument(bool verbose) const
-{
-    return true;
-}
-
 /* XmlAtt */
+
+int main()
+{
+    return 0;
+}
 
 void XmlAtt::Display() const
 {
@@ -48,12 +20,12 @@ void XmlAtt::Display() const
 
 /* XmlElement */
 
-void XmlElement::AddElement( XmlElement elt )
+void XmlElement::AddElement( XmlElement* elt )
 {
     nodeList.push_back( elt );
 }
 
-void XmlElement::AddContent( XmlContent cont )
+void XmlElement::AddContent( XmlContent* cont )
 {
     nodeList.push_back( cont );
 }
@@ -82,8 +54,9 @@ void XmlElement::Display() const
         attIt->Display();
 
     // Elements and content
-    vector <XmlNode>::const_iterator nIt;
-    for ( nIt =  )	
+    vector <XmlNode*>::const_iterator nIt;
+    for ( nIt = nodeList.begin(); nIt != nodeList.end(); ++nIt )
+        (*nIt)->Display();	
 
     // Closing
     cout << "/>" <<endl;
@@ -91,7 +64,7 @@ void XmlElement::Display() const
 
 /* XmlContent */
 
-virtual void XmlContent::Display()
+void XmlContent::Display() const
 {
     cout << "\"" << content << "\"" << endl;
 }

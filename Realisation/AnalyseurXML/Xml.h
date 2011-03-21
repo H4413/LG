@@ -20,71 +20,6 @@ class XmlContent;
 
 /* Classes */
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
-class DTD
-{
-    public:
-                //string filename;
-                string dtdname;
-                
-                
-                void Display() const;
-
-                DTD(string name);
-                string& name(){return dtdname;}
-}
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
-class StyleSheet
-{
-    public:
-
-                string filename;
-                string type;
-                
-                void dis() const;
-}
-
-};
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
-class XmlDoc
-{
-        
-        public: 
-                //string DocName;
-                
-                XmlElement&  XmlElement;
-                DTD& dtd;
-                
-                //XmlDoc doc = new XmlDoc();
-                
-                
-                XmlDoc(){root= NULL;};
-                
-                XmlElement& root(){return XmlElement;}
-                void setroot(XmlElement& root);
-                
-                DTD& dtd(){return dtd;}
-                void setDTD(DTD& dtd);
-                
-                //void AddElement();
-                //void AddStyleSheet();
-                //void AddDTD();
-                
-                
-                //XmlDoc *Getroot(){ return root; }
-                
-                bool ValidateDocument(bool verbose) const;        
-};
-
-/****************************************************************************/
 /*!
 *****************************************************************************/
 class XmlAtt
@@ -110,7 +45,7 @@ class XmlNode
 
                 virtual void Display() const = 0;
 
-                virtual bool ValidateNode(bool verbose) const;
+                //virtual bool ValidateNode(bool verbose) const;
 
                 XmlElement * GetParent()   { return parent; };
 
@@ -118,19 +53,19 @@ class XmlNode
                 XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
-                    XmlElement * parent;
+                XmlElement * parent;
 };
 
 /****************************************************************************/
 /*!
 *****************************************************************************/
-class XmlElement : XmlNode
+class XmlElement : public XmlNode
 {
     public:
-                vector<XmlNode>   GetChildren() { return nodeList; };
+                vector<XmlNode*>   GetChildren() { return nodeList; };
 
-                void AddElement( XmlElement elt );  
-                void AddContent( XmlContent cont );  
+                void AddElement( XmlElement* elt );  
+                void AddContent( XmlContent* cont );  
                 void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, string v );
 
@@ -140,16 +75,17 @@ class XmlElement : XmlNode
 
                 virtual void Display() const;
 
-                virtual bool ValidateNode(bool verbose) const;
+                //virtual bool ValidateNode(bool verbose) const;
 
                 // [Cons,Des]tructors 
-                XmlElement( string n = "noname" ) : name( n ) {};
+                XmlElement( XmlElement * par, string n = "noname" )
+                                    : XmlNode( par ), name( n ) {};
                 ~XmlElement();
 
     private:
-                    string           name;
-                    vector<XmlAtt>   attList;
-                vector<XmlNode>  nodeList;
+                string           name;
+                vector<XmlAtt>   attList;
+                vector<XmlNode*>  nodeList;
 };
 
 /****************************************************************************/
@@ -166,10 +102,11 @@ class XmlContent : public XmlNode
 
                 virtual void Display() const;
 
-                virtual bool ValidateNode(bool verbose) const;
+                //virtual bool ValidateNode(bool verbose) const;
 
                 // [Cons,Des]tructors 
-                XmlContent( string cont ) : content ( cont ) {};
+                XmlContent(XmlElement * par,  string cont )
+                                    : XmlNode( par ), content ( cont ) {};
     
     private:
                 string content;
