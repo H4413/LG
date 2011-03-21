@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+/* XmlDoc */
+
 /* XmlAtt */
 
 int main()

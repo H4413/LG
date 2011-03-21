@@ -78,6 +78,7 @@ class XmlDoc
 
                 // [Cons,Des]tructors 
                 XmlDoc( XmlElement * root = NULL ) {};
+                ~XmlDoc() {delete root;};
         
         private: 
                 XmlElement *  root;
