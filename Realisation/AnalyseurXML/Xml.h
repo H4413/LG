@@ -110,6 +110,8 @@ class XmlNode
 
 		virtual void Display() const = 0;
 
+		virtual bool ValidateNode(bool verbose) const;
+
 		XmlElement * GetParent()   { return parent; };
 
 		// [Cons,Des]tructors 
@@ -138,6 +140,8 @@ class XmlElement : XmlNode
 
 		virtual void Display() const;
 
+		virtual bool ValidateNode(bool verbose) const;
+
 		// [Cons,Des]tructors 
 		XmlElement( string n = "noname" ) : name( n );
 		~XmlElement();
@@ -161,6 +165,8 @@ class XmlContent : XmlNode
 		virtual bool isContent() { return true; };
 
 		virtual void Display() const;
+
+		virtual bool ValidateNode(bool verbose) const;
 
 		// [Cons,Des]tructors 
 		XmlContent( string cont ) : content ( cont );
