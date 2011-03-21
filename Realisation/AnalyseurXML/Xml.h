@@ -20,6 +20,74 @@ class XmlContent;
 
 /* Classes */
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
+class DTD
+{
+    public:
+                //string filename;
+                string name;
+                
+                void Display() const {};
+
+                // [Cons,Des]tructors 
+                DTD( string n = "" ) : name( n ) {};
+               
+               // string& name(){return dtdname;}
+};
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
+class StyleSheet
+{
+    public:
+
+                string filename;
+                string type;
+                
+                void Display() const {};
+
+
+                // [Cons,Des]tructors 
+                StyleSheet( string f, string t )
+                            : filename( f ), type( t ) {};
+};
+
+
+/****************************************************************************/
+/*!
+*****************************************************************************/
+class XmlDoc
+{
+        
+        public:
+                XmlElement * GetRoot(){ return root; };
+                
+                void setRoot( XmlElement * nRoot ) { root = nRoot; };
+                
+                DTD GetDTD() { return dtd; }
+
+                void setDTD( DTD dtd );
+                
+                //void AddElement();
+                //void AddStyleSheet();
+                //void AddDTD();
+                
+                bool ValidateDocument(bool verbose) const;  
+
+                // [Cons,Des]tructors 
+                XmlDoc( XmlElement * root = NULL ) {};
+        
+        private: 
+                XmlElement *  root;
+                DTD dtd;
+                
+                     
+};
+
+/****************************************************************************/
 /*!
 *****************************************************************************/
 class XmlAtt
