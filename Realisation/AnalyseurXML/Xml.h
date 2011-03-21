@@ -113,7 +113,7 @@ class XmlNode
             XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
-            XmlElement * parent;
+		XmlElement * parent;
 };
 
 /****************************************************************************/
@@ -140,12 +140,14 @@ class XmlElement : XmlNode
             ~XmlElement();
 
     private:
-            string           name;
-            vector<XmlAtt>   attList;
-            vector<XmlNode>  nodeList;
-
+		string           name;
+		vector<XmlAtt>   attList;
+		vector<XmlNode>  nodeList;
 };
 
+/****************************************************************************/
+/*!
+*****************************************************************************/
 class XmlContent : XmlNode
 {
 public:
@@ -183,7 +185,6 @@ class XmlNode
 
     protected:
                 XmlElement * parent;
-
 };
 
 /****************************************************************************/
@@ -213,7 +214,6 @@ class XmlElement : public XmlNode
                 string           name;
                 vector<XmlAtt>   attList;
                 vector<XmlNode>  nodeList;
-                
 };
 
 /****************************************************************************/

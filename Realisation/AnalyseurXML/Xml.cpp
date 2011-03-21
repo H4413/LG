@@ -21,6 +21,7 @@ void StyleSheet::Display() const
 	cout <<"<?xml-stylesheet href=" << filename << "type=" << type << "?>" << endl; 
 }
 
+/*XmlDoc*/
 void XmlDoc::setroot(XmlElement& elt)
 {
 	XmlElement=elt;

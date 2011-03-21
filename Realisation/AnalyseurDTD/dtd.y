@@ -15,7 +15,8 @@ int yylex(void);
 DTDDocument * document = new DTDDocument();
 %}
 
-%union {
+%union 
+{
 	DTDDocument * dtdd;
 	DTDElement * elem;
 	DTDContentspec * spec;
@@ -38,54 +39,61 @@ DTDDocument * document = new DTDDocument();
 main: dtd               
     ;
 
-dtd: dtd ATTLIST NAME att_definition CLOSE {document->AddAttribute($3);}
-   | dtd element {document->AddElement($2);}
+dtd: dtd ATTLIST NAME att_definition CLOSE 	{document->AddAttribute($3);}
+   | dtd element 							{document->AddElement($2);}
    | /* empty */                     
    ;
 
-element: ELEMENT NAME contentspec CLOSE {$$ = new DTDElement($2);
-										  $$->Add($3);}
+element: ELEMENT NAME contentspec CLOSE 	{$$ = new DTDElement($2);
+											 $$->Add($3);}
 	;
 
-contentspec: EMPTY {$$ = new DTDChoice();}
-   | ANY {$$ = new DTDChoice();}
-   | mixed {$$ = $1;}
-   | children {$$ = $1;}
+contentspec: EMPTY 							{$$ = new DTDChoice();}
+   | ANY 									{$$ = new DTDChoice();}
+   | mixed 									{$$ = $1;}
+   | children 								{$$ = $1;}
    ;
 
-children: sequence plus {$$ = $1;}
-   | choice plus  {$$ = $1;}
+children: sequence plus 					{$$ = $1;}
+   | choice plus  							{$$ = $1;}
    ;
 
-choice_plus : sequence plus {$$ = $1; $$->AddMark($2);}
-   | choice plus {$$ = $1; $$->AddMark($2);}
-   | NAME plus {$$ = new DTDName($1); $$->AddMark($2);}
+choice_plus : sequence plus 				{$$ = $1; $$->AddMark($2);}
+   | choice plus 							{$$ = $1; $$->AddMark($2);}
+   | NAME plus 								{$$ = new DTDName($1); 
+											 $$->AddMark($2);}
    ;
 
-plus : AST {$$ = M_AST;}
-   | PLUS {$$ = M_PLUS;}
-   | QMARK {$$ = M_Q;}
-   | /*empty*/ {$$ = NO_MARK;}
+plus : AST 									{$$ = M_AST;}
+   | PLUS 									{$$ = M_PLUS;}
+   | QMARK 									{$$ = M_Q;}
+   | /*empty*/ 								{$$ = NO_MARK;}
    ;
 
-sequence : OPENPAR liste_seq CLOSEPAR {$$ = new DTDSequence(); $$->Add($2);}
+sequence : OPENPAR liste_seq CLOSEPAR 		{$$ = new DTDSequence(); 
+											 $$->Add($2);}
    ;
 
-choice : OPENPAR liste_choice CLOSEPAR {$$ = new DTDChoice(); $$-> Add($2);}
+choice : OPENPAR liste_choice CLOSEPAR 		{$$ = new DTDChoice(); 
+											 $$-> Add($2);}
    ;
 
-liste_seq : liste_seq COMMA choice_plus {$$ = new DTDSequence();
-										$$->Add($1); $$->Add($3);}
-   |choice_plus {$$ = $1;}
+liste_seq : liste_seq COMMA choice_plus 	{$$ = new DTDSequence();
+											 $$->Add($1); $$->Add($3);}
+	| choice_plus 							{$$ = $1;}
 	;
 	
 liste_choice : liste_choice PIPE choice_plus {$$ = new DTDChoice();
-										$$->Add($1); $$->Add($3);}
-   |choice_plus {$$ = $1;}
+											  $$->Add($1); $$->Add($3);}
+	| choice_plus 							 {$$ = $1;}
 	;
 	
-mixed : OPENPAR PCDATA PIPE choice_plus CLOSEPAR AST { $$ = new DTDChoice(); $$->Add(new DTDName("#PCDATA")); $$->Add($4); }
-   | OPENPAR PCDATA CLOSEPAR {$$ = new DTDChoice(); $$->Add(new DTDName("#PCDATA"));}
+mixed : OPENPAR PCDATA PIPE 
+	choice_plus CLOSEPAR AST 			{$$ = new DTDChoice(); 
+										 $$->Add(new DTDName("#PCDATA")); 
+										 $$->Add($4);}
+   | OPENPAR PCDATA CLOSEPAR 			{$$ = new DTDChoice(); 
+										 $$->Add(new DTDName("#PCDATA"));}
    ;
 
 att_definition

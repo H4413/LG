@@ -37,7 +37,7 @@ void DTDDocument::AddElement(DTDElement* element)
 
 void DTDDocument::AddAttribute(string attribute)
 {
-	attributes.push_back(*(new DTDAttributes(attribute)));
+	//attributes.push_back(*(new DTDAttributes(attribute)));
 }
 
 /************************** DTDElement ******************************/
@@ -80,6 +80,11 @@ void DTDSequence::Add(string name)
 	seq.push_back(new DTDName(name));
 }
 
+ChildType DTDSequence::getType()
+{
+    return SEQUENCE;
+}
+
 /************************** DTDChoice ******************************/
 void DTDChoice::Display() const
 {
@@ -106,9 +111,25 @@ void DTDChoice::Add(string name)
 	choice.push_back(new DTDName(name));
 }
 
+ChildType DTDChoice::getType()
+{
+    return CHOICE;
+}
+
 /************************** DTDName ******************************/
 void DTDName::Display() const
 {
 	cout << name;
 	PRINT_MARK
+}
+
+ChildType DTDName::getType()
+{
+    return NAME;
+}
+
+/************************** DTDAttList ******************************/
+void DTDAttList::Add(DTDAttribute * att)
+{
+	attList.push_back(*att);
 }
