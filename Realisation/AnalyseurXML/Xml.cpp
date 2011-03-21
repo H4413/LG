@@ -36,6 +36,7 @@ bool ValidateDocument(bool verbose) const
 {
     return true;
 }
+
 /* XmlAtt */
 
 void XmlAtt::Display() const
