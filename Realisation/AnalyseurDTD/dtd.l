@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <vector>
 #include "DTD.h"
 #include "yy.tab.h"
 

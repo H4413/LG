@@ -78,14 +78,7 @@ void DTDSequence::Display() const
 
 void DTDSequence::Add(DTDChildren * child)
 {
-	if (child->getType() == DTDSEQUENCE)
-    {
-	    seq.push_back(child);
-    }
-    else
-    {
-        seq.push_back(child);
-    }
+	seq.push_back(child);
 }
 
 void DTDSequence::Add(string name)
@@ -93,9 +86,13 @@ void DTDSequence::Add(string name)
 	seq.push_back(new DTDName(name));
 }
 
-ChildType DTDSequence::getType()
+void DTDSequence::AddList(vector<DTDChildren*>* list)
 {
-    return DTDSEQUENCE;
+	vector <DTDChildren*>::const_iterator it;
+	for (it = list->begin(); it != list->end(); ++it)
+	{
+		seq.push_back(*it);
+	}
 }
 
 /************************** DTDChoice ******************************/
@@ -116,14 +113,7 @@ void DTDChoice::Display() const
 
 void DTDChoice::Add(DTDChildren * child)
 {
-    if (child->getType() == DTDCHOICE)
-    {
-	    choice.push_back(child);
-    }
-    else
-    {
-        choice.push_back(child);
-    }
+    choice.push_back(child);
 }
 
 void DTDChoice::Add(string name)
@@ -131,9 +121,13 @@ void DTDChoice::Add(string name)
 	choice.push_back(new DTDName(name));
 }
 
-ChildType DTDChoice::getType()
+void DTDChoice::AddList(vector<DTDChildren*>* list)
 {
-    return DTDCHOICE;
+	vector <DTDChildren*>::const_iterator it;
+	for (it = list->begin(); it != list->end(); ++it)
+	{
+		choice.push_back(*it);
+	}
 }
 
 /************************** DTDName ******************************/
@@ -141,11 +135,6 @@ void DTDName::Display() const
 {
 	cout << name;
 	PRINT_MARK
-}
-
-ChildType DTDName::getType()
-{
-    return DTDNAME;
 }
 
 /************************** DTDAttList ******************************/
