@@ -1,13 +1,15 @@
 /* Xml.cpp */
 
+/* Project includes */
 #include "Xml.h"
 
+/* System includes */
 #include <string.h>
 #include <iostream>
 
 void XmlDoc::Display() const
 {
-	root->Display();
+    root->Display();
 }
 
 /* XmlAtt */
