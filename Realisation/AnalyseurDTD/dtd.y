@@ -5,6 +5,7 @@ using namespace std;
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
 #include "DTD.h"
 #define YYDEBUG 1
 
@@ -21,6 +22,7 @@ DTDDocument * document = new DTDDocument();
 	DTDElement * elem;
 	DTDContentspec * spec;
 	DTDChildren * child;
+	vector<DTDChildren*>* list_child;
 	DTDAttList * attList;
 	DTDAttribute * att;
 	DTDName * name;
@@ -30,7 +32,8 @@ DTDDocument * document = new DTDDocument();
 
 %type <dtdd> dtd
 %type <elem> element
-%type <child> children mixed choice choice_plus liste_choice sequence liste_seq
+%type <list_child> liste_seq liste_choice
+%type <child> children mixed choice choice_plus sequence
 %type <spec> contentspec
 %type <mrk> plus
 %type <att> attribut
@@ -76,21 +79,23 @@ plus : AST 									{$$ = M_AST;}
    ;
 
 sequence : OPENPAR liste_seq CLOSEPAR 		{$$ = new DTDSequence(); 
-											 $$->Add($2);}
+											 $$->AddList($2);}
    ;
 
 choice : OPENPAR liste_choice CLOSEPAR 		{$$ = new DTDChoice(); 
-											 $$-> Add($2);}
+											 $$-> AddList($2);}
    ;
 
-liste_seq : liste_seq COMMA choice_plus 	{$$ = new DTDSequence();
-											 $$->Add($1); $$->Add($3);}
-	| choice_plus 							{$$ = $1;}
+liste_seq : liste_seq COMMA choice_plus 	{$$ = $1;
+											 $$->push_back($3);}
+	| choice_plus 							{$$ = new vector<DTDChildren*>;
+											 $$->push_back($1);}
 	;
 	
-liste_choice : liste_choice PIPE choice_plus {$$ = new DTDChoice();
-											  $$->Add($1); $$->Add($3);}
-	| choice_plus 							 {$$ = $1;}
+liste_choice : liste_choice PIPE choice_plus {$$ = $1;
+											 $$->push_back($3);}
+	| choice_plus 							 {$$ = new vector<DTDChildren*>;
+											 $$->push_back($1);}
 	;
 	
 mixed : OPENPAR PCDATA PIPE 

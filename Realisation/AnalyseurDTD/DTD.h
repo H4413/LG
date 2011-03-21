@@ -13,36 +13,23 @@ enum Mark
 	M_Q
 };
 
-enum ChildType
+class DTDContentspec 
 {
-    DTDSEQUENCE,
-    DTDCHOICE,
-    DTDNAME,
-    DTDCHILD
-};
-
-class DTDContentspec {
-
 	public :
-
-	virtual void Display() const = 0;
+		virtual void Display() const = 0;
 
 };
 
-class DTDAttribute {
-    
+class DTDAttribute 
+{
     private :
-
-    string name;
-    string type;
-    string att;
+		string name;
+		string type;
+		string att;
       
     public:
-
-    DTDAttribute(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
-    void Display() const;
-  
-
+		DTDAttribute(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
+		void Display() const;
 };
 
 class DTDAttList 
@@ -55,114 +42,102 @@ class DTDAttList
 		DTDAttList () {}
 		void Add (DTDAttribute * att);
 		void SetName (string a_name) { name = a_name; }
-		void Display() const;
-		
+		void Display() const;	
 };
 
 class DTDChildren : public DTDContentspec 
 {
 	protected:
-	Mark mark;
+		Mark mark;
 	
 	public :
-	DTDChildren() : mark(NO_MARK) {}
-	virtual void Add(DTDChildren * child) {}
-	virtual void AddMark(Mark a_mark) {mark = a_mark;}
-    virtual void Display() const = 0;
-    bool HasAMark() const {return mark != NO_MARK;}
-    virtual ChildType getType() {return DTDCHILD;}
-
+		DTDChildren() : mark(NO_MARK) {}
+		virtual void Add(DTDChildren * child) {}
+		virtual void AddList(vector<DTDChildren*>* list) {}
+		virtual void AddMark(Mark a_mark) {mark = a_mark;}
+		virtual void Display() const = 0;
+		bool HasAMark() const {return mark != NO_MARK;}
 };
 
-class DTDSequence : public DTDChildren {
-
+class DTDSequence : public DTDChildren 
+{
 	public :
-    DTDSequence() {}
-    void Display() const;
-    void Add(DTDChildren* child);
-    void Add(string name);
-    ChildType getType();
-
+		DTDSequence() {}
+		void Display() const;
+		void Add(DTDChildren* child);
+		void Add(string name);
+		virtual void AddList(vector<DTDChildren*>* list);
+		
 	protected :
-
-	vector<DTDChildren*> seq;
+		vector<DTDChildren*> seq;
 };
 
-class DTDChoice : public DTDChildren {
+class DTDChoice : public DTDChildren 
+{
 	public :
-
-    DTDChoice() {}
-    void Display() const;
-    void Add(DTDChildren* child);
-    void Add(string name);
-    ChildType getType();
+		DTDChoice() {}
+		void Display() const;
+		void Add(DTDChildren* child);
+		void Add(string name);
+		virtual void AddList(vector<DTDChildren*>* list);
 
     protected:
-
-	vector<DTDChildren*> choice;
+		vector<DTDChildren*> choice;
 	
 };
 
-class DTDName : public DTDChildren {
+class DTDName : public DTDChildren 
+{
 	public :
-
-	DTDName(string name) : name(name){};
-    void Display() const;
-    ChildType getType();
+		DTDName(string name) : name(name){};
+		void Display() const;
 
 	private :
-
-	string name;
+		string name;
 };
 
-class DTDEmpty : public DTDContentspec {
-
+class DTDEmpty : public DTDContentspec 
+{
 	public :
-	
-	DTDEmpty();
-	void Display() const;
+		DTDEmpty();
+		void Display() const;
 
 };
 
-class DTDAny : public DTDContentspec {
-	
+class DTDAny : public DTDContentspec 
+{
 	public :
-
-	DTDAny(string content): content(content){};
-	void Display() const;
+		DTDAny(string content): content(content){};
+		void Display() const;
 
 	private : 
-
-	string content;
+		string content;
 };
 
-class DTDElement {
-
+class DTDElement 
+{
 	public :
-    
-    DTDElement() {}
-    DTDElement(string name) : name(name) {};
-    void Display() const;
-    void Add(DTDContentspec * content);
+		DTDElement() {}
+		DTDElement(string name) : name(name) {};
+		void Display() const;
+		void Add(DTDContentspec * content);
 
 	private:
-	string name;
-	vector<DTDContentspec*> contentspec;
-	
+		string name;
+		vector<DTDContentspec*> contentspec;
 };
 
-class DTDDocument {
-	public :
-    
-    DTDDocument() {}
-    DTDDocument(string name) : name(name) {};
-    void Display() const;
-    void AddElement(DTDElement* element);
-    void AddAttList(DTDAttList* attList); 
+class DTDDocument 
+{
+	public :  
+		DTDDocument() {}
+		DTDDocument(string name) : name(name) {};
+		void Display() const;
+		void AddElement(DTDElement* element);
+		void AddAttList(DTDAttList* attList); 
 
 	private :
-
-	vector<DTDElement> elements;
-    vector<DTDAttList> attList;
-    string name;
+		vector<DTDElement> elements;
+		vector<DTDAttList> attList;
+		string name;
 };
