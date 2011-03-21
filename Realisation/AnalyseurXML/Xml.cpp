@@ -2,6 +2,7 @@
 
 #include "Xml.h"
 
+#include <string.h>
 #include <iostream>
 
 void XmlDoc::Display() const
@@ -13,7 +14,7 @@ void XmlDoc::Display() const
 
 void XmlAtt::Display() const
 {
-    cout << Name << " = \"" << Value << "\" "; 
+    cout << " " << Name << " = \"" << Value << "\" "; 
 }
 
 /* XmlNode */
@@ -32,34 +33,39 @@ void XmlElement::AddContent( XmlContent* cont )
 
 void XmlElement::AddAttribute( XmlAtt att )
 {
-    attList.push_back( att );
+    attList.push_back( &att );
 }
 
 void XmlElement::AddAttribute( string n, string v )
 {
-    attList.push_back( XmlAtt( n, v ));
+    attList.push_back( new XmlAtt( n, v ));
 }
 
-void XmlElement::Display() const
+void XmlElement::Display(int ident) const
 {
-    // Indentation
-    cout << "\t";
-    
     // Opening
-    cout << "<" << name << " ";
+    cout << "<" << name;
 
     // Attributes
-    vector  <XmlAtt>::const_iterator attIt;
+    vector  <XmlAtt*>::const_iterator attIt;
     for ( attIt = attList.begin(); attIt != attList.end(); ++attIt )
-        attIt->Display();
-
+        (*attIt)->Display();
+        
+    cout << ">" << endl;
+    
     // Elements and content
     vector <XmlNode*>::const_iterator nIt;
     for ( nIt = nodeList.begin(); nIt != nodeList.end(); ++nIt )
-        (*nIt)->Display();	
+    {
+		for (int i = 0; i <= ident; i++) cout << "\t";
+        (*nIt)->Display(ident+1);	
+	}
+	
+	cout << endl;
+	for (int i = 0; i < ident; i++) cout << "\t";
 
     // Closing
-    cout << "/>" <<endl;
+    cout << "</" << name << ">" << endl;
 }
 
 XmlElement::~XmlElement()
@@ -73,7 +79,14 @@ XmlElement::~XmlElement()
 
 /* XmlContent */
 
-void XmlContent::Display() const
+void XmlContent::Display(int ident) const
 {
-    cout << "\"" << content << "\"" << endl;
+	char delims[] = "\n\t";
+	char *result = NULL;
+	result = strtok( content, delims );
+	while( result != NULL ) 
+	{		
+		cout << result;
+		result = strtok( NULL, delims );
+	}
 }

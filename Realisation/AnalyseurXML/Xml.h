@@ -75,10 +75,10 @@ class XmlAtt
 class XmlNode
 {
     public:
-                virtual bool isElement() = 0;
-                virtual bool isContent() = 0;
+                virtual bool isElement() { return false; };
+                virtual bool isContent() { return false; };
 
-                virtual void Display() const = 0;
+                virtual void Display(int ident = 0) const = 0;
 
                 //virtual bool ValidateNode(bool verbose) const;
 
@@ -97,7 +97,7 @@ class XmlNode
 class XmlElement : public XmlNode
 {
     public:
-                vector<XmlNode*>   GetChildren() { return nodeList; };
+                vector<XmlNode*>   GetChildren() { return nodeList; }
 
                 void AddNode( XmlNode* n );  
                 void AddElement( XmlElement* elt );  
@@ -105,24 +105,25 @@ class XmlElement : public XmlNode
                 
                 void AddAttribute( XmlAtt att );
                 void AddAttribute( string n, string v );
-                void SetAttList( vector<XmlAtt>* aList )
-                                        { attList = (*aList); };
+                void SetAttList( vector<XmlAtt*>* aList )
+                                        { attList = (*aList); }
+				void SetChildren( vector<XmlNode*>* children)
+										{nodeList = *children; }
 
                 // Override
-                virtual bool isElement() { return true; };
-                virtual bool isContent() { return false; };
+                virtual bool isElement() { return true; }
 
-                virtual void Display() const;
+                virtual void Display(int ident = 0) const;
 
                 //virtual bool ValidateNode(bool verbose) const;
 
                 // [Cons,Des]tructors 
                 XmlElement( XmlElement * par, string n = "noname" )
-                                    : XmlNode( par ), name( n ) {};
+                                    : XmlNode( par ), name( n ) {}
                 ~XmlElement();
     private:
                 string            name;
-                vector<XmlAtt>    attList;
+                vector<XmlAtt*>   attList;
                 vector<XmlNode*>  nodeList;
 };
 
@@ -135,19 +136,18 @@ class XmlContent : public XmlNode
                 string GetContent() { return content; };
                 
                 // Override
-                virtual bool isElement() { return false; };
                 virtual bool isContent() { return true; };
 
-                virtual void Display() const;
+                virtual void Display(int ident = 0) const;
 
                 //virtual bool ValidateNode(bool verbose) const;
 
                 // [Cons,Des]tructors 
-                XmlContent(XmlElement * par,  string cont )
+                XmlContent(XmlElement * par,  char * cont )
                                     : XmlNode( par ), content ( cont ) {};
     
     private:
-                string content;
+                char * content;
 };
 
 /****************************************************************************/
@@ -171,7 +171,7 @@ class XmlDoc
 
                 // [Cons,Des]tructors 
                 XmlDoc( XmlNode * root = NULL ) {};
-                ~XmlDoc() { delete root; delete DTD; };
+                ~XmlDoc() { delete root; delete dtd; }	
         
         private: 
                 XmlNode *  root;

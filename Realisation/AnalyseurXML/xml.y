@@ -24,12 +24,15 @@ XmlDoc * xmlDoc = new XmlDoc();
    XmlDoc * doc;
    XmlNode * balise;
    vector<XmlAtt*>* att;
+   vector<XmlNode*>* list_cont;
 
 }
 
 %type <doc> document
-%type <balise> element content
+%type <balise> element 
 %type <att> attribut
+%type <list_cont> empty_or_content close_content_and_end content
+%type <en> start
 
 %token EQ SLASH CLOSE END CLOSESPECIAL DOCTYPE
 %token <s> ENCODING VALUE DATA COMMENT NAME NSNAME
@@ -60,20 +63,21 @@ declaration
  ;
 
 element
- : start attribut					{//$$ = new XmlElement(NULL);
-									 //$$->SetAttList($2);
-									}
-   empty_or_content 		
+ : start attribut					
+   empty_or_content 				{$$ = new XmlElement(NULL, $1->second);
+									 ((XmlElement*)$$)->SetAttList($2);
+									 ((XmlElement*)$$)->SetChildren($3);
+									 }
  ;
 start
- : START		
- | NSSTART	
+ : START							{$$ = $1;}
+ | NSSTART							{$$ = $1;}
  ;
 
 empty_or_content
- : SLASH CLOSE	
- | close_content_and_end 
-   name_or_nsname_opt CLOSE 
+ : SLASH CLOSE						{$$ = new vector<XmlNode*>;}
+ | close_content_and_end 			
+   name_or_nsname_opt CLOSE 		{$$ = $1;}
  ;
 name_or_nsname_opt 
  : NAME     
@@ -83,13 +87,13 @@ name_or_nsname_opt
 close_content_and_end
  : CLOSE			
    content 
-   END 
+   END 								{$$ = $2;}
  ;
 content 
- : content DATA		
- | content misc        
- | content element      
- | /*empty*/         
+ : content DATA						{$$ = $1; $$->push_back(new XmlContent(NULL, $2));}
+ | content misc						{$$ = $1;}
+ | content element      			{$$ = $1; $$->push_back($2);}
+ | /*empty*/         				{$$ = new vector<XmlNode*>;}
  ;
 
 attribut
