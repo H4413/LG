@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include "Xml.h"
 #include "commun.h"
 #include "yy.tab.h"
 

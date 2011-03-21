@@ -63,26 +63,28 @@ class XmlDoc
 {
         
         public:
-                XmlElement * GetRoot(){ return root; };
+                XmlNode * GetRoot(){ return root; };
                 
-                void setRoot( XmlElement * nRoot ) { root = nRoot; };
+                void setRoot( XmlNode * nRoot ) { root = nRoot; };
                 
-                DTD GetDTD() { return dtd; }
+                DTD * GetDTD() { return dtd; }
 
-                void setDTD( DTD dtd );
+                void setDTD( DTD * dtd ) {this->dtd = dtd;}
                 
                 //void AddElement();
                 //void AddStyleSheet();
                 //void AddDTD();
                 
                 bool ValidateDocument(bool verbose) const;  
+                
+                void Display() const;
 
                 // [Cons,Des]tructors 
-                XmlDoc( XmlElement * root = NULL ) {};
+                XmlDoc( XmlNode * root = NULL ) {};
         
         private: 
-                XmlElement *  root;
-                DTD dtd;
+                XmlNode *  root;
+                DTD * dtd;
                 
                      
 };

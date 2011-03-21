@@ -4,12 +4,12 @@
 
 #include <iostream>
 
-/* XmlAtt */
-
-int main()
+void XmlDoc::Display() const
 {
-    return 0;
+	root->Display();
 }
+
+/* XmlAtt */
 
 void XmlAtt::Display() const
 {

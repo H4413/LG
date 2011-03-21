@@ -5,6 +5,8 @@ using namespace std;
 #include <string>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
+#include "Xml.h"
 #include "commun.h"
 #include "yy.tab.h"
 
@@ -12,12 +14,22 @@ int yywrap(void);
 void yyerror(char *msg);
 int yylex(void);
 
+XmlDoc * xmlDoc = new XmlDoc();
+
 %}
 
 %union {
    char * s;
    ElementName * en;  /* le nom d'un element avec son namespace */
+   XmlDoc * doc;
+   XmlNode * balise;
+   vector<XmlAtt*>* att;
+
 }
+
+%type <doc> document
+%type <balise> element content
+%type <att> attribut
 
 %token EQ SLASH CLOSE END CLOSESPECIAL DOCTYPE
 %token <s> ENCODING VALUE DATA COMMENT NAME NSNAME
@@ -26,8 +38,9 @@ int yylex(void);
 %%
 
 document
- : declarations element misc_seq_opt 
+ : declarations element misc_seq_opt 	{xmlDoc->setRoot($2);}
  ;
+
 misc_seq_opt
  : misc_seq_opt misc
  | /* empty */
@@ -42,19 +55,21 @@ declarations
  ;
  
 declaration
- : DOCTYPE NAME NAME VALUE CLOSE
+ : DOCTYPE NAME NAME VALUE CLOSE		{xmlDoc->setDTD (new DTD($2));}
  | STARTSPECIAL attribut CLOSESPECIAL
  ;
 
 element
- : start
-   attribut
-   empty_or_content 
+ : start attribut					{//$$ = new XmlElement(NULL);
+									 //$$->SetAttList($2);
+									}
+   empty_or_content 		
  ;
 start
  : START		
  | NSSTART	
  ;
+
 empty_or_content
  : SLASH CLOSE	
  | close_content_and_end 
@@ -78,8 +93,9 @@ content
  ;
 
 attribut
- : attribut NAME EQ VALUE
- | /* empty */
+ : attribut NAME EQ VALUE			{$$ = $1;
+									 $$->push_back(new XmlAtt($2, $4));}
+ | /* empty */						{$$ = new vector<XmlAtt*>;}
  ;
 %%
 
@@ -90,8 +106,11 @@ int main(int argc, char **argv)
   err = yyparse();
   if (err != 0) printf("Parse ended with %d error(s)\n", err);
   	else  printf("Parse ended with sucess\n", err);
+  
+  xmlDoc->Display();
   return 0;
 }
+
 int yywrap(void)
 {
   return 1;
