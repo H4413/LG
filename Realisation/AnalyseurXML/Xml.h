@@ -104,15 +104,15 @@ class XmlAtt
 class XmlNode
 {
     public:
-            virtual bool isElement() = 0;
-            virtual bool isContent() = 0;
+		virtual bool isElement() = 0;
+		virtual bool isContent() = 0;
 
-            virtual void Display() const = 0;
+		virtual void Display() const = 0;
 
-            XmlElement * GetParent()   { return parent; };
+		XmlElement * GetParent()   { return parent; };
 
-            // [Cons,Des]tructors 
-            XmlNode( XmlElement * par = NULL ) : parent( par ){};
+		// [Cons,Des]tructors 
+		XmlNode( XmlElement * par = NULL ) : parent( par ){};
 
     protected:
 		XmlElement * parent;
@@ -124,22 +124,22 @@ class XmlNode
 class XmlElement : XmlNode
 {
     public:
-            vector<XmlNode>   GetChildren() { return nodeList; };
+		vector<XmlNode>   GetChildren() { return nodeList; };
 
-            void AddElement( XmlElement element );  
-            void AddContent( string cont );  
-            void AddAttribute( XmlAtt att );
-            void AddAttribute( string n, String v );
+		void AddElement( XmlElement element );  
+		void AddContent( string cont );  
+		void AddAttribute( XmlAtt att );
+		void AddAttribute( string n, String v );
 
-            // Override
-            virtual bool isElement() { return true; };
-            virtual bool isContent() { return false; };
+		// Override
+		virtual bool isElement() { return true; };
+		virtual bool isContent() { return false; };
 
-            virtual void Display() const;
+		virtual void Display() const;
 
-            // [Cons,Des]tructors 
-            XmlElement( string n = "noname" ) : name( n );
-            ~XmlElement();
+		// [Cons,Des]tructors 
+		XmlElement( string n = "noname" ) : name( n );
+		~XmlElement();
 
     private:
 		string           name;
@@ -152,20 +152,20 @@ class XmlElement : XmlNode
 *****************************************************************************/
 class XmlContent : XmlNode
 {
-public:
-string GetContent() { return content; };
+    public:
+		string GetContent() { return content; };
 
-// Override
-virtual bool isElement() { return false; };
-virtual bool isContent() { return true; };
+		// Override
+		virtual bool isElement() { return false; };
+		virtual bool isContent() { return true; };
 
-virtual void Display() const;
+		virtual void Display() const;
 
-// [Cons,Des]tructors 
-XmlContent( string cont ) : content ( cont );
+		// [Cons,Des]tructors 
+		XmlContent( string cont ) : content ( cont );
 
-private:
-string content;
+    private:
+		string content;
 };
 
 /****************************************************************************/
