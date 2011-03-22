@@ -72,7 +72,20 @@ void XmlElement::Display(int ident) const
 
 bool XmlElement::ValidateNode(bool verbose, DTDDocument const * dtd) const
 {
-    DTDElement const * elem( dtd->SearchForElem( name ) );
+    DTDElement const * matchingElem( dtd->SearchForElem( name ) );
+
+    if(matchingElem == NULL)
+    {
+        return false;
+    }
+
+    DTDContentspec * dtdContent = matchingElem->getContent();
+
+    if(dtdContent->GetType() == Type::ANY)
+    {
+        return true;
+    }
+
     return true;
 }
 

@@ -8,17 +8,32 @@ using namespace std;
 
 enum Mark
 {
-	NO_MARK,
-	M_AST,
-	M_PLUS,
-	M_Q
+    NO_MARK,
+    M_AST,
+    M_PLUS,
+    M_Q
+};
+
+enum Type
+{
+    T_ANY,
+    T_EMPTY,
+    T_NAME,
+    T_SEQ,
+    T_CHOICE
 };
 
 class DTDContentspec 
 {
-	public :
-		virtual void Display() const = 0;
+    protected :
+                Type contentSpec;
 
+    public :
+                DTDContentspec(Type type) : contentSpec(type) {}
+
+		virtual void Display() const = 0;
+                
+                Type GetType() {return contentSpec;}
 };
 
 class DTDAttribute 
@@ -52,7 +67,7 @@ class DTDChildren : public DTDContentspec
 		Mark mark;
 	
 	public :
-		DTDChildren() : mark(NO_MARK) {}
+		DTDChildren(Type type) : DTDContentspec(type), mark(NO_MARK) {}
 		virtual void Add(DTDChildren * child) {}
 		virtual void AddList(vector<DTDChildren*>* list) {}
 		virtual void AddMark(Mark a_mark) {mark = a_mark;}
@@ -63,7 +78,7 @@ class DTDChildren : public DTDContentspec
 class DTDSequence : public DTDChildren 
 {
 	public :
-		DTDSequence() {}
+		DTDSequence() : DTDChildren(T_SEQ) {}
 		void Display() const;
 		void Add(DTDChildren* child);
 		void Add(string name);
@@ -76,7 +91,7 @@ class DTDSequence : public DTDChildren
 class DTDChoice : public DTDChildren 
 {
 	public :
-		DTDChoice() {}
+		DTDChoice() : DTDChildren(T_CHOICE) {}
 		void Display() const;
 		void Add(DTDChildren* child);
 		void Add(string name);
@@ -90,7 +105,7 @@ class DTDChoice : public DTDChildren
 class DTDName : public DTDChildren 
 {
 	public :
-		DTDName(string name) : name(name){};
+		DTDName(string name) : DTDChildren(T_NAME), name(name) {};
 		void Display() const;
 
 	private :
@@ -100,15 +115,14 @@ class DTDName : public DTDChildren
 class DTDEmpty : public DTDContentspec 
 {
 	public :
-		DTDEmpty();
+		DTDEmpty() : DTDContentspec(T_EMPTY) {};
 		void Display() const;
-
 };
 
 class DTDAny : public DTDContentspec 
 {
 	public :
-		DTDAny(string content): content(content){};
+		DTDAny(string content) : DTDContentspec(T_ANY), content(content){};
 		void Display() const;
 
 	private : 
