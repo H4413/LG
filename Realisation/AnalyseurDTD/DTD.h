@@ -60,7 +60,8 @@ class DTDAttribute
 		string att;
       
     public:
-		DTDAttribute(string name, string type = "CDATA", string att = "#IMPLIED") : name(name),type(type),att(att){};
+		DTDAttribute(string name, string type = "CDATA",
+                        string att = "#IMPLIED") : name(name),type(type),att(att){};
 		void Display() const;
 };
 
