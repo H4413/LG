@@ -103,6 +103,11 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
 	}
 }
 
+bool DTDSequence::IsValidated( XmlElement * * elem ) const
+{
+    return true; // et bim
+}
+
 /************************** DTDChoice ******************************/
 void DTDChoice::Display() const
 {
@@ -138,6 +143,11 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 	}
 }
 
+bool DTDChoice::IsValidated( XmlElement * * elem ) const
+{
+    return true; // et bim
+}
+
 /************************** DTDName ******************************/
 void DTDName::Display() const
 {
@@ -145,9 +155,21 @@ void DTDName::Display() const
 	PRINT_MARK
 }
 
-/************************** DTDEmpty ******************************/
-bool DTDEmpty::IsValidated( XmlElement * * ) const
+bool DTDName::IsValidated( XmlElement * * elem ) const
 {
+    return true; // et bim
+}
+
+/************************** DTDEmpty ******************************/
+bool DTDEmpty::IsValidated( XmlElement * * elem ) const
+{
+    return ( *elem )->IsEmpty();
+}
+
+/************************** DTDAny ******************************/
+bool DTDAny::IsValidated( XmlElement * * elem ) const
+{
+    return true;
 }
 
 /************************** DTDAttList ******************************/

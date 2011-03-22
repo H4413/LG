@@ -98,6 +98,7 @@ class XmlElement : public XmlNode
 {
     public:
                 vector<XmlNode*>   GetChildren() { return nodeList; }
+                bool IsEmpty() { return nodeList.empty(); }
 
                 void AddNode( XmlNode* n );  
                 void AddElement( XmlElement* elt );  
