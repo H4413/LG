@@ -110,9 +110,10 @@ class XmlElement : public XmlNode
                 void SetAttList( vector<XmlAtt*>* aList )
                                         { attList = (*aList); }
                 
-		void SetChildren( vector<XmlNode*>* children)
+        		void SetChildren( vector<XmlNode*>* children)
 					{ nodeList = *children; }
-
+                
+                vector<XmlElement*> GetChildrenElements(){};
 
                 string GetName() { return name; }
                 XmlElement * GetNextElemChild( XmlElement * elem );
@@ -126,6 +127,7 @@ class XmlElement : public XmlNode
                 XmlElement( XmlElement * par, string n = "noname" )
                                     : XmlNode( par ), name( n ) {}
                 ~XmlElement();
+
     private:
                 string            name;
                 vector<XmlAtt*>   attList;

@@ -24,6 +24,19 @@ void XmlAtt::Display() const
 
 /* XmlElement */
 
+vector<XmlElement*> XmlElement::GetChildrenElements()
+{
+    vector<XmlElement*> elements;
+    for (   vector <XmlNode>::const_iterator it = nodeList.begin();
+            it != nodeList.end();
+            ++it )
+     {
+        if ( (*it)->isElement() ) elements.push_back( it );
+     }
+
+    return elements;
+}
+
 void XmlElement::AddElement( XmlElement* elt )
 {
     nodeList.push_back( elt );
