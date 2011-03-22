@@ -112,6 +112,7 @@ int main(int argc, char **argv)
   	else  printf("Parse ended with sucess\n", err);
   
   xmlDoc->Display();
+  
   return 0;
 }
 

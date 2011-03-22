@@ -84,6 +84,8 @@ class XmlNode
 
                 XmlElement * GetParent()   { return parent; };
     
+                virtual vector<XmlElement*> GetChildrenElements() const = 0;
+
                 // [Cons,Des]tructors 
                 XmlNode( XmlElement * par = NULL ) :
                         parent( par ) {};
@@ -98,8 +100,8 @@ class XmlNode
 class XmlElement : public XmlNode
 {
     public:
-                vector<XmlNode*>   GetChildren() { return nodeList; }
-                vector<XmlElement*> GetChildrenElements();
+                vector<XmlNode*>   GetChildren() const { return nodeList; }
+                vector<XmlElement*> GetChildrenElements() const;
                 
                 bool IsEmpty() { return nodeList.empty(); }
 
@@ -143,6 +145,7 @@ class XmlContent : public XmlNode
     public:
                 string GetContent() { return content; };
                 
+                vector<XmlElement*> GetChildrenElements() const {};
                 // Override
                 virtual bool isContent() { return true; };
 

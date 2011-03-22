@@ -24,7 +24,7 @@ void XmlAtt::Display() const
 
 /* XmlElement */
 
-vector<XmlElement*> XmlElement::GetChildrenElements()
+vector<XmlElement*> XmlElement::GetChildrenElements() const
 {
     vector<XmlElement*> elements;
     for (   vector <XmlNode*>::const_iterator it = nodeList.begin();
