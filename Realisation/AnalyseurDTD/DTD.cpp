@@ -96,16 +96,79 @@ void DTDSequence::Add(string name)
 
 void DTDSequence::AddList(vector<DTDChildren*>* list)
 {
-	vector <DTDChildren*>::const_iterator it;
-	for (it = list->begin(); it != list->end(); ++it)
-	{
-		seq.push_back(*it);
-	}
+    vector <DTDChildren*>::const_iterator it;
+    for (it = list->begin(); it != list->end(); ++it)
+    {
+        seq.push_back(*it);
+    }
 }
 
 bool DTDSequence::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
-    return true; // et bim
+    vector<XmlElement *>::const_iterator xmlElemBackup = *xmlElem;
+
+    vector<DTDChildren *>::const_iterator childrenIt;
+
+    bool result = true;
+
+    for( childrenIt = seq.begin() ; childrenIt != seq.end() ; childrenIt++ )
+    {
+        result &= ( *childrenIt )->IsValidated( xmlElem );
+    }
+
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            if( !result )
+            {
+                *xmlElem = xmlElemBackup;
+            }
+
+            return result;
+        }
+
+        case M_Q:
+        {
+            if( !result )
+            {
+                *xmlElem = xmlElemBackup;
+            }
+
+            return true;
+        }
+
+        case M_AST:
+        {
+            // let's try to validate this sequence another time !
+            // No need to backup *xmlElem because it is done in the
+            // next level of recurrence (it's complicated)
+            bool nestedResult = IsValidated( xmlElem );
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            if( result )
+            {
+                // let's try to validate this sequence another time !
+                // No need to backup *xmlElem because it is done in the
+                // next level of recurrence (it's complicated)
+                bool nestedResult = IsValidated( xmlElem );
+
+                return true;
+            }
+            else
+            {
+                *xmlElem = xmlElemBackup;
+
+                return false;
+            }
+        }
+    }
+
+    return result; // et bim
 }
 
 /************************** DTDChoice ******************************/
