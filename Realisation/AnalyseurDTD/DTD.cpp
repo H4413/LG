@@ -208,7 +208,70 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 
 bool DTDChoice::IsValidated( vector<XmlElement*>::const_iterator * xmlElem) const
 {
-    return true; // et bim
+    vector<XmlElement *>::const_iterator xmlElemBackup = *xmlElem;
+
+    vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
+
+    bool result = false;
+
+    while( !result && choiceIt != choice.end() )
+    {
+        result = ( *choiceIt )->IsValidated( xmlElem );
+    }
+
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            if( !result )
+            {
+                *xmlElem = xmlElemBackup;
+            }
+
+            return result;
+        }
+
+        case M_Q:
+        {
+            if( !result )
+            {
+                *xmlElem = xmlElemBackup;
+            }
+
+            return true;
+        }
+
+        case M_AST:
+        {
+            // let's try to validate this sequence another time !
+            // No need to backup *xmlElem because it is done in the
+            // next level of recurrence (it's complicated)
+            bool nestedResult = IsValidated( xmlElem );
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            if( result )
+            {
+                // let's try to validate this sequence another time !
+                // No need to backup *xmlElem because it is done in the
+                // next level of recurrence (it's complicated)
+                bool nestedResult = IsValidated( xmlElem );
+
+                return true;
+            }
+            else
+            {
+                *xmlElem = xmlElemBackup;
+
+                return false;
+            }
+        }
+    }
+
+    return result; // et bim
 }
 
 /************************** DTDName ******************************/
