@@ -157,15 +157,86 @@ void DTDName::Display() const
 
 bool DTDName::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
-    //return ( name.compare( ( *xmlNode )->GetName() ) == 0 ); 
-    return true;
+    bool result;
+
+    result = ( name.compare( ( *( *xmlElem ) )->GetName() ) == 0 ); 
+
+    // The idea is to advance the iterator throught the elements' vector
+    // according to the mark. Whatever happens, the iterator is left just
+    // after the last validated xml element (so it can eventually not
+    // move).
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            // We must find one and only one matching element. Possible
+            // other matching elements are left to further analysis.
+            if( result )
+            {
+                ( *xmlElem )++;
+            }
+            return result;
+        }
+
+        case M_Q:
+        {
+            // We must find one or zero matching element. Possible
+            // other matching elements are left to further analysis.
+            // It's no problem if we don't find any matching elem, so we
+            // always return true.
+            if( result )
+            {
+                ( *xmlElem )++;
+            }
+            return true;
+        }
+
+        case M_AST:
+        {
+            // 0 to n matching elements : consumming them all.
+            // No problem if no element found : returning always true.
+            while( result )
+            {
+                ( *xmlElem )++;
+
+                while( *( *xmlElem ) != NULL )
+                {
+                    result = ( name.compare( ( *( *xmlElem ) )->GetName() ) == 0 ); 
+                }
+            }
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            // We must have at least one matching element
+            if( !result )
+            {
+                return false;
+            }
+
+            while( result )
+            {
+                ( *xmlElem )++;
+
+                while( *( *xmlElem ) != NULL )
+                {
+                    result = ( name.compare( ( *( *xmlElem ) )->GetName() ) == 0 ); 
+                }
+            }
+
+            return true;
+        }
+    }
+
+    return result;
 }
 
 /************************** DTDEmpty ******************************/
 bool DTDEmpty::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
-    //return ( *xmlNode )->IsEmpty();
-    return true;
+    return ( ( *( *xmlElem ) )->IsEmpty() );
 }
 
 /************************** DTDAny ******************************/
