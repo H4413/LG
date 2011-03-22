@@ -7,8 +7,13 @@
 #include <map>
 #include <string>
 
+/* Forward declarations */
+class XmlElement;
+
+/* This is NOT good, it shall be removed */
 using namespace std;
 
+/* Type declarations */
 enum Mark
 {
     NO_MARK,
@@ -26,6 +31,9 @@ enum Type
     T_CHOICE
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDContentspec 
 {
     protected :
@@ -37,8 +45,13 @@ class DTDContentspec
 		virtual void Display() const = 0;
                 
                 Type GetType() {return contentSpec;}
+
+                virtual bool IsValidated( XmlElement * * ) const = 0;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDAttribute 
 {
     private :
@@ -51,6 +64,9 @@ class DTDAttribute
 		void Display() const;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDAttList 
 {
 	protected:
@@ -64,6 +80,9 @@ class DTDAttList
 		void Display() const;	
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDChildren : public DTDContentspec 
 {
 	protected:
@@ -78,6 +97,9 @@ class DTDChildren : public DTDContentspec
 		bool HasAMark() const {return mark != NO_MARK;}
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDSequence : public DTDChildren 
 {
 	public :
@@ -86,11 +108,15 @@ class DTDSequence : public DTDChildren
 		void Add(DTDChildren* child);
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
+                virtual bool IsValidated( XmlElement * * ) const;
 		
 	protected :
 		vector<DTDChildren*> seq;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDChoice : public DTDChildren 
 {
 	public :
@@ -99,39 +125,55 @@ class DTDChoice : public DTDChildren
 		void Add(DTDChildren* child);
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
+                virtual bool IsValidated( XmlElement * * ) const;
 
     protected:
 		vector<DTDChildren*> choice;
 	
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDName : public DTDChildren 
 {
 	public :
 		DTDName(string name) : DTDChildren(T_NAME), name(name) {};
 		void Display() const;
+                virtual bool IsValidated( XmlElement * * ) const;
 
 	private :
 		string name;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDEmpty : public DTDContentspec 
 {
 	public :
 		DTDEmpty() : DTDContentspec(T_EMPTY) {};
 		void Display() const;
+                virtual bool IsValidated( XmlElement * * ) const;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDAny : public DTDContentspec 
 {
 	public :
 		DTDAny(string content) : DTDContentspec(T_ANY), content(content){};
 		void Display() const;
+                virtual bool IsValidated( XmlElement * * ) const;
 
 	private : 
 		string content;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDElement 
 {
 	public :
@@ -145,6 +187,9 @@ class DTDElement
 		vector<DTDContentspec*> contentspec;
 };
 
+/*****************************************************************************/
+/*!
+******************************************************************************/
 class DTDDocument 
 {
 	public :  

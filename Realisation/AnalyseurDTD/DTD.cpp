@@ -1,6 +1,7 @@
 /* Implémentation de la DTD */ 
 
 #include "DTD.h"
+#include "Xml.h"
 
 #include <iostream>
 

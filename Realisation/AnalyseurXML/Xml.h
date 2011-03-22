@@ -9,10 +9,10 @@
 #ifndef XML_H
 #define XML_H
 
-#include "DTD.h"
-
 #include <string>
 #include <vector>
+
+class DTDDocument;
 
 using namespace std;
 
@@ -82,10 +82,6 @@ class XmlNode
 
                 virtual void Display(int ident = 0) const = 0;
 
-                virtual bool ValidateNode(bool verbose,
-                                        DTDDocument const dtd) const 
-					{return true;}
-
                 XmlElement * GetParent()   { return parent; };
 
                 // [Cons,Des]tructors 
@@ -118,9 +114,6 @@ class XmlElement : public XmlNode
                 virtual bool isElement() { return true; }
 
                 virtual void Display(int ident = 0) const;
-
-                virtual bool ValidateNode(bool verbose,
-                                        DTDDocument const * dtd) const; 
 
                 // [Cons,Des]tructors 
                 XmlElement( XmlElement * par, string n = "noname" )
@@ -168,8 +161,6 @@ class XmlDoc
 
                 void setDTD( DTD * dtd ) {this->dtd = dtd;}
                 
-                bool ValidateDocument(bool verbose, DTDDocument * dtd) const;  
-
                 void Display() const;
 
                 // [Cons,Des]tructors 
