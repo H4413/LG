@@ -103,7 +103,7 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
 	}
 }
 
-bool DTDSequence::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDSequence::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
     return true; // et bim
 }
@@ -143,7 +143,7 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 	}
 }
 
-bool DTDChoice::IsValidated( vector<XmlNode *>::const_iterator * xmlNode) const
+bool DTDChoice::IsValidated( vector<XmlElement*>::const_iterator * xmlElem) const
 {
     return true; // et bim
 }
@@ -155,19 +155,21 @@ void DTDName::Display() const
 	PRINT_MARK
 }
 
-bool DTDName::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDName::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
-    return ( name.compare( ( *xmlNode )->GetName() ) == 0 ); 
+    //return ( name.compare( ( *xmlNode )->GetName() ) == 0 ); 
+    return true;
 }
 
 /************************** DTDEmpty ******************************/
-bool DTDEmpty::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDEmpty::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
-    return ( *xmlNode )->IsEmpty();
+    //return ( *xmlNode )->IsEmpty();
+    return true;
 }
 
 /************************** DTDAny ******************************/
-bool DTDAny::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDAny::IsValidated( vector<XmlElement*>::const_iterator * xmlElem ) const
 {
     return true;
 }
