@@ -1,5 +1,8 @@
 /* Interface de la DTD */
 
+#ifndef DTD_H
+#define DTD_H
+
 #include <vector>
 #include <map>
 #include <string>
@@ -158,3 +161,5 @@ class DTDDocument
 		vector<DTDAttList> attList;
 		string name;
 };
+
+#endif // DTD_H
