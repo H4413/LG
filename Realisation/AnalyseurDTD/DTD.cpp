@@ -145,6 +145,11 @@ void DTDName::Display() const
 	PRINT_MARK
 }
 
+/************************** DTDEmpty ******************************/
+bool DTDEmpty::IsValidated( XmlElement * * ) const
+{
+}
+
 /************************** DTDAttList ******************************/
 void DTDAttList::Add(DTDAttribute * att)
 {

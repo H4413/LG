@@ -163,7 +163,8 @@ class DTDEmpty : public DTDContentspec
 class DTDAny : public DTDContentspec 
 {
 	public :
-		DTDAny(string content) : DTDContentspec(T_ANY), content(content){};
+		DTDAny(string content) :
+                    DTDContentspec(T_ANY), content(content){};
 		void Display() const;
                 virtual bool IsValidated( XmlElement * * ) const;
 
