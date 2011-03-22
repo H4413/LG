@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <string>
+
 using namespace std;
 
 enum Mark
@@ -135,6 +136,8 @@ class DTDDocument
 		void Display() const;
 		void AddElement(DTDElement* element);
 		void AddAttList(DTDAttList* attList); 
+                
+                DTDElement const * SearchForElem( string const & name ) const;
 
 	private :
 		vector<DTDElement> elements;

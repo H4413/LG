@@ -46,6 +46,13 @@ void DTDDocument::AddAttList(DTDAttList* atts)
 	attList.push_back(*atts);
 }
 
+DTDElement const * DTDDocument::SearchForElem( string const & name ) const
+{
+    // TODO
+
+    return NULL;
+}
+
 /************************** DTDElement ******************************/
 void DTDElement::Display() const
 {

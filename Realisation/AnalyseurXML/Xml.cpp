@@ -2,7 +2,6 @@
 
 /* Project includes */
 #include "Xml.h"
-#include "DTD.h"
 
 /* System includes */
 #include <string.h>
@@ -71,8 +70,9 @@ void XmlElement::Display(int ident) const
     cout << "</" << name << ">" << endl;
 }
 
-bool XmlElement::ValidateNode(bool verbose) const
+bool XmlElement::ValidateNode(bool verbose, DTDDocument const * dtd) const
 {
+    DTDElement const * elem( dtd->SearchForElem( name ) );
     return true;
 }
 
