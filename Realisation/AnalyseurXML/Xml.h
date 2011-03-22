@@ -99,6 +99,8 @@ class XmlElement : public XmlNode
 {
     public:
                 vector<XmlNode*>   GetChildren() { return nodeList; }
+                vector<XmlElement*> GetChildrenElements();
+                
                 bool IsEmpty() { return nodeList.empty(); }
 
                 void AddNode( XmlNode* n );  
@@ -113,7 +115,6 @@ class XmlElement : public XmlNode
         		void SetChildren( vector<XmlNode*>* children)
 					{ nodeList = *children; }
                 
-                vector<XmlElement*> GetChildrenElements(){};
 
                 string GetName() { return name; }
                 XmlElement * GetNextElemChild( XmlElement * elem );

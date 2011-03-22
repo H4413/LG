@@ -27,11 +27,11 @@ void XmlAtt::Display() const
 vector<XmlElement*> XmlElement::GetChildrenElements()
 {
     vector<XmlElement*> elements;
-    for (   vector <XmlNode>::const_iterator it = nodeList.begin();
+    for (   vector <XmlNode*>::const_iterator it = nodeList.begin();
             it != nodeList.end();
             ++it )
      {
-        if ( (*it)->isElement() ) elements.push_back( it );
+        if ( (*it)->isElement() ) elements.push_back( (XmlElement*) *it );
      }
 
     return elements;
