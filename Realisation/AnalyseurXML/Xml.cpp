@@ -39,6 +39,12 @@ void XmlElement::AddAttribute( XmlAtt att )
     attList.push_back( &att );
 }
 
+XmlElement * XmlElement::GetNextElemChild( XmlElement * elem )
+{
+    XmlElement * result = NULL;
+    return result;
+}
+
 void XmlElement::AddAttribute( string n, string v )
 {
     attList.push_back( new XmlAtt( n, v ));

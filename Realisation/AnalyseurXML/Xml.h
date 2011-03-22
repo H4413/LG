@@ -83,9 +83,10 @@ class XmlNode
                 virtual void Display(int ident = 0) const = 0;
 
                 XmlElement * GetParent()   { return parent; };
-
+    
                 // [Cons,Des]tructors 
-                XmlNode( XmlElement * par = NULL ) : parent( par ){};
+                XmlNode( XmlElement * par = NULL ) :
+                        parent( par ) {};
 
     protected:
                 XmlElement * parent;
@@ -108,8 +109,13 @@ class XmlElement : public XmlNode
                 void AddAttribute( string n, string v );
                 void SetAttList( vector<XmlAtt*>* aList )
                                         { attList = (*aList); }
+                
 		void SetChildren( vector<XmlNode*>* children)
 					{ nodeList = *children; }
+
+
+                string GetName() { return name; }
+                XmlElement * GetNextElemChild( XmlElement * elem );
 
                 // Override
                 virtual bool isElement() { return true; }
