@@ -119,7 +119,7 @@ class XmlElement : public XmlNode
 					{ nodeList = *children; }
                 
 
-                string GetName() { return name; }
+                string GetName() const { return name; }
                 XmlElement * GetNextElemChild( XmlElement * elem );
 
                 // Override
