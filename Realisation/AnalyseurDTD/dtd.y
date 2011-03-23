@@ -13,7 +13,8 @@ void yyerror(char *msg);
 int yywrap(void);
 int yylex(void);
 
-DTDDocument * document = new DTDDocument();
+DTDDocument * document;
+extern FILE * yyin;
 %}
 
 %union 
@@ -144,18 +145,38 @@ defaut_declaration
 | FIXED STRING 
 ;
 %%
+
+DTDDocument * dtdparse(char * dtdname)
+{
+	int err;
+	document = new DTDDocument();
+	if (dtdname)
+	{
+		FILE * dtdfile = fopen(dtdname, "r");
+		if (dtdfile)
+			yyin = dtdfile;
+		else
+			printf("%s cannot be open. We will try stdin.", dtdname);
+	}
+	err = yyparse();
+	if (err != 0) 
+		printf("Parse ended with %d error(s)\n", err);
+	else  
+		printf("Parse ended with sucess\n");
+	return document;
+}
+
+#ifndef NDEBUG
+
 int main(int argc, char **argv)
 {
-  int err;
-  yydebug = 1;
-
-  err = yyparse();
-  if (err != 0) printf("Parse ended with %d error(s)\n", err);
-        else  printf("Parse ended with sucess\n", err);
-        
-  document->Display();
-  return 0;
+	DTDDocument * dtd = dtdparse(argv[1]);
+	dtd->Display();
+	return 0;
 }
+
+#endif
+
 int yywrap(void)
 {
   return 1;

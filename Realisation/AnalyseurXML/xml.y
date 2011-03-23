@@ -8,13 +8,14 @@ using namespace std;
 #include <vector>
 #include "Xml.h"
 #include "commun.h"
-#include "yy.tab.h"
+#include "xx.tab.h"
 
-int yywrap(void);
-void yyerror(char *msg);
-int yylex(void);
+int xxwrap(void);
+void xxerror(char *msg);
+int xxlex(void);
 
-XmlDoc * xmlDoc = new XmlDoc();
+XmlDoc * xmlDoc;
+extern FILE * xxin;
 
 %}
 
@@ -103,25 +104,43 @@ attribut
  ;
 %%
 
-int main(int argc, char **argv)
+XmlDoc * xmlparse(char * xmlname)
 {
-  int err;
-
-  err = yyparse();
-  if (err != 0) printf("Parse ended with %d error(s)\n", err);
-  	else  printf("Parse ended with sucess\n", err);
-  
-  xmlDoc->Display();
-  
-  return 0;
+	int err;
+	xmlDoc = new XmlDoc();
+	if (xmlname)
+	{
+		FILE * xmlfile = fopen(xmlname, "r");
+		if (xmlfile)
+			xxin = xmlfile;
+		else
+			printf("%s cannot be open. We will try stdin.", xmlname);
+	}
+	err = xxparse();
+	if (err != 0) 
+		printf("Parse ended with %d error(s)\n", err);
+	else  
+		printf("Parse ended with sucess\n");
+	return xmlDoc;
 }
 
-int yywrap(void)
+#ifndef NDEBUG
+
+int main(int argc, char **argv)
+{
+	XmlDoc * xml = xmlparse(argv[1]);
+	xml->Display();
+	return 0;
+}
+
+#endif
+
+int xxwrap(void)
 {
   return 1;
 }
 
-void yyerror(char *msg)
+void xxerror(char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }
