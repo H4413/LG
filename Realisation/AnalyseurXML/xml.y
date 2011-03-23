@@ -10,6 +10,10 @@ using namespace std;
 #include "commun.h"
 #include "xx.tab.h"
 
+#ifndef NDEBUG
+#	include "parser.h"
+#endif
+
 int xxwrap(void);
 void xxerror(char *msg);
 int xxlex(void);
@@ -104,7 +108,7 @@ attribut
  ;
 %%
 
-XmlDoc * xmlparse(char * xmlname)
+bool xmlparse(char * xmlname, XmlDoc * xml)
 {
 	int err;
 	xmlDoc = new XmlDoc();
@@ -117,18 +121,28 @@ XmlDoc * xmlparse(char * xmlname)
 			printf("%s cannot be open. We will try stdin.", xmlname);
 	}
 	err = xxparse();
+	if (xml)
+		xml = xmlDoc;
+	else
+		delete xmlDoc;
 	if (err != 0) 
+	{
 		printf("Parse ended with %d error(s)\n", err);
-	else  
+		return false;
+	}
+	else
+	{  
 		printf("Parse ended with sucess\n");
-	return xmlDoc;
+		return true;
+	}
 }
 
 #ifndef NDEBUG
 
 int main(int argc, char **argv)
 {
-	XmlDoc * xml = xmlparse(argv[1]);
+	XmlDoc * xml;
+	xmlparse(argv[1], xml);
 	xml->Display();
 	return 0;
 }

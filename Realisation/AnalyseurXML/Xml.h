@@ -29,12 +29,12 @@ class DTD
 {
     public:
                 //string filename;
-                string name;
+                char * name;
                 
                 void Display() const {};
 
                 // [Cons,Des]tructors 
-                DTD( string n = "" ) : name( n ) {};
+                DTD( char * n = "" ) : name( n ) {};
 };
 
 /****************************************************************************/

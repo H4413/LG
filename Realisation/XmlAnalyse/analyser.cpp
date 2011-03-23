@@ -1,6 +1,10 @@
 #include <iostream>
 #include <getopt.h>
 
+#include "parser.h"
+#include "Xml.h"
+#include "DTD.h"
+
 #define VERSION		0
 #define SVERSION	1
 
@@ -30,10 +34,11 @@ int main (int argc, char ** argv)
 	
 	static struct option long_options[] = 
 	{
-		{"version",	no_argument,	0, 'v'},
 		{"verbose",	no_argument,	&verbose_flag, 1},
+		{"version",	no_argument,	0, 'v'},
 		{"help", 	no_argument, 	0, 	'h'},
 		{"transform", no_argument,	0,	't'},
+		{"validate",	required_argument, 	0, 	'V'},
 		{"dtd-well-formed",	required_argument, 	0, 	'd'},
 		{"well-formed",		required_argument, 	0,	'w'},
 		{"output", 	required_argument, 	0, 	'o'},
@@ -41,35 +46,56 @@ int main (int argc, char ** argv)
 		{0, 0, 0, 0}
 	};
 	
+	if (argc < 2)
+	{
+		print_usage();
+		return 3;
+	}
+	
 	for (;;)
 	{
-		c = getopt_long (argc, argv, "v:htdwox",
+		c = getopt_long (argc, argv, "vhtV:d:w:o:x:",
 			long_options, &option_index);
 		if (c == -1)
 			break;
 		switch (c)
 		{
-			case 0:
-				if (long_options[option_index].flag != 0)
-					break;
-				cout << "Option " << long_options[option_index].name;
-				if (optarg)
-					cout << " with arg " << optarg;
-				cout << endl;
-			case 'a':
-				cout << "Option -a" << endl;
-				break;
-			case 'b':
-				cout << "Option -b" << endl;
-				break;
-			case 'c':
-				cout << "Option -c" << endl;
+			case 'V':
+			{
+				XmlDoc * xml;
+				DTDDocument * dtd;
+				if(xmlparse(optarg, xml))
+				{
+					if (xml)
+					{
+						if (dtdparse(xml->GetDTD()->name, dtd))
+							if (dtd)
+							{
+								//xml->Validate(dtd);
+								cout << "XML is validated" << endl << endl;
+								delete dtd;
+							}
+							else
+								cout << "DTD error" << endl << endl;
+						delete xml;
+					}
+					else
+						cout << "XML error" << endl << endl;
+				}
+			}
 				break;
 			case 'd':
-				cout << "Option -d with value " << optarg << endl;
+				if (dtdparse(optarg, NULL))
+					cout << optarg << ": is a well-formed DTD document." << endl << endl;
+				else
+					cout << optarg << ": is not a well-formed DTD document." << endl << endl;
 				break;
-			case 'f':
-				cout << "Option -f with value " << optarg << endl;
+			case 'w':	
+				if (xmlparse(optarg, NULL))
+					cout << optarg << ": is a well-formed XML document." << endl << endl;
+				else
+					cout << optarg << ": is not a well-formed XML document." << endl << endl;
+				break;
 			case 'h':
 				print_usage();
 				return 1;
@@ -78,8 +104,7 @@ int main (int argc, char ** argv)
 					<< "." << SVERSION << endl;
 				return 1;
 			case '?':
-				break;
-			default:	
+			default:
 				return 2;
 		}
 	}
@@ -88,7 +113,7 @@ int main (int argc, char ** argv)
 		cout << "Verbose flag is set" << endl;
 	if (optind < argc)
 	{
-		cout << "Non-option ARGV-elements: ";
+		cout << "Non-option: ";
 		while (optind < argc)
 			cout << argv[optind++];
 		cout << endl;

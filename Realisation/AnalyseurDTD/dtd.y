@@ -9,6 +9,10 @@ using namespace std;
 #include "DTD.h"
 #define YYDEBUG 1
 
+#ifdef NDEBUG
+#	include "parser.h"
+#endif
+
 void yyerror(char *msg);
 int yywrap(void);
 int yylex(void);
@@ -146,7 +150,7 @@ defaut_declaration
 ;
 %%
 
-DTDDocument * dtdparse(char * dtdname)
+bool dtdparse(char * dtdname, DTDDocument * dtd)
 {
 	int err;
 	document = new DTDDocument();
@@ -159,11 +163,20 @@ DTDDocument * dtdparse(char * dtdname)
 			printf("%s cannot be open. We will try stdin.", dtdname);
 	}
 	err = yyparse();
+	if (dtd)
+		dtd = document;
+	else
+		delete document;
 	if (err != 0) 
+	{
 		printf("Parse ended with %d error(s)\n", err);
-	else  
+		return false;
+	}
+	else
+	{  
 		printf("Parse ended with sucess\n");
-	return document;
+		return true;
+	};
 }
 
 #ifndef NDEBUG
