@@ -49,7 +49,17 @@ void DTDDocument::AddAttList(DTDAttList* atts)
 
 DTDElement const * DTDDocument::SearchForElem( string const & name ) const
 {
-    // TODO
+    vector<DTDElement>::const_iterator elemIt = elements.begin();
+
+    bool found = false;
+
+    while( !found && ( elemIt != elements.end() ) )
+    {
+        if( ( elemIt->GetName() ).compare( name ) == 0 )
+        {
+            return &( *elemIt );
+        }
+    }
 
     return NULL;
 }

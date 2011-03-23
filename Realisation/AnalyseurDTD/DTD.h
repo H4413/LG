@@ -190,6 +190,8 @@ class DTDElement
 		void Display() const;
 		void Add(DTDContentspec * content);
                 bool ValidateElement( vector<XmlNode *> * xmlNodeVector );
+                
+                string GetName() const { return name; }
 
 	private:
 		string name;
