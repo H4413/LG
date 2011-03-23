@@ -49,7 +49,7 @@ main: dtd
 dtd: dtd ATTLIST NAME att_definition CLOSE 	{$4->SetName($3); 
 											 document->AddAttList($4);}
    | dtd element 							{document->AddElement($2);}
-   | /* empty */                     
+   | /* empty */                     		{$$ = document;}
    ;
 
 element: ELEMENT NAME contentspec CLOSE 	{$$ = new DTDElement($2);

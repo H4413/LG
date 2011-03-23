@@ -157,13 +157,13 @@ void DTDName::Display() const
 
 bool DTDName::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
 {
-    return ( name.compare( ( *xmlNode )->GetName() ) == 0 ); 
+    return true; //( name.compare( xmlNode->GetName() ) == 0 ); 
 }
 
 /************************** DTDEmpty ******************************/
 bool DTDEmpty::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
 {
-    return ( *xmlNode )->IsEmpty();
+    return true; //( *xmlNode )->IsEmpty();
 }
 
 /************************** DTDAny ******************************/
