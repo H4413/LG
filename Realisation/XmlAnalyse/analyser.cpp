@@ -68,7 +68,7 @@ int main (int argc, char ** argv)
 				{
 					if (xml)
 					{
-						if (dtdparse(xml->GetDTD()->name, dtd))
+						if (dtdparse(xml->GetDTD()->name.c_str(), dtd))
 							if (dtd)
 							{
 								//xml->Validate(dtd);

@@ -49,7 +49,17 @@ void DTDDocument::AddAttList(DTDAttList* atts)
 
 DTDElement const * DTDDocument::SearchForElem( string const & name ) const
 {
-    // TODO
+    vector<DTDElement>::const_iterator elemIt = elements.begin();
+
+    bool found = false;
+
+    while( !found && ( elemIt != elements.end() ) )
+    {
+        if( ( elemIt->GetName() ).compare( name ) == 0 )
+        {
+            return &( *elemIt );
+        }
+    }
 
     return NULL;
 }
@@ -67,6 +77,19 @@ void DTDElement::Display() const
 void DTDElement::Add(DTDContentspec * content)
 {
 	contentspec.push_back(content);
+}
+
+bool DTDElement::ValidateElement( vector<XmlNode *> * xmlNodeVector )
+{
+    vector<XmlNode *>::const_iterator * nodeIt = new vector<XmlNode *>::const_iterator;
+    
+    *nodeIt = xmlNodeVector->begin();
+
+    bool result = ( *( contentspec.begin() ) )->IsValidated( nodeIt, xmlNodeVector );
+
+    delete nodeIt;
+
+    return result;
 }
 
 /************************** DTDSequence ******************************/
@@ -96,16 +119,89 @@ void DTDSequence::Add(string name)
 
 void DTDSequence::AddList(vector<DTDChildren*>* list)
 {
-	vector <DTDChildren*>::const_iterator it;
-	for (it = list->begin(); it != list->end(); ++it)
-	{
-		seq.push_back(*it);
-	}
+    vector <DTDChildren*>::const_iterator it;
+    for (it = list->begin(); it != list->end(); ++it)
+    {
+        seq.push_back(*it);
+    }
 }
 
-bool DTDSequence::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
 {
-    return true; // et bim
+     if( *xmlNode == nodeVector->end() )
+    {
+        return false;
+    }
+
+    if( ( *( *xmlNode ) )->isElement() == false )
+    {
+        return false;
+    }
+
+    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
+
+    vector<DTDChildren *>::const_iterator childrenIt;
+
+    bool result = true;
+
+    for( childrenIt = seq.begin() ; childrenIt != seq.end() ; childrenIt++ )
+    {
+        result &= ( *childrenIt )->IsValidated( xmlNode, nodeVector );
+    }
+
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            if( !result )
+            {
+                *xmlNode = xmlNodeBackup;
+            }
+
+            return result;
+        }
+
+        case M_Q:
+        {
+            if( !result )
+            {
+                *xmlNode = xmlNodeBackup;
+            }
+
+            return true;
+        }
+
+        case M_AST:
+        {
+            // let's try to validate this sequence another time !
+            // No need to backup *xmlNode because it is done in the
+            // next level of recurrence (it's complicated)
+            bool nestedResult = IsValidated( xmlNode , nodeVector);
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            if( result )
+            {
+                // let's try to validate this sequence another time !
+                // No need to backup *xmlNode because it is done in the
+                // next level of recurrence (it's complicated)
+                bool nestedResult = IsValidated( xmlNode, nodeVector );
+
+                return true;
+            }
+            else
+            {
+                *xmlNode = xmlNodeBackup;
+
+                return false;
+            }
+        }
+    }
+
+    return result; // et bim
 }
 
 /************************** DTDChoice ******************************/
@@ -143,9 +239,82 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 	}
 }
 
-bool DTDChoice::IsValidated( vector<XmlNode *>::const_iterator * xmlNode) const
+bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
 {
-    return true; // et bim
+    if( *xmlNode == nodeVector->end() )
+    {
+        return false;
+    }
+
+    if( ( *( *xmlNode ) )->isElement() == false )
+    {
+        return false;
+    }
+
+    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
+
+    vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
+
+    bool result = false;
+
+    while( !result && choiceIt != choice.end() )
+    {
+        result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
+    }
+
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            if( !result )
+            {
+                *xmlNode = xmlNodeBackup;
+            }
+
+            return result;
+        }
+
+        case M_Q:
+        {
+            if( !result )
+            {
+                *xmlNode = xmlNodeBackup;
+            }
+
+            return true;
+        }
+
+        case M_AST:
+        {
+            // let's try to validate this sequence another time !
+            // No need to backup *xmlNode because it is done in the
+            // next level of recurrence (it's complicated)
+            bool nestedResult = IsValidated( xmlNode, nodeVector );
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            if( result )
+            {
+                // let's try to validate this sequence another time !
+                // No need to backup *xmlNode because it is done in the
+                // next level of recurrence (it's complicated)
+                bool nestedResult = IsValidated( xmlNode, nodeVector );
+
+                return true;
+            }
+            else
+            {
+                *xmlNode = xmlNodeBackup;
+
+                return false;
+            }
+        }
+    }
+
+    return result; // et bim
 }
 
 /************************** DTDName ******************************/
@@ -155,19 +324,116 @@ void DTDName::Display() const
 	PRINT_MARK
 }
 
-bool DTDName::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
 {
-    return true; //( name.compare( xmlNode->GetName() ) == 0 ); 
+    if( *xmlNode == nodeVector->end() )
+    {
+        return false;
+    }
+
+     bool result;
+
+    if( ( *( *xmlNode ) )->isElement() )
+    {
+        XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
+
+        result = ( name.compare( elem->GetName() ) == 0 ); 
+    }
+    else
+    {
+        XmlContent * cont = ( XmlContent * )( *( *xmlNode ) );
+    }
+
+
+    // The idea is to advance the iterator throught the elements' vector
+    // according to the mark. Whatever happens, the iterator is left just
+    // after the last validated xml element (so it can eventually not
+    // move).
+    switch( mark )
+    {
+        case NO_MARK:
+        {
+            // We must find one and only one matching element. Possible
+            // other matching elements are left to further analysis.
+            if( result )
+            {
+                ( *xmlNode )++;
+            }
+            return result;
+        }
+
+        case M_Q:
+        {
+            // We must find one or zero matching element. Possible
+            // other matching elements are left to further analysis.
+            // It's no problem if we don't find any matching elem, so we
+            // always return true.
+            if( result )
+            {
+                ( *xmlNode )++;
+            }
+            return true;
+        }
+
+        case M_AST:
+        {
+            // 0 to n matching elements : consumming them all.
+            // No problem if no element found : returning always true.
+            while( result )
+            {
+                ( *xmlNode )++;
+
+                //while( *( *xmlNode ) != nodeVector.end() )
+                //{
+                //    result = ( name.compare( ( *( *xmlNode ) )->GetName() ) == 0 ); 
+                    result = IsValidated( xmlNode, nodeVector );
+                //}
+            }
+
+            return true;
+        }
+
+        case M_PLUS:
+        {
+            // We must have at least one matching element
+            if( !result )
+            {
+                return false;
+            }
+
+            while( result )
+            {
+                ( *xmlNode )++;
+
+                //while( *( *xmlNode ) != nodeVector.end() )
+                //{
+                //    result = ( name.compare( ( *( *xmlNode ) )->GetName() ) == 0 ); 
+                    result = IsValidated( xmlNode, nodeVector );
+                //}
+            }
+
+            return true;
+        }
+    }
+
+    return result;
 }
 
 /************************** DTDEmpty ******************************/
-bool DTDEmpty::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
 {
-    return true; //( *xmlNode )->IsEmpty();
+    if( ( *( *xmlNode ) )->isContent() )
+    {
+        return false;
+    }
+    
+    XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
+
+    return ( elem->IsEmpty() );
 }
 
 /************************** DTDAny ******************************/
-bool DTDAny::IsValidated( vector<XmlNode *>::const_iterator * xmlNode ) const
+bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
 {
     return true;
 }

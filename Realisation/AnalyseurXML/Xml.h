@@ -28,13 +28,14 @@ class XmlContent;
 class DTD
 {
     public:
-                //string filename;
-                char * name;
+                string fileName;
+                string name;
                 
-                void Display() const {};
+                void Display() const;
 
                 // [Cons,Des]tructors 
-                DTD( char * n = "" ) : name( n ) {};
+                DTD( string n = "", string fn = "" )
+                                    : name( n ), fileName( fn ) {};
 };
 
 /****************************************************************************/
@@ -118,7 +119,7 @@ class XmlElement : public XmlNode
 					{ nodeList = *children; }
                 
 
-                string GetName() { return name; }
+                string GetName() const { return name; }
                 XmlElement * GetNextElemChild( XmlElement * elem );
 
                 // Override
@@ -177,14 +178,12 @@ class XmlDoc
                 void Display() const;
 
                 // [Cons,Des]tructors 
-                XmlDoc( XmlNode * root = NULL ) {};
+                XmlDoc( XmlNode * toor = NULL ) { root = toor; };
                 ~XmlDoc() { delete root; delete dtd; }	
         
         private: 
                 XmlNode *  root;
                 DTD * dtd;
-                
-                     
 };
 
 #endif // XML_H

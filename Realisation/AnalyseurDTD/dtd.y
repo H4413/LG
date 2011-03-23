@@ -150,7 +150,7 @@ defaut_declaration
 ;
 %%
 
-bool dtdparse(char * dtdname, DTDDocument * dtd)
+bool dtdparse(const char * dtdname, DTDDocument * dtd)
 {
 	int err;
 	document = new DTDDocument();
