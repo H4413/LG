@@ -23,7 +23,6 @@ void print_usage()
 	cout << "  -V, --validate \t\t Validate an XML file " << endl;
 	cout << "  -t, --transform \t\t Transform an XML in HTML " << endl;
 	cout << "  -o, --output \t\t\t Output file for HTML transformation" << endl;
-	cout << "  -x, --xslt \t\t\t Input XSLT file for HTML transformation" << endl;
 	
 }
 
@@ -42,7 +41,6 @@ int main (int argc, char ** argv)
 		{"dtd-well-formed",	required_argument, 	0, 	'd'},
 		{"well-formed",		required_argument, 	0,	'w'},
 		{"output", 	required_argument, 	0, 	'o'},
-		{"xslt", 	required_argument, 	0, 	'x'},
 		{0, 0, 0, 0}
 	};
 	
@@ -54,7 +52,7 @@ int main (int argc, char ** argv)
 	
 	for (;;)
 	{
-		c = getopt_long (argc, argv, "vhtV:d:w:o:x:",
+		c = getopt_long (argc, argv, "vhV:d:w:o:t::",
 			long_options, &option_index);
 		if (c == -1)
 			break;
@@ -62,9 +60,9 @@ int main (int argc, char ** argv)
 		{
 			case 'V':
 			{
-				XmlDoc * xml;
-				DTDDocument * dtd;
-				if(xmlparse(optarg, xml))
+				XmlDoc * xml = NULL;
+				DTDDocument * dtd = NULL;
+				if(xmlparse(optarg, &xml))
 				{
 					if (xml)
 					{
