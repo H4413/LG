@@ -163,10 +163,7 @@ bool dtdparse(const char * dtdname, DTDDocument * dtd)
 			printf("%s cannot be open. We will try stdin.", dtdname);
 	}
 	err = yyparse();
-	if (dtd)
-		dtd = document;
-	else
-		delete document;
+	dtd = document;
 	if (err != 0) 
 	{
 		printf("Parse ended with %d error(s)\n", err);

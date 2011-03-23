@@ -108,7 +108,7 @@ attribut
  ;
 %%
 
-bool xmlparse(const char * xmlname, XmlDoc * xml)
+bool xmlparse(const char * xmlname, XmlDoc ** xml)
 {
 	int err;
 	xmlDoc = new XmlDoc();
@@ -122,7 +122,7 @@ bool xmlparse(const char * xmlname, XmlDoc * xml)
 	}
 	err = xxparse();
 	if (xml)
-		xml = xmlDoc;
+		*xml = xmlDoc;
 	else
 		delete xmlDoc;
 	if (err != 0) 
