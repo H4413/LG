@@ -25,6 +25,11 @@ void XmlDoc::Display() const
     root->Display();
 }
 
+bool XmlDoc::Validate( DTDDocument * dtdDoc ) const
+{
+    return ( ( XmlElement * )root )->Validate( dtdDoc );
+}
+
 /* XmlAtt */
 
 void XmlAtt::Display() const
@@ -110,7 +115,21 @@ XmlElement::~XmlElement()
     nodeList.clear();
 }
 
+bool XmlElement::Validate( DTDDocument * dtdDoc ) const
+{
+#ifdef NDEBUG
+    DTDElement const * matchingElem = dtdDoc->SearchForElem( name );
 
+    if( matchingElem == NULL )
+    {
+        return false;
+    }
+
+    return matchingElem->ValidateElement( &nodeList );
+#else
+    return false;
+#endif
+}
 /* XmlContent */
 
 void XmlContent::Display(int ident) const

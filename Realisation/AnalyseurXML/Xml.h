@@ -127,6 +127,8 @@ class XmlElement : public XmlNode
 
                 virtual void Display(int ident = 0) const;
 
+                bool Validate( DTDDocument * dtdDoc ) const;
+
                 // [Cons,Des]tructors 
                 XmlElement( XmlElement * par, string n = "noname" )
                                     : XmlNode( par ), name( n ) {}
@@ -147,6 +149,7 @@ class XmlContent : public XmlNode
                 string GetContent() { return content; };
                 
                 vector<XmlElement*> GetChildrenElements() const {};
+
                 // Override
                 virtual bool isContent() { return true; };
 
@@ -180,6 +183,8 @@ class XmlDoc
                 // [Cons,Des]tructors 
                 XmlDoc( XmlNode * toor = NULL ) { root = toor; };
                 ~XmlDoc() { delete root; delete dtd; }	
+
+                bool Validate( DTDDocument * dtdDoc ) const;
         
         private: 
                 XmlNode *  root;
