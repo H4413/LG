@@ -28,13 +28,14 @@ class XmlContent;
 class DTD
 {
     public:
-                //string filename;
+                string fileName;
                 string name;
                 
-                void Display() const {};
+                void Display() const;
 
                 // [Cons,Des]tructors 
-                DTD( string n = "" ) : name( n ) {};
+                DTD( string n = "", string fn = "" )
+                                    : name( n ), fileName( fn ) {};
 };
 
 /****************************************************************************/
@@ -177,7 +178,7 @@ class XmlDoc
                 void Display() const;
 
                 // [Cons,Des]tructors 
-                XmlDoc( XmlNode * root = NULL ) {};
+                XmlDoc( XmlNode * toor = NULL ) { root = toor; };
                 ~XmlDoc() { delete root; delete dtd; }	
         
         private: 

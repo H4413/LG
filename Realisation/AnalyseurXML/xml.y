@@ -58,7 +58,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE NAME NAME VALUE CLOSE		{xmlDoc->setDTD (new DTD($2));}
+ : DOCTYPE NAME NAME VALUE CLOSE		{xmlDoc->setDTD (new DTD($2, $4));}
  | STARTSPECIAL attribut CLOSESPECIAL
  ;
 

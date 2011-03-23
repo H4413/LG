@@ -8,8 +8,19 @@
 #include <string.h>
 #include <iostream>
 
+/* DTD */
+
+void DTD::Display() const
+{
+    cout << "<!DOCTYPE " << name;
+    cout << " SYSTEM" << " \"" << fileName << "\">" << endl;
+}
+
+/* XmlDoc */
+
 void XmlDoc::Display() const
 {
+    dtd->Display();
     root->Display();
 }
 
