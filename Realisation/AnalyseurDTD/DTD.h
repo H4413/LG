@@ -183,6 +183,7 @@ class DTDElement
 		DTDElement(string name) : name(name) {};
 		void Display() const;
 		void Add(DTDContentspec * content);
+                bool ValidateElement( vector<XmlNode *> * xmlNodeVector );
 
 	private:
 		string name;

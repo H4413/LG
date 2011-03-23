@@ -69,6 +69,19 @@ void DTDElement::Add(DTDContentspec * content)
 	contentspec.push_back(content);
 }
 
+bool DTDElement::ValidateElement( vector<XmlNode *> * xmlNodeVector )
+{
+    vector<XmlNode *>::const_iterator * nodeIt = new vector<XmlNode *>::const_iterator;
+    
+    *nodeIt = xmlNodeVector->begin();
+
+    bool result = ( *( contentspec.begin() ) )->IsValidated( nodeIt, xmlNodeVector );
+
+    delete nodeIt;
+
+    return result;
+}
+
 /************************** DTDSequence ******************************/
 void DTDSequence::Display() const
 {
