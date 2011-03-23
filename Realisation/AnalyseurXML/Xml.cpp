@@ -20,6 +20,7 @@ void DTD::Display() const
 
 void XmlDoc::Display() const
 {
+    cout << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << endl;
     dtd->Display();
     root->Display();
 }

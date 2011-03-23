@@ -184,8 +184,6 @@ class XmlDoc
         private: 
                 XmlNode *  root;
                 DTD * dtd;
-                
-                     
 };
 
 #endif // XML_H
