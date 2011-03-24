@@ -13,7 +13,7 @@ using namespace std;
 #	include "parser.h"
 #endif
 
-void yyerror(char *msg);
+void yyerror(const char *msg);
 int yywrap(void);
 int yylex(void);
 
@@ -150,20 +150,35 @@ defaut_declaration
 ;
 %%
 
-bool dtdparse(const char * dtdname, DTDDocument * dtd)
+
+bool dtdparse(const char * dtdname, DTDDocument ** dtd)
 {
 	int err;
+	FILE * dtdfile = NULL;
+	dtd = NULL;
 	document = new DTDDocument();
+	
 	if (dtdname)
 	{
-		FILE * dtdfile = fopen(dtdname, "r");
+		dtdfile = fopen(dtdname, "r");
 		if (dtdfile)
 			yyin = dtdfile;
 		else
 			printf("%s cannot be open. We will try stdin.", dtdname);
 	}
 	err = yyparse();
-	dtd = document;
+	
+	if (dtdfile)
+	{
+		yyin = stdin;
+		fclose(dtdfile);
+	}
+	
+	if (dtd)
+		*dtd = document;
+	else
+		delete document;
+	
 	if (err != 0) 
 	{
 		printf("Parse ended with %d error(s)\n", err);
@@ -173,15 +188,17 @@ bool dtdparse(const char * dtdname, DTDDocument * dtd)
 	{  
 		printf("Parse ended with sucess\n");
 		return true;
-	};
+	}
+	
 }
 
 #ifndef NDEBUG
 
 int main(int argc, char **argv)
 {
-	DTDDocument * dtd = dtdparse(argv[1]);
-	dtd->Display();
+	DTDDocument * dtd;
+	dtdparse(argv[1], &dtd);
+	dtd->display();
 	return 0;
 }
 
@@ -192,7 +209,7 @@ int yywrap(void)
   return 1;
 }
 
-void yyerror(char *msg)
+void yyerror(const char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }
