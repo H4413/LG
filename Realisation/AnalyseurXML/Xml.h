@@ -60,12 +60,12 @@ class DTD
 class StyleSheet
 {
     public:
-		string filename;
+		string fileName;
 		string type;
 
 		// [Cons,Des]tructors 
 		StyleSheet( string f, string t )
-					: filename( f ), type( t ) {};
+					: fileName( f ), type( t ) {};
 							
 		void display() const {};
 };

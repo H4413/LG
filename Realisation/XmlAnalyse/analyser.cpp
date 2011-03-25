@@ -139,11 +139,13 @@ int main (int argc, char ** argv)
 				{
 					if (xml)
 					{
-						if (dtdparse(xml->getDTD()->name.c_str(), &dtd))
+						if (dtdparse(xml->getDTD()->fileName.c_str(), &dtd))
 							if (dtd)
 							{
-								//xml->Validate(dtd);
-								cout << "XML is validated" << endl << endl;
+								if (xml->Validate(dtd))
+									cout << "XML is validated" << endl << endl;
+								else
+									cout << "XML is not valide" << endl << endl;
 								delete dtd;
 							}
 							else

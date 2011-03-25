@@ -155,7 +155,6 @@ bool dtdparse(const char * dtdname, DTDDocument ** dtd)
 {
 	int err;
 	FILE * dtdfile = NULL;
-	dtd = NULL;
 	document = new DTDDocument();
 	
 	if (dtdname)
