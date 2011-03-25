@@ -150,9 +150,11 @@ class XmlElement : public XmlNode
 		void setChildren (NodeList * children) { nodeList = *children; }
 		virtual const NodeList * children() const { return &nodeList; }
 		ElementList * elementChildren() const;
-
+		
+		bool Validate( DTDDocument * dtdDoc ) const;
+		
 		// Override
-		virtual bool isElement() const { return true; }
+		virtual bool isElement() const { return true; };
 		virtual NodeType nodeType() const { return XmlElementNode; }
 		virtual void display(int ident = 0) const;
 };
@@ -198,6 +200,8 @@ class XmlDoc
 		void setDTD( DTD * dtd ) {this->dtd = dtd;}
 
 		void display() const;
+		
+		bool Validate( DTDDocument * dtdDoc ) const;
 
 	private: 
 		XmlNode *  root;

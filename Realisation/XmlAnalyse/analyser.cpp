@@ -12,17 +12,16 @@ using namespace std;
 
 void print_usage()
 {
-	cout << "Usage : analyse ";
-	cout << " [--version] [-v, --verbose] [-h,--help] " << endl
-		<< "\tCOMMAND [ARGS] [-o OUTPUT_FILE] [-x XSLT_FILE]" << endl;
-	cout << endl << "The commands can be: " << endl;
-	cout << "  -w, --well-formed \t\t Tells if a XML file is well-formed" << endl;
-	cout << "  -d, --dtd-well-formed \t Tells if a DTD file is well-formed" << endl;
-	cout << "  -V, --validate \t\t Validate an XML file " << endl;
-	cout << "  -t, --transform \t\t Transform an XML in HTML " << endl;
-	cout << "  -x, --xslt \t\t\t The XSLT file used for the transformation " << endl;
-	cout << "  -o, --output \t\t\t Output file for HTML transformation" << endl;
-	
+    cout << "Usage : analyse ";
+    cout << " [--version] [-v, --verbose] [-h,--help] " << endl
+            << "\tCOMMAND [ARGS] [-o OUTPUT_FILE] [-x XSLT_FILE]" << endl;
+    cout << endl << "The commands can be: " << endl;
+    cout << "  -w, --well-formed \t\t Tells if a XML file is well-formed" << endl;
+    cout << "  -d, --dtd-well-formed \t Tells if a DTD file is well-formed" << endl;
+    cout << "  -V, --validate \t\t Validate an XML file " << endl;
+    cout << "  -t, --transform \t\t Transform an XML in HTML " << endl;
+    cout << "  -x, --xslt \t\t\t The XSLT file used for the transformation " << endl;
+    cout << "  -o, --output \t\t\t Output file for HTML transformation" << endl;
 }
 
 void display_content(const XmlNode * node);

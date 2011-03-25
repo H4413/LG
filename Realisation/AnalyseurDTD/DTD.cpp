@@ -79,7 +79,7 @@ void DTDElement::Add(DTDContentspec * content)
 	contentspec.push_back(content);
 }
 
-bool DTDElement::ValidateElement( vector<XmlNode *> * xmlNodeVector )
+bool DTDElement::ValidateElement( vector<XmlNode *> const * xmlNodeVector ) const
 {
     vector<XmlNode *>::const_iterator * nodeIt = new vector<XmlNode *>::const_iterator;
     
@@ -126,7 +126,7 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
     }
 }
 
-bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
+bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
      if( *xmlNode == nodeVector->end() )
     {
@@ -239,7 +239,7 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 	}
 }
 
-bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
+bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
     if( *xmlNode == nodeVector->end() )
     {
@@ -324,7 +324,7 @@ void DTDName::display() const
 	PRINT_MARK
 }
 
-bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
+bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
     if( *xmlNode == nodeVector->end() )
     {
@@ -420,7 +420,7 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
 }
 
 /************************** DTDEmpty ******************************/
-bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
+bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
     if( ( *( *xmlNode ) )->isContent() )
     {
@@ -433,7 +433,7 @@ bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<X
 }
 
 /************************** DTDAny ******************************/
-bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const
+bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
     return true;
 }

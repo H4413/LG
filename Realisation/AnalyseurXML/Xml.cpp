@@ -35,6 +35,11 @@ XmlDoc::~XmlDoc()
 		delete dtd;
 }
 
+bool XmlDoc::Validate( DTDDocument * dtdDoc ) const
+{
+    return ( ( XmlElement * )root )->Validate( dtdDoc );
+}
+
 /* XmlAtt */
 
 void XmlAtt::display(int ident) const
@@ -138,6 +143,22 @@ XmlElement::~XmlElement()
         delete nodeList[i];
 
     nodeList.clear();
+}
+
+bool XmlElement::Validate( DTDDocument * dtdDoc ) const
+{
+#ifdef NDEBUG
+    DTDElement const * matchingElem = dtdDoc->SearchForElem( name );
+
+    if( matchingElem == NULL )
+    {
+        return false;
+    }
+
+    return matchingElem->ValidateElement( &nodeList );
+#else
+    return false;
+#endif
 }
 
 /* XmlContent */

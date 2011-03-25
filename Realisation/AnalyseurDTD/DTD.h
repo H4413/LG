@@ -46,7 +46,7 @@ class DTDContentspec
                 
                 Type GetType() {return contentSpec;}
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const = 0;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const = 0;
 };
 
 /*****************************************************************************/
@@ -110,7 +110,7 @@ class DTDSequence : public DTDChildren
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 		
 	protected :
 		vector<DTDChildren*> seq;
@@ -128,7 +128,7 @@ class DTDChoice : public DTDChildren
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
     protected:
 		vector<DTDChildren*> choice;
@@ -144,7 +144,7 @@ class DTDName : public DTDChildren
 		DTDName(string name) : DTDChildren(T_NAME), name(name) {};
 		void display() const;
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
 	private :
 		string name;
@@ -159,7 +159,7 @@ class DTDEmpty : public DTDContentspec
 		DTDEmpty() : DTDContentspec(T_EMPTY) {};
 		void display() const;
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 };
 
 /*****************************************************************************/
@@ -172,7 +172,7 @@ class DTDAny : public DTDContentspec
                     DTDContentspec(T_ANY), content(content){};
 		void display() const;
 
-                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> * nodeVector ) const;
+                virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
 
 	private : 
@@ -189,7 +189,7 @@ class DTDElement
 		DTDElement(string name) : name(name) {};
 		void display() const;
 		void Add(DTDContentspec * content);
-                bool ValidateElement( vector<XmlNode *> * xmlNodeVector );
+                bool ValidateElement( vector<XmlNode *> const * xmlNodeVector )const;
                 
                 string GetName() const { return name; }
 
