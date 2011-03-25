@@ -66,10 +66,11 @@ int main (int argc, char ** argv)
                 {
                     if (xml)
                     {
-                        if (dtdparse(xml->GetDTD()->name.c_str(), dtd))
+                        if (dtdparse(xml->GetDTD()->fileName.c_str(), dtd))
                             if (dtd)
                             {
-                                //xml->Validate(dtd);
+                                cout << "Validating XML" << endl;
+                                xml->Validate(dtd);
                                 cout << "XML is validated" << endl << endl;
                                 delete dtd;
                             }
