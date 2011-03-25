@@ -1,7 +1,7 @@
 /* Xml.h */
 
 /*TODO
- *   Display
+ *   display
  *   Validation du document XML
  */
 
@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class DTDDocument;
 
@@ -19,6 +20,21 @@ using namespace std;
 class XmlNode;
 class XmlElement;
 class XmlContent;
+class XmlAtt;
+
+typedef enum
+{
+	XmlElementNode,
+	XmlAttributeNode,
+	XmlContentNode,
+	XmlNullNode
+} NodeType;
+
+typedef vector<XmlNode*> 				NodeList;
+typedef vector <XmlNode*>::iterator		NodeIterator;
+typedef vector<XmlElement*> 			ElementList;
+typedef map<string,XmlAtt*>				AttributeList;
+typedef pair<string,XmlAtt*>			Attribute;
 
 /* Classes */
 
@@ -28,14 +44,14 @@ class XmlContent;
 class DTD
 {
     public:
-                string fileName;
-                string name;
-                
-                void Display() const;
+		string fileName;
+		string name;
 
-                // [Cons,Des]tructors 
-                DTD( string n = "", string fn = "" )
-                                    : name( n ), fileName( fn ) {};
+		// [Cons,Des]tructors 
+		DTD( string n = "", string fn = "" )
+							: name( n ), fileName( fn ) {};
+							
+		void display() const;
 };
 
 /****************************************************************************/
@@ -44,18 +60,15 @@ class DTD
 class StyleSheet
 {
     public:
+		string filename;
+		string type;
 
-                string filename;
-                string type;
-                
-                void Display() const {};
-
-
-                // [Cons,Des]tructors 
-                StyleSheet( string f, string t )
-                            : filename( f ), type( t ) {};
+		// [Cons,Des]tructors 
+		StyleSheet( string f, string t )
+					: filename( f ), type( t ) {};
+							
+		void display() const {};
 };
-
 
 /****************************************************************************/
 /*!
@@ -63,13 +76,13 @@ class StyleSheet
 class XmlAtt
 {
     public:
-                string Name;
-                string Value;
-                
-                void Display() const;
-                
-                // [Cons,Des]tructors 
-                XmlAtt( string n, string v ) : Name( n ), Value( v ){};
+		string name;
+		string value;
+		
+		// [Cons,Des]tructors 
+		XmlAtt( string n, string v ) : name( n ), value( v ){};
+		
+		virtual void display(int ident = 0) const;
 };
 
 /****************************************************************************/
@@ -77,22 +90,33 @@ class XmlAtt
 *****************************************************************************/
 class XmlNode
 {
-    public:
-                virtual bool isElement() { return false; };
-                virtual bool isContent() { return false; };
+	protected:
+		string name;
+		
+	public:
+		// [Cons,Des]tructors 
+		XmlNode(const string name = "noname") : name(name) {}
+		~XmlNode() {}
+				
+		virtual bool isElement() const { return false; }
+		virtual bool isContent() const { return false; }
+		virtual NodeType nodeType() const { return XmlNullNode; }
+		
+		virtual bool addAttribute(XmlAtt * newAtt) {return false;}
+		virtual bool hasAttributes() const { return false; }
+		virtual const AttributeList * attributes() const { return NULL; }
+		virtual const XmlAtt * attribute (const string & attName) const {return NULL;}
+		
+		virtual bool addChild (XmlNode * newChild) {return false;}
+		virtual bool hasChild() const { return false; }
+		virtual XmlNode * nextChild() { return NULL; }
+		virtual const NodeList * children() const { return NULL; }
+		
+		virtual void setNodeName (const string nodeName) { name = nodeName; }
+		virtual const string nodeName () const { return name; }
+				
+		virtual void display(int ident = 0) const = 0;
 
-                virtual void Display(int ident = 0) const = 0;
-
-                XmlElement * GetParent()   { return parent; };
-    
-                virtual vector<XmlElement*> GetChildrenElements() const = 0;
-
-                // [Cons,Des]tructors 
-                XmlNode( XmlElement * par = NULL ) :
-                        parent( par ) {};
-
-    protected:
-                XmlElement * parent;
 };
 
 /****************************************************************************/
@@ -100,6 +124,7 @@ class XmlNode
 *****************************************************************************/
 class XmlElement : public XmlNode
 {
+<<<<<<< HEAD
     public:
                 vector<XmlNode*>   GetChildren() const { return nodeList; }
                 vector<XmlElement*> GetChildrenElements() const;
@@ -145,6 +170,7 @@ class XmlElement : public XmlNode
 *****************************************************************************/
 class XmlContent : public XmlNode
 {
+<<<<<<< HEAD
     public:
                 string GetContent() { return content; };
                 
@@ -161,6 +187,25 @@ class XmlContent : public XmlNode
     
     private:
                 char * content;
+=======
+	private:
+		string data;
+		
+	public:
+		// [Cons,Des]tructors 
+		XmlContent(const string data )
+					: XmlNode("xmlContent"), data ( data ) {}
+					
+		const string & content() const { return data; }
+		void setContent (const string cont) { data = cont; }
+		const unsigned int size () const { return data.size(); }
+		
+		// Override
+		virtual bool isContent() const { return true; };
+		virtual NodeType nodeType() const { return XmlContentNode; }
+		virtual void display(int ident = 0) const;
+
+>>>>>>> 47eda987c772d3ead4cb22b80dfcd85a91e85efb
 };
 
 /****************************************************************************/
@@ -168,6 +213,7 @@ class XmlContent : public XmlNode
 *****************************************************************************/
 class XmlDoc
 {
+<<<<<<< HEAD
         
         public:
                 XmlNode * GetRoot(){ return root; };
@@ -189,6 +235,24 @@ class XmlDoc
         private: 
                 XmlNode *  root;
                 DTD * dtd;
+=======
+	public:
+		// [Cons,Des]tructors 
+		XmlDoc( XmlNode * toor = NULL ) { root = toor; dtd = NULL;};
+		~XmlDoc();
+
+		void setRoot( XmlNode * nRoot ) { root = nRoot; };
+		XmlNode * getRoot(){ return root; };
+
+		DTD * getDTD() { return dtd; }
+		void setDTD( DTD * dtd ) {this->dtd = dtd;}
+
+		void display() const;
+
+	private: 
+		XmlNode *  root;
+		DTD * dtd;
+>>>>>>> 47eda987c772d3ead4cb22b80dfcd85a91e85efb
 };
 
 #endif // XML_H

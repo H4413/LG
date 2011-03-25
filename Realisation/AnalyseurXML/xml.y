@@ -15,7 +15,7 @@ using namespace std;
 #endif
 
 int xxwrap(void);
-void xxerror(char *msg);
+void xxerror(const char *msg);
 int xxlex(void);
 
 XmlDoc * xmlDoc;
@@ -28,10 +28,12 @@ extern FILE * xxin;
    ElementName * en;  /* le nom d'un element avec son namespace */
    XmlDoc * doc;
    XmlNode * balise;
-   vector<XmlAtt*>* att;
+   AttributeList* att;
    vector<XmlNode*>* list_cont;
 
 }
+
+%error-verbose
 
 %type <doc> document
 %type <balise> element 
@@ -69,9 +71,9 @@ declaration
 
 element
  : start attribut					
-   empty_or_content 				{$$ = new XmlElement(NULL, $1->second);
-									 ((XmlElement*)$$)->SetAttList($2);
-									 ((XmlElement*)$$)->SetChildren($3);
+   empty_or_content 				{$$ = new XmlElement($1->second);
+									 ((XmlElement*)$$)->setAttributsList($2);
+									 ((XmlElement*)$$)->setChildren($3);
 									 }
  ;
 start
@@ -95,7 +97,7 @@ close_content_and_end
    END 								{$$ = $2;}
  ;
 content 
- : content DATA						{$$ = $1; $$->push_back(new XmlContent(NULL, $2));}
+ : content DATA						{$$ = $1; $$->push_back(new XmlContent($2));}
  | content misc						{$$ = $1;}
  | content element      			{$$ = $1; $$->push_back($2);}
  | /*empty*/         				{$$ = new vector<XmlNode*>;}
@@ -103,38 +105,50 @@ content
 
 attribut
  : attribut NAME EQ VALUE			{$$ = $1;
-									 $$->push_back(new XmlAtt($2, $4));}
- | /* empty */						{$$ = new vector<XmlAtt*>;}
+									 $$->insert(Attribute($2, new XmlAtt($2, $4)));}
+ | /* empty */						{$$ = new AttributeList;}
  ;
 %%
 
 bool xmlparse(const char * xmlname, XmlDoc ** xml)
 {
 	int err;
+	FILE * xmlfile = NULL;
 	xmlDoc = new XmlDoc();
+	
 	if (xmlname)
 	{
-		FILE * xmlfile = fopen(xmlname, "r");
+		xmlfile = fopen(xmlname, "r");
 		if (xmlfile)
 			xxin = xmlfile;
 		else
 			printf("%s cannot be open. We will try stdin.", xmlname);
 	}
+	
 	err = xxparse();
+	
+	if (xmlfile)
+	{
+		xxin = stdin;
+		fclose(xmlfile);
+	}
+	
 	if (xml)
 		*xml = xmlDoc;
 	else
 		delete xmlDoc;
+	
 	if (err != 0) 
 	{
 		printf("Parse ended with %d error(s)\n", err);
 		return false;
 	}
-	else
+	else	
 	{  
 		printf("Parse ended with sucess\n");
 		return true;
 	}
+
 }
 
 #ifndef NDEBUG
@@ -143,7 +157,7 @@ int main(int argc, char **argv)
 {
 	XmlDoc * xml;
 	xmlparse(argv[1], xml);
-	xml->Display();
+	xml->display();
 	return 0;
 }
 
@@ -154,8 +168,7 @@ int xxwrap(void)
   return 1;
 }
 
-void xxerror(char *msg)
+void xxerror(const char *msg)
 {
-  fprintf(stderr, "%s\n", msg);
+	fprintf(stderr, "Problem: %s\n", msg);
 }
-

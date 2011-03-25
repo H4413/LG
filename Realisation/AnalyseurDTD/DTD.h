@@ -42,7 +42,7 @@ class DTDContentspec
     public :
                 DTDContentspec(Type type) : contentSpec(type) {}
 
-		virtual void Display() const = 0;
+		virtual void display() const = 0;
                 
                 Type GetType() {return contentSpec;}
 
@@ -62,7 +62,7 @@ class DTDAttribute
     public:
 		DTDAttribute(string name, string type = "CDATA",
                         string att = "#IMPLIED") : name(name),type(type),att(att){};
-		void Display() const;
+		void display() const;
 };
 
 /*****************************************************************************/
@@ -78,7 +78,7 @@ class DTDAttList
 		DTDAttList () {}
 		void Add (DTDAttribute * att);
 		void SetName (string a_name) { name = a_name; }
-		void Display() const;	
+		void display() const;	
 };
 
 /*****************************************************************************/
@@ -94,7 +94,7 @@ class DTDChildren : public DTDContentspec
 		virtual void Add(DTDChildren * child) {}
 		virtual void AddList(vector<DTDChildren*>* list) {}
 		virtual void AddMark(Mark a_mark) {mark = a_mark;}
-		virtual void Display() const = 0;
+		virtual void display() const = 0;
 		bool HasAMark() const {return mark != NO_MARK;}
 };
 
@@ -105,7 +105,7 @@ class DTDSequence : public DTDChildren
 {
 	public :
 		DTDSequence() : DTDChildren(T_SEQ) {}
-		void Display() const;
+		void display() const;
 		void Add(DTDChildren* child);
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
@@ -123,7 +123,7 @@ class DTDChoice : public DTDChildren
 {
 	public :
 		DTDChoice() : DTDChildren(T_CHOICE) {}
-		void Display() const;
+		void display() const;
 		void Add(DTDChildren* child);
 		void Add(string name);
 		virtual void AddList(vector<DTDChildren*>* list);
@@ -142,7 +142,7 @@ class DTDName : public DTDChildren
 {
 	public :
 		DTDName(string name) : DTDChildren(T_NAME), name(name) {};
-		void Display() const;
+		void display() const;
 
                 virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
@@ -157,7 +157,7 @@ class DTDEmpty : public DTDContentspec
 {
 	public :
 		DTDEmpty() : DTDContentspec(T_EMPTY) {};
-		void Display() const;
+		void display() const;
 
                 virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 };
@@ -170,7 +170,7 @@ class DTDAny : public DTDContentspec
 	public :
 		DTDAny(string content) :
                     DTDContentspec(T_ANY), content(content){};
-		void Display() const;
+		void display() const;
 
                 virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
@@ -187,7 +187,7 @@ class DTDElement
 	public :
 		DTDElement() {}
 		DTDElement(string name) : name(name) {};
-		void Display() const;
+		void display() const;
 		void Add(DTDContentspec * content);
                 bool ValidateElement( vector<XmlNode *> const * xmlNodeVector )const;
                 
@@ -206,7 +206,7 @@ class DTDDocument
 	public :  
 		DTDDocument() {}
 		DTDDocument(string name) : name(name) {};
-		void Display() const;
+		void display() const;
 		void AddElement(DTDElement* element);
 		void AddAttList(DTDAttList* attList); 
                 
