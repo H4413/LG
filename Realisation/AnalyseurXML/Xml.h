@@ -109,6 +109,7 @@ class XmlNode
 		
 		virtual bool addChild (XmlNode * newChild) {return false;}
 		virtual bool hasChild() const { return false; }
+		virtual XmlNode * firstChild() { return NULL; }
 		virtual XmlNode * nextChild() { return NULL; }
 		virtual const NodeList * children() const { return NULL; }
 		
@@ -144,6 +145,7 @@ class XmlElement : public XmlNode
 		
 		virtual bool addChild (XmlNode * newChild);
 		virtual bool hasChild() const { nodeList.size() > 0; }
+		virtual XmlNode * firstChild();
 		virtual XmlNode * nextChild();
 		void setChildren (NodeList * children) { nodeList = *children; }
 		virtual const NodeList * children() const { return &nodeList; }

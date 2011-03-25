@@ -25,6 +25,37 @@ void print_usage()
 	
 }
 
+void display_content(const XmlNode * node);
+void display_node(const NodeList * nodeList, XmlNode * node);
+void display_children(const NodeList * nodeList, XmlNode * node);
+
+void display_node(const NodeList * nodeList, XmlNode * node)
+{
+	
+}
+
+void display_children(const NodeList * nodeList, XmlNode * node)
+{
+	// Elements and content
+    NodeList::const_iterator it;
+    for ( it = nodeList->begin(); it != nodeList->end(); ++it )
+    {
+		//for (int i = 0; i <= ident; i++) cout << "\t";
+		if ((*it)->nodeName() == "value-of")
+			display_children(node->children(), NULL);
+		else if ((*it)->hasChild())
+			display_children((*it)->children(), node);
+		else
+			(*it)->display(1);	
+	}
+}
+
+void display_content(const XmlNode * node)
+{
+	if (node->isContent())
+		cout << ((XmlContent*)node)->content();
+}
+
 void transform (char * xmlName, char * xsltName)
 {
 	XmlDoc * xml, * xslt;
@@ -40,12 +71,19 @@ void transform (char * xmlName, char * xsltName)
 	XmlElement * root = (XmlElement*)xml->getRoot();
 	XmlElement * xsltRoot = (XmlElement*)xslt->getRoot();
 	
-	XmlNode * node;
-	while ((node = xsltRoot->nextChild()) != NULL)
+	XmlNode * node = xsltRoot->firstChild();
+	XmlNode * xmlChild = root->firstChild();	
+	while (node != NULL)
 	{
-		cout << node->nodeName() << endl;
+		if (node->hasAttributes())
+			if (node->attribute("match")->value == xmlChild->nodeName())
+			{
+				display_children(node->children(), xmlChild);
+			}
+				//xmlChild->display();
+		node = xsltRoot->nextChild();
 	}
-	//xsltRoot
+
 	
 	
 }

@@ -62,13 +62,17 @@ bool XmlElement::addChild (XmlNode * newChild)
 	return false;
 }
 
+XmlNode * XmlElement::firstChild()
+{
+	iterator = nodeList.begin();
+	return *iterator;
+}
+
 XmlNode * XmlElement::nextChild() 
 {
+	iterator++;
 	if (iterator == nodeList.end())
-	{
-		iterator = nodeList.begin();
 		return NULL;
-	}
 	return *iterator;
 }
 
