@@ -1,0 +1,3 @@
+<!ELEMENT rapport (a|b)>
+<!ELEMENT a ANY>
+<!ELEMENT b ANY>
