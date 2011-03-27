@@ -59,6 +59,8 @@ DTDElement const * DTDDocument::SearchForElem( string const & name ) const
         {
             return &( *elemIt );
         }
+
+        elemIt++;
     }
 
     return NULL;
@@ -429,12 +431,19 @@ bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<X
     
     XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
 
-    return ( !elem->hasChild() );
+    if( !elem->hasChild() );
+    {
+        ( *xmlNode )++;
+
+        return true;
+    }
 }
 
 /************************** DTDAny ******************************/
 bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
+    ( *xmlNode )++;
+
     return true;
 }
 

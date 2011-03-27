@@ -155,7 +155,28 @@ bool XmlElement::Validate( DTDDocument * dtdDoc ) const
         return false;
     }
 
-    return matchingElem->ValidateElement( &nodeList );
+    // First, we validate child elements' order within this element.
+    bool result = matchingElem->ValidateElement( &nodeList );
+
+    // Then, if all children are where we expect them to be, we go deeper
+    // and try to validate every child.
+    if( result )
+    {
+        NodeList::const_iterator nodeIt = nodeList.begin();
+
+        while( result && ( nodeIt != nodeList.end() ) )
+        {
+            if( ( *nodeIt )->isElement() )
+            {
+                result &= ( ( XmlElement * )( *nodeIt ) )->Validate( dtdDoc );
+            }
+
+            nodeIt++;
+        }
+    }
+
+    return result;
+
 #else
     return false;
 #endif

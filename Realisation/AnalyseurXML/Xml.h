@@ -30,7 +30,7 @@ typedef enum
 	XmlNullNode
 } NodeType;
 
-typedef vector<XmlNode*> 				NodeList;
+typedef vector<XmlNode*> 			NodeList;
 typedef vector <XmlNode*>::iterator		NodeIterator;
 typedef vector<XmlElement*> 			ElementList;
 typedef map<string,XmlAtt*>				AttributeList;
