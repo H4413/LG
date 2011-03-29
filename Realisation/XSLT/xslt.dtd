@@ -1,13 +1,10 @@
 <!ELEMENT value-of EMPTY>
 <!ATTLIST value-of select CDATA #REQUIRED>
 
-<!ELEMENT template (text | value-of)* >
-<!ATTLIST template match CDATA #IMPLIED>
-
-<!ELEMENT text (#PCDATA) >
+<!ELEMENT template ANY>
+<!ATTLIST template match CDATA #REQUIRED>
 
 <!ELEMENT stylesheet (template)* >
 <!ATTLIST stylesheet version CDATA #REQUIRED>
-<!ATTLIST stylesheet xmlns CDATA #REQUIRED>
 
 <!ELEMENT apply-templates EMPTY>

@@ -11,6 +11,14 @@
 #include "commun.h"
 #include "xx.tab.h"
 
+extern bool verbose_flag;
+
+#define PRINT_XXTEXT			\
+({								\
+	if (verbose_flag)			\
+		printf("%s", xxtext);	\
+})
+
 static char* skipSpace(char *s) {
   char *buf;
   int i,lastnonspace;
@@ -96,25 +104,25 @@ closespecial "?>"{nl}?
 
 %%
 
-<INITIAL>{ws}		{printf("%s",xxtext); /* skip */}
-<INITIAL>{xmlversion} {printf("%s",xxtext); /* skip */}
-<INITIAL>{doctype} {printf("%s",xxtext); return DOCTYPE;}
-<INITIAL>"/"		{printf("%s",xxtext); return SLASH;}
-<INITIAL>"="		{printf("%s",xxtext); return EQ;}
-<INITIAL>{close}	{printf("%s",xxtext); BEGIN(CONTENT); return CLOSE;}
-<INITIAL>{closespecial}	{printf("%s",xxtext); return CLOSESPECIAL;}
-<INITIAL>{name}		{printf("%s",xxtext);xxlval.s = strdup(xxtext); return NAME;}
-<INITIAL>{nsname}		{printf("%s",xxtext);xxlval.s = strdup(xxtext); return NSNAME;}
-<INITIAL>{string}	{printf("%s",xxtext);xxlval.s = strdup(getString(xxtext)); return VALUE;}
+<INITIAL>{ws}			{PRINT_XXTEXT; /* skip */}
+<INITIAL>{xmlversion} 	{PRINT_XXTEXT; /* skip */}
+<INITIAL>{doctype} 		{PRINT_XXTEXT; return DOCTYPE;}
+<INITIAL>"/"			{PRINT_XXTEXT; return SLASH;}
+<INITIAL>"="			{PRINT_XXTEXT; return EQ;}
+<INITIAL>{close}		{PRINT_XXTEXT; BEGIN(CONTENT); return CLOSE;}
+<INITIAL>{closespecial}	{PRINT_XXTEXT; return CLOSESPECIAL;}
+<INITIAL>{name}			{PRINT_XXTEXT;xxlval.s = strdup(xxtext); return NAME;}
+<INITIAL>{nsname}		{PRINT_XXTEXT;xxlval.s = strdup(xxtext); return NSNAME;}
+<INITIAL>{string}		{PRINT_XXTEXT;xxlval.s = strdup(getString(xxtext)); return VALUE;}
 
-{openspecial}{ws}?{name}	{printf("%s",xxtext);BEGIN(INITIAL); char * tmp = word(xxtext); xxlval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
-{open}{ws}?{name}	{printf("%s",xxtext);BEGIN(INITIAL); char * tmp = word(xxtext); xxlval.en = new ElementName("",tmp); free(tmp); return START;}
-{open}{ws}?{nsname}	{printf("%s",xxtext);BEGIN(INITIAL); char *tmp1 = nameSpace(xxtext); char * tmp2 = split_namespace(xxtext); xxlval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSSTART;}
-{open}{ws}?"/"		{printf("%s",xxtext);BEGIN(INITIAL); return END;}
-{comment}		{printf("%s",xxtext);xxlval.s = strdup(xxtext); return COMMENT;}
+{openspecial}{ws}?{name}	{PRINT_XXTEXT;BEGIN(INITIAL); char * tmp = word(xxtext); xxlval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
+{open}{ws}?{name}		{PRINT_XXTEXT;BEGIN(INITIAL); char * tmp = word(xxtext); xxlval.en = new ElementName("",tmp); free(tmp); return START;}
+{open}{ws}?{nsname}		{PRINT_XXTEXT;BEGIN(INITIAL); char *tmp1 = nameSpace(xxtext); char * tmp2 = split_namespace(xxtext); xxlval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSSTART;}
+{open}{ws}?"/"			{PRINT_XXTEXT;BEGIN(INITIAL); return END;}
+{comment}				{PRINT_XXTEXT;xxlval.s = strdup(xxtext); return COMMENT;}
 
-<CONTENT>{ws}?{pcdata}		{printf("%s",xxtext);xxlval.s = strdup(skipSpace(xxtext)); return DATA;}
+<CONTENT>{ws}?{pcdata}	{PRINT_XXTEXT;xxlval.s = strdup(skipSpace(xxtext)); return DATA;}
 
-{nl}			{printf("\n");}
-.			{printf("%s",xxtext);fprintf(stderr, "!ERROR(%c)\n", *xxtext);}
+{nl}					{printf("\n");}
+.						{printf("%s",xxtext);fprintf(stderr, "!ERROR(%c)\n", *xxtext);}
 

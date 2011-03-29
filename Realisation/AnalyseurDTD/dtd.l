@@ -9,6 +9,14 @@
 #include "DTD.h"
 #include "yy.tab.h"
 
+extern bool verbose_flag;
+
+#define PRINT_YYTEXT			\
+({								\
+	if (verbose_flag)			\
+		printf("%s", yytext);	\
+})
+
 static char* skipSpace(char *s) {
   char *buf;
   int i,lastnonspace;
@@ -64,26 +72,26 @@ any "ANY"
 %%
 
 <INITIAL>{ws}		            { /* skip */}
-<INITIAL>{element}            {printf("%s",yytext); BEGIN(INSIDE); return ELEMENT; }
-<INITIAL>{attlist}            {printf("%s",yytext); BEGIN(INSIDE); return ATTLIST; }
-<INSIDE>{close}               {printf("%s",yytext); BEGIN(INITIAL); return CLOSE; }
-<INSIDE>{openpar}             {printf("%s",yytext); return OPENPAR; }
-<INSIDE>{closepar}{ws}?       {printf("%s",yytext); return CLOSEPAR; }
-<INSIDE>{comma}{ws}?          {printf("%s",yytext); return COMMA; }
-<INSIDE>{pipe}{ws}?           {printf("%s",yytext); return PIPE; }
-<INSIDE>{declaration}         {printf("%s",yytext); stringreturn(DECLARATION); }
-<INSIDE>{fixed}               {printf("%s",yytext); return FIXED; }
-<INSIDE>{ast}                 {printf("%s",yytext); return AST ; }
-<INSIDE>{qmark}               {printf("%s",yytext); return QMARK ; }
-<INSIDE>{plus}                {printf("%s",yytext); return PLUS ; }
-<INSIDE>{empty}               {printf("%s",yytext); return EMPTY; }
-<INSIDE>{any}                 {printf("%s",yytext); return ANY; }
-<INSIDE>{pcdata}              {printf("%s",yytext); return PCDATA; }
-<INSIDE>{cdata}               {printf("%s",yytext); return CDATA; }
-<INSIDE>{string}              {printf("%s",yytext); stringreturn(STRING); }
-<INSIDE>{tokentype}{ws}?      {printf("%s",yytext); stringreturn(TOKENTYPE); }
-<INSIDE>{name}{ws}?           {printf("%s",yytext); stringreturn(NAME); }
-{comment}		               {printf("%s",yytext); /* skip comments stringreturn(COMMENT); */ }
+<INITIAL>{element}            {PRINT_YYTEXT; BEGIN(INSIDE); return ELEMENT; }
+<INITIAL>{attlist}            {PRINT_YYTEXT; BEGIN(INSIDE); return ATTLIST; }
+<INSIDE>{close}               {PRINT_YYTEXT; BEGIN(INITIAL); return CLOSE; }
+<INSIDE>{openpar}             {PRINT_YYTEXT; return OPENPAR; }
+<INSIDE>{closepar}{ws}?       {PRINT_YYTEXT; return CLOSEPAR; }
+<INSIDE>{comma}{ws}?          {PRINT_YYTEXT; return COMMA; }
+<INSIDE>{pipe}{ws}?           {PRINT_YYTEXT; return PIPE; }
+<INSIDE>{declaration}         {PRINT_YYTEXT; stringreturn(DECLARATION); }
+<INSIDE>{fixed}               {PRINT_YYTEXT; return FIXED; }
+<INSIDE>{ast}                 {PRINT_YYTEXT; return AST ; }
+<INSIDE>{qmark}               {PRINT_YYTEXT; return QMARK ; }
+<INSIDE>{plus}                {PRINT_YYTEXT; return PLUS ; }
+<INSIDE>{empty}               {PRINT_YYTEXT; return EMPTY; }
+<INSIDE>{any}                 {PRINT_YYTEXT; return ANY; }
+<INSIDE>{pcdata}              {PRINT_YYTEXT; return PCDATA; }
+<INSIDE>{cdata}               {PRINT_YYTEXT; return CDATA; }
+<INSIDE>{string}              {PRINT_YYTEXT; stringreturn(STRING); }
+<INSIDE>{tokentype}{ws}?      {PRINT_YYTEXT; stringreturn(TOKENTYPE); }
+<INSIDE>{name}{ws}?           {PRINT_YYTEXT; stringreturn(NAME); }
+{comment}		              {PRINT_YYTEXT; /* skip comments stringreturn(COMMENT); */ }
 
-.			{printf("%s",yytext);fprintf(stderr, "!ERROR(%c)\n", *yytext);}
-{nl}			{printf("%s",yytext);/* skip, must be an extra one at EOF */;}
+.							 {printf("%s",yytext);fprintf(stderr, "!ERROR(%c)\n", *yytext);}
+{nl}						 {printf("%s",yytext);/* skip, must be an extra one at EOF */;}

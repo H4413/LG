@@ -138,13 +138,13 @@ class XmlElement : public XmlNode
 		~XmlElement();		
 		
 		virtual bool addAttribute(XmlAtt * newAtt);
-		virtual bool hasAttributes() const { attributeList.size() > 0; }
+		virtual bool hasAttributes() const { return attributeList.size() > 0; }
 		void setAttributsList(AttributeList * list) { attributeList = *list; } 
 		virtual const AttributeList * attributes() const { return &attributeList; }
 		virtual const XmlAtt * attribute (const string & attName) const;
 		
 		virtual bool addChild (XmlNode * newChild);
-		virtual bool hasChild() const { nodeList.size() > 0; }
+		virtual bool hasChild() const { return nodeList.size() > 0; }
 		virtual XmlNode * firstChild();
 		virtual XmlNode * nextChild();
 		void setChildren (NodeList * children) { nodeList = *children; }
@@ -188,6 +188,10 @@ class XmlContent : public XmlNode
 *****************************************************************************/
 class XmlDoc
 {
+	private: 
+		XmlNode *  root;
+		DTD * dtd;
+		
 	public:
 		// [Cons,Des]tructors 
 		XmlDoc( XmlNode * toor = NULL ) { root = toor; dtd = NULL;};
@@ -203,9 +207,8 @@ class XmlDoc
 		
 		bool Validate( DTDDocument * dtdDoc ) const;
 
-	private: 
-		XmlNode *  root;
-		DTD * dtd;
+		// static functions
+		static XmlDoc * parse(const string & filename);
 };
 
 #endif // XML_H

@@ -40,6 +40,15 @@ bool XmlDoc::Validate( DTDDocument * dtdDoc ) const
     return ( ( XmlElement * )root )->Validate( dtdDoc );
 }
 
+extern bool xmlparse(const char *, XmlDoc**); 
+XmlDoc * XmlDoc::parse (const string & filename)
+{
+	XmlDoc * xml;
+	if (xmlparse(filename.c_str(), &xml))
+		return xml;
+	return NULL;
+}
+
 /* XmlAtt */
 
 void XmlAtt::display(int ident) const

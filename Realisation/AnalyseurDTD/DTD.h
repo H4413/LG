@@ -157,7 +157,7 @@ class DTDEmpty : public DTDContentspec
 {
 	public :
 		DTDEmpty() : DTDContentspec(T_EMPTY) {};
-		void display() const;
+		void display() const {}
 
                 virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 };
@@ -168,15 +168,12 @@ class DTDEmpty : public DTDContentspec
 class DTDAny : public DTDContentspec 
 {
 	public :
-		DTDAny(string content) :
-                    DTDContentspec(T_ANY), content(content){};
-		void display() const;
+		DTDAny() :
+                    DTDContentspec(T_ANY) {};
+		void display() const {}
 
                 virtual bool IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const;
 
-
-	private : 
-		string content;
 };
 
 /*****************************************************************************/
@@ -211,6 +208,9 @@ class DTDDocument
 		void AddAttList(DTDAttList* attList); 
                 
                 DTDElement const * SearchForElem( string const & name ) const;
+
+		// static functions
+		static DTDDocument * parse(const string & filename);
 
 	private :
 		vector<DTDElement> elements;

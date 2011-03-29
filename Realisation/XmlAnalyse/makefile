@@ -5,6 +5,7 @@ SOURCES += ../AnalyseurXML/Xml.cpp
 SOURCES += ../AnalyseurXML/lex.xx.c
 SOURCES += ../AnalyseurXML/xml.tab.c
 SOURCES += analyser.cpp
+SOURCES += XslTransform.cpp
 
 FLAGS = -g -DXXDEBUG=1 -DYYDEBUG=1 -DNDEBUG=1 -I../AnalyseurDTD/ -I../AnalyseurXML/ -I../XmlAnalyse/
 

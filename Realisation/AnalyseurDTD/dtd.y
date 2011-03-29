@@ -61,8 +61,8 @@ element: ELEMENT NAME contentspec CLOSE 	{$$ = new DTDElement($2);
 											 $$->Add($3);}
 	;
 
-contentspec: EMPTY 							{$$ = new DTDChoice();}
-   | ANY 									{$$ = new DTDChoice();}
+contentspec: EMPTY 							{$$ = new DTDEmpty();}
+   | ANY 									{$$ = new DTDAny();}
    | mixed 									{$$ = $1;}
    | children 								{$$ = $1;}
    ;
@@ -163,7 +163,7 @@ bool dtdparse(const char * dtdname, DTDDocument ** dtd)
 		if (dtdfile)
 			yyin = dtdfile;
 		else
-			printf("%s cannot be open. We will try stdin.", dtdname);
+			printf("%s cannot be open. We will try stdin.\n", dtdname);
 	}
 	err = yyparse();
 	

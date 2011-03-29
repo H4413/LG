@@ -122,7 +122,7 @@ bool xmlparse(const char * xmlname, XmlDoc ** xml)
 		if (xmlfile)
 			xxin = xmlfile;
 		else
-			printf("%s cannot be open. We will try stdin.", xmlname);
+			printf("%s cannot be open. We will try stdin.\n", xmlname);
 	}
 	
 	err = xxparse();

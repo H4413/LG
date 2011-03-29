@@ -66,6 +66,15 @@ DTDElement const * DTDDocument::SearchForElem( string const & name ) const
     return NULL;
 }
 
+extern bool dtdparse(const char *, DTDDocument**); 
+DTDDocument * DTDDocument::parse (const string & filename)
+{
+	DTDDocument * dtd;
+	if (dtdparse(filename.c_str(), &dtd))
+		return dtd;
+	return NULL;
+}
+
 /************************** DTDElement ******************************/
 void DTDElement::display() const
 {

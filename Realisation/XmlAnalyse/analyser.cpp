@@ -1,14 +1,17 @@
 #include <iostream>
 #include <getopt.h>
+#include <fstream>
 
-#include "parser.h"
 #include "Xml.h"
 #include "DTD.h"
+#include "XslTransform.h"
 
 #define VERSION		0
 #define SVERSION	1
 
 using namespace std;
+
+bool verbose_flag = false;
 
 void print_usage()
 {
@@ -24,82 +27,23 @@ void print_usage()
     cout << "  -o, --output \t\t\t Output file for HTML transformation" << endl;
 }
 
-void display_content(const XmlNode * node);
-void display_node(const NodeList * nodeList, XmlNode * node);
-void display_children(const NodeList * nodeList, XmlNode * node);
-
-void display_node(const NodeList * nodeList, XmlNode * node)
-{
-	
-}
-
-void display_children(const NodeList * nodeList, XmlNode * node)
-{
-	// Elements and content
-    NodeList::const_iterator it;
-    for ( it = nodeList->begin(); it != nodeList->end(); ++it )
-    {
-		//for (int i = 0; i <= ident; i++) cout << "\t";
-		if ((*it)->nodeName() == "value-of")
-			display_children(node->children(), NULL);
-		else if ((*it)->hasChild())
-			display_children((*it)->children(), node);
-		else
-			(*it)->display(1);	
-	}
-}
-
-void display_content(const XmlNode * node)
-{
-	if (node->isContent())
-		cout << ((XmlContent*)node)->content();
-}
-
-void transform (char * xmlName, char * xsltName)
-{
-	XmlDoc * xml, * xslt;
-	cout << "Xmlfile : " << xmlName << " XSLT file : " << xsltName << endl;
-	if (!(xmlparse(xmlName, &xml) && xmlparse(xsltName, &xslt)))
-	{
-		cerr << "Error parsing the files!" << endl;
-		return;
-	}
-	xml->display();
-	xslt->display();
-	
-	XmlElement * root = (XmlElement*)xml->getRoot();
-	XmlElement * xsltRoot = (XmlElement*)xslt->getRoot();
-	
-	XmlNode * node = xsltRoot->firstChild();
-	XmlNode * xmlChild = root->firstChild();	
-	while (node != NULL)
-	{
-		if (node->hasAttributes())
-			if (node->attribute("match")->value == xmlChild->nodeName())
-			{
-				display_children(node->children(), xmlChild);
-			}
-				//xmlChild->display();
-		node = xsltRoot->nextChild();
-	}
-
-	
-	
-}
-
 int main (int argc, char ** argv)
 {
 	int c;
-	int verbose_flag = 0;
 	char * xmlName = NULL;
 	char * xsltName = NULL;
+	char * output = NULL;
+	XmlDoc * xml = NULL;
+	DTDDocument * dtd = NULL;
 	int option_index = 0;
 	bool transform_flag = false;
+	XslTransform * xslt = NULL;
 	
 	static struct option long_options[] = 
 	{
-		{"verbose",	no_argument,	&verbose_flag, 1},
-		{"version",	no_argument,	0, 'v'},
+		{"verbose",	no_argument,	0, 'v'},
+		{"version",	no_argument,	0, 'a'},
+		{"about",	no_argument,	0, 'a'},
 		{"help", 	no_argument, 	0, 	'h'},
 		{"transform", 	required_argument,	0,	't'},
 		{"validate",	required_argument, 	0, 	'V'},
@@ -118,12 +62,15 @@ int main (int argc, char ** argv)
 	
 	for (;;)
 	{
-		c = getopt_long (argc, argv, "vhV:d:w:o:t:x:",
+		c = getopt_long (argc, argv, "vahV:d:w:o:t:x:",
 			long_options, &option_index);
 		if (c == -1)
 			break;
 		switch (c)
 		{
+			case 'v':
+				verbose_flag = true;
+				break;
 			case 't':
 				transform_flag = true;
 				xmlName = optarg;
@@ -131,48 +78,49 @@ int main (int argc, char ** argv)
 			case 'x':
 				xsltName = optarg;
 				break;
+			case 'o':
+				output = optarg;
+				break;
 			case 'V':
-			{
-				XmlDoc * xml = NULL;
-				DTDDocument * dtd = NULL;
-				if(xmlparse(optarg, &xml))
+				if( (xml = XmlDoc::parse(optarg)) )
 				{
-					if (xml)
-					{
-						if (dtdparse(xml->getDTD()->fileName.c_str(), &dtd))
-							if (dtd)
-							{
-								if (xml->Validate(dtd))
-									cout << "XML is validated" << endl << endl;
-								else
-									cout << "XML is not valide" << endl << endl;
-								delete dtd;
-							}
-							else
-								cout << "DTD error" << endl << endl;
-						delete xml;
+					if ( (dtd = DTDDocument::parse(xml->getDTD()->fileName.c_str())) )	
+					{			
+						if (xml->Validate(dtd))
+							cout << "XML is validated" << endl << endl;
+						else
+							cout << "XML is not valide" << endl << endl;
+						delete dtd;
+					} else {
+						cout << "DTD error" << endl << endl;
 					}
-					else
-						cout << "XML error" << endl << endl;
+					delete xml;
+				} else {
+					cout << "XML error" << endl << endl;
 				}
-			}
 				break;
 			case 'd':
-				if (dtdparse(optarg, NULL))
+				if ( (dtd = DTDDocument::parse(optarg)) )
+				{
 					cout << optarg << ": is a well-formed DTD document." << endl << endl;
-				else
+					delete dtd;
+				} else {
 					cout << optarg << ": is not a well-formed DTD document." << endl << endl;
+				}
 				break;
-			case 'w':	
-				if (xmlparse(optarg, NULL))
+			case 'w':
+				if ( (xml = XmlDoc::parse(optarg)) )
+				{
 					cout << optarg << ": is a well-formed XML document." << endl << endl;
-				else
+					delete xml;
+				} else {
 					cout << optarg << ": is not a well-formed XML document." << endl << endl;
+				}
 				break;
 			case 'h':
 				print_usage();
 				return 1;
-			case 'v':
+			case 'a':
 				cout << "XML Analyse, version " << VERSION 
 					<< "." << SVERSION << endl;
 				return 1;
@@ -195,11 +143,11 @@ int main (int argc, char ** argv)
 			print_usage();
 			return 1;
 		}
-		transform(xmlName, xsltName);
+		xslt = new XslTransform();
+		if (output)
+			xslt->setOutputFile(output);
+		xslt->transform(xmlName, xsltName);
 	}
-	
-	if (verbose_flag)
-		cout << "Verbose flag is set" << endl;
 
 	if (optind < argc)
 	{
