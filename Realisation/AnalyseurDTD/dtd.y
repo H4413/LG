@@ -23,7 +23,7 @@ extern FILE * yyin;
 	DTDElement * elem;
 	DTDContentspec * spec;
 	DTDChildren * child;
-	vector<DTDChildren*>* list_child;
+	std::vector<DTDChildren*>* list_child;
 	DTDAttList * attList;
 	DTDAttribute * att;
 	DTDName * name;

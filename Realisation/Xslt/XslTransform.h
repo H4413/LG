@@ -1,25 +1,27 @@
+#ifndef XSLTRANSFORM_H
+#define XSLTRANSFORM_H
+
 #include <iostream>
 #include <string>
 #include <stack>
 
-
 #include "Xml.h"
 
-#ifndef XSLTRANSFORM_H
-#define XSLTRANSFORM_H
-
+/**********************************************************************
+ * XslTransformation is a class implementation of a tranformation
+ * algorithm XML to HTML, using a XSL file
+ **********************************************************************/
 class XslTransform
 {
 	protected:
-		ostream * out;
+		std::ostream * out;
 		
 	private:
 		/* temporary attributes */
 		XmlNode * xmlRoot;
 		XmlNode * xslRoot;
-		
 		XmlNode * currentNode;
-		stack<XmlNode*> parents;
+		std::stack<XmlNode*> parents;
 		
 	private:
 		void begin(XmlNode * node);
@@ -31,13 +33,14 @@ class XslTransform
 		void printTemplate(XmlNode * templateNode);
 	
 	public:
-		XslTransform() : out(&std::cout) { (parents.size() == 0 ? cout << "empty" << endl : cout << "full" << endl); }
+		XslTransform() : out(&std::cout) {}
 		~XslTransform();
 		
-		bool setOutputFile(const string filename);
+		bool SetOutputFile(const std::string filename);
 		
-		bool transform(XmlDoc * xml, XmlDoc * xsl);
-		bool transform(const string xmlName, const string xslName);
+		bool Transform(XmlDoc * xml, XmlDoc * xsl);
+		bool Transform(const std::string xmlName, 
+						const std::string xslName);
 		
 };
 

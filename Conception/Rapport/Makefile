@@ -6,7 +6,7 @@ RM=rm -rfv
 MV=mv -v
 ECHO=@echo
 
-SH=sh
+SH=bash
 
 all: pdf 
 

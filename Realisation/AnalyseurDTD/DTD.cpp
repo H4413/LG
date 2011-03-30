@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 #define PRINT_MARK 			\
 	switch (mark)			\
 	{						\
@@ -21,18 +23,19 @@
 			break;			\
 	}
 
+
 /************************** DTDDocument ******************************/
-void DTDDocument::display() const
+void DTDDocument::Display() const
 {
 	cout << "<!DOCTYPE " << name << " [ " << endl << endl;
 	vector <DTDElement>::const_iterator it;
 	
 	for (it = elements.begin(); it != elements.end(); ++it)
-		it->display();
+		it->Display();
 		
 	vector <DTDAttList>::const_iterator it_att;
 	for (it_att = attList.begin(); it_att != attList.end(); ++it_att)
-		it_att->display();
+		it_att->Display();
 		
 	cout << endl << "]>" << endl;
 }
@@ -67,7 +70,7 @@ DTDElement const * DTDDocument::SearchForElem( string const & name ) const
 }
 
 extern bool dtdparse(const char *, DTDDocument**); 
-DTDDocument * DTDDocument::parse (const string & filename)
+DTDDocument * DTDDocument::Parse (const string & filename)
 {
 	DTDDocument * dtd;
 	if (dtdparse(filename.c_str(), &dtd))
@@ -76,12 +79,12 @@ DTDDocument * DTDDocument::parse (const string & filename)
 }
 
 /************************** DTDElement ******************************/
-void DTDElement::display() const
+void DTDElement::Display() const
 {
 	cout << "<!ELEMENT " << name << " ";
 	vector <DTDContentspec*>::const_iterator it;
 	for (it = contentspec.begin(); it != contentspec.end(); ++it)
-		(*it)->display();
+		(*it)->Display();
 	cout << ">" << endl;
 }
 
@@ -90,9 +93,11 @@ void DTDElement::Add(DTDContentspec * content)
 	contentspec.push_back(content);
 }
 
-bool DTDElement::ValidateElement( vector<XmlNode *> const * xmlNodeVector ) const
+bool 
+DTDElement::ValidateElement(vector<XmlNode *> const * xmlNodeVector) const
 {
-    vector<XmlNode *>::const_iterator * nodeIt = new vector<XmlNode *>::const_iterator;
+    vector<XmlNode *>::const_iterator * nodeIt 
+								= new vector<XmlNode *>::const_iterator;
     
     *nodeIt = xmlNodeVector->begin();
 
@@ -104,13 +109,13 @@ bool DTDElement::ValidateElement( vector<XmlNode *> const * xmlNodeVector ) cons
 }
 
 /************************** DTDSequence ******************************/
-void DTDSequence::display() const
+void DTDSequence::Display() const
 {
 	vector <DTDChildren*>::const_iterator it;
 	cout << "(";
 	for (it = seq.begin(); it != seq.end(); ++it)
 	{
-		(*it)->display();
+		(*it)->Display();
 		if (it + 1 != seq.end())
 			cout << ", ";
 	}
@@ -137,13 +142,18 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
     }
 }
 
-bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
+bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, 
+							vector<XmlNode*> const * nodeVector ) const
 {
     bool result = true;
     
     vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
+<<<<<<< HEAD
     if( *xmlNode == nodeVector->end() )
+=======
+    if( ( *( *xmlNode ) )->IsElement() == false )
+>>>>>>> 7a096e44a757d02383ecb2c46faa4943886e03c1
     {
         return false;
     }
@@ -213,13 +223,13 @@ bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vecto
 }
 
 /************************** DTDChoice ******************************/
-void DTDChoice::display() const
+void DTDChoice::Display() const
 {
 	vector <DTDChildren*>::const_iterator it;
 	cout << "(";
 	for (it = choice.begin(); it != choice.end(); ++it)
 	{
-		(*it)->display();
+		(*it)->Display();
 		if (it + 1 != choice.end())
 			cout << " | ";
 	}
@@ -247,7 +257,8 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 	}
 }
 
-bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
+bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, 
+							vector<XmlNode*> const * nodeVector ) const
 {
     bool result;
 
@@ -318,19 +329,28 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
 }
 
 /************************** DTDName ******************************/
-void DTDName::display() const
+void DTDName::Display() const
 {
 	cout << name;
 	PRINT_MARK
 }
 
-bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
+bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, 
+							vector<XmlNode*> const * nodeVector ) const
 {
     bool result;
 
+<<<<<<< HEAD
     if( *xmlNode == nodeVector->end() )
     {
         result = false;
+=======
+    if( ( *( *xmlNode ) )->IsElement() )
+    {
+        XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
+
+        result = ( name.compare( elem->NodeName() ) == 0 ); 
+>>>>>>> 7a096e44a757d02383ecb2c46faa4943886e03c1
     }
     else
     {
@@ -414,13 +434,15 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
 }
 
 /************************** DTDEmpty ******************************/
-bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
+bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, 
+							vector<XmlNode*> const * nodeVector ) const
 {
     return nodeVector->empty();
 }
 
 /************************** DTDAny ******************************/
-bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
+bool DTDAny::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, 
+							vector<XmlNode*> const * nodeVector ) const
 {
     ( *xmlNode )++;
 
@@ -433,17 +455,17 @@ void DTDAttList::Add(DTDAttribute * att)
 	attList.push_back(*att);
 }
 
-void DTDAttList::display() const
+void DTDAttList::Display() const
 {
 	cout << "<!ATTLIST " << name << endl;
 	vector <DTDAttribute>::const_iterator it;
 	for (it = attList.begin(); it != attList.end(); ++it)
-		it->display();
+		it->Display();
 	cout << ">" << endl;
 }
 
 /************************** DTDAttribute ******************************/
-void DTDAttribute::display() const
+void DTDAttribute::Display() const
 {
 	cout << "\t" << name << " " << type << " " << att << endl;
 }

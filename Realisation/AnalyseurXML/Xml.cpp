@@ -8,23 +8,26 @@
 #include <string.h>
 #include <iostream>
 
+using namespace std;
+
+
 /* DTD */
 
-void DTD::display() const
+void DTD::Display() const
 {
-    cout << "<!DOCTYPE " << name;
-    cout << " SYSTEM" << " \"" << fileName << "\">" << endl;
+    cout << "<!DOCTYPE " << Name;
+    cout << " SYSTEM" << " \"" << FileName << "\">" << endl;
 }
 
 /* XmlDoc */
 
-void XmlDoc::display() const
+void XmlDoc::Display() const
 {
     cout << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << endl;
     if (dtd)
-		dtd->display();
+		dtd->Display();
 	if (root)
-		root->display();
+		root->Display();
 }
 
 XmlDoc::~XmlDoc()
@@ -41,7 +44,7 @@ bool XmlDoc::Validate( DTDDocument * dtdDoc ) const
 }
 
 extern bool xmlparse(const char *, XmlDoc**); 
-XmlDoc * XmlDoc::parse (const string & filename)
+XmlDoc * XmlDoc::Parse (const string & filename)
 {
 	XmlDoc * xml;
 	if (xmlparse(filename.c_str(), &xml))
@@ -51,9 +54,9 @@ XmlDoc * XmlDoc::parse (const string & filename)
 
 /* XmlAtt */
 
-void XmlAtt::display(int ident) const
+void XmlAtt::Display(int ident) const
 {
-    cout << " " << name << " = \"" << value << "\" "; 
+    cout << " " << Name << " = \"" << Value << "\" "; 
 }
 
 /* XmlNode */
@@ -66,7 +69,7 @@ XmlElement::XmlElement(const string name) : XmlNode(name)
 	iterator = nodeList.begin();
 }
 
-bool XmlElement::addChild (XmlNode * newChild)
+bool XmlElement::AddChild (XmlNode * newChild)
 {
 	if (newChild)
 	{
@@ -76,13 +79,13 @@ bool XmlElement::addChild (XmlNode * newChild)
 	return false;
 }
 
-XmlNode * XmlElement::firstChild()
+XmlNode * XmlElement::FirstChild()
 {
 	iterator = nodeList.begin();
 	return *iterator;
 }
 
-XmlNode * XmlElement::nextChild() 
+XmlNode * XmlElement::NextChild() 
 {
 	iterator++;
 	if (iterator == nodeList.end())
@@ -90,36 +93,36 @@ XmlNode * XmlElement::nextChild()
 	return *iterator;
 }
 
-bool XmlElement::addAttribute(XmlAtt * newAtt)
+bool XmlElement::AddAttribute(XmlAtt * newAtt)
 {
 	if (newAtt)
 	{
-		attributeList.insert(Attribute(newAtt->name, newAtt));
+		attributeList.insert(Attribute(newAtt->Name, newAtt));
 		return true;
 	}
 	return false;
 }
 
-const XmlAtt * XmlElement::attribute (const string & attName) const
+const XmlAtt * XmlElement::GetAttribute (const string & attName) const
 {
 	return (attributeList.find(attName))->second;
 }
 		
 
-ElementList * XmlElement::elementChildren() const
+ElementList * XmlElement::ElementChildren() const
 {
     ElementList * elements = new ElementList();
     for (   vector <XmlNode*>::const_iterator it = nodeList.begin();
             it != nodeList.end();
             ++it )
      {
-        if ( (*it)->isElement() ) elements->push_back( (XmlElement*) *it );
+        if ( (*it)->IsElement() ) elements->push_back( (XmlElement*) *it );
      }
 
     return elements;
 }
 
-void XmlElement::display(int ident) const
+void XmlElement::Display(int ident) const
 {
     // Opening
     cout << "<" << name;
@@ -127,7 +130,7 @@ void XmlElement::display(int ident) const
     // Attributes
     AttributeList::const_iterator attIt;
     for ( attIt = attributeList.begin(); attIt != attributeList.end(); ++attIt )
-		attIt->second->display();
+		attIt->second->Display();
         
     cout << ">" << endl;
     
@@ -136,7 +139,7 @@ void XmlElement::display(int ident) const
     for ( nIt = nodeList.begin(); nIt != nodeList.end(); ++nIt )
     {
 		for (int i = 0; i <= ident; i++) cout << "\t";
-        (*nIt)->display(ident+1);	
+        (*nIt)->Display(ident+1);	
 	}
 	
 	cout << endl;
@@ -193,7 +196,7 @@ bool XmlElement::Validate( DTDDocument * dtdDoc ) const
 
 /* XmlContent */
 
-void XmlContent::display(int ident) const
+void XmlContent::Display(int ident) const
 {
 	cout << data;
 }

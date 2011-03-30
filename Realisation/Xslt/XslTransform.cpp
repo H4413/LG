@@ -1,7 +1,9 @@
 #include <fstream>
 #include "XslTransform.h"
 
-bool XslTransform::setOutputFile(const string filename)
+using namespace std;
+
+bool XslTransform::SetOutputFile(const string filename)
 {
 	cout << "changing output file" << endl;
 	if (!filename.empty())
@@ -20,22 +22,22 @@ bool XslTransform::setOutputFile(const string filename)
 	return false;
 }
 
-bool XslTransform::transform(const string xmlName, const string xslName)
+bool XslTransform::Transform(const string xmlName, const string xslName)
 {
 	XmlDoc * xml, * xsl;
-	if ( !((xml = XmlDoc::parse(xmlName)) && (xsl = XmlDoc::parse(xslName))) )
+	if ( !((xml = XmlDoc::Parse(xmlName)) && (xsl = XmlDoc::Parse(xslName))) )
 	{
 		cerr << "Error parsing the files!" << endl;
 		return false;
 	}
 	cout << "First constructor" << endl;
-	return transform(xml, xsl);
+	return Transform(xml, xsl);
 }
 
-bool XslTransform::transform(XmlDoc * xml, XmlDoc * xsl)
+bool XslTransform::Transform(XmlDoc * xml, XmlDoc * xsl)
 {
-	xmlRoot = xml->getRoot();
-	xslRoot = xsl->getRoot();
+	xmlRoot = xml->GetRoot();
+	xslRoot = xsl->GetRoot();
 	currentNode = xmlRoot;
 	cout << "Before first apply templates" << endl;
 	applyTemplates();
@@ -45,14 +47,14 @@ bool XslTransform::transform(XmlDoc * xml, XmlDoc * xsl)
 void XslTransform::begin(XmlNode * node)
 {
     // Opening
-    *out << "<" << node->nodeName();
+    *out << "<" << node->NodeName();
     
-    const AttributeList * attributeList = node->attributes();
+    const AttributeList * attributeList = node->Attributes();
 
     // Attributes
     AttributeList::const_iterator attIt;
     for ( attIt = attributeList->begin(); attIt != attributeList->end(); ++attIt )
-		*out << " " << attIt->second->name << " = \"" << attIt->second->value << "\" "; 
+		*out << " " << attIt->second->Name << " = \"" << attIt->second->Value << "\" "; 
         
     *out << ">" << endl;
 }
@@ -60,7 +62,7 @@ void XslTransform::begin(XmlNode * node)
 void XslTransform::end(XmlNode * node)
 {
 	// Closing
-    *out << "</" << node->nodeName() << ">" << endl;
+    *out << "</" << node->NodeName() << ">" << endl;
 }
 
 void XslTransform::applyTemplates()
@@ -89,19 +91,19 @@ bool XslTransform::nextNode()
 	if (!currentNode)
 		return false;
 		
-	if (currentNode->hasChild())
+	if (currentNode->HasChild())
 	{
 		parents.push(currentNode);
-		cout << "Current Node name" << currentNode->nodeName() << endl;
-		currentNode = currentNode->firstChild();
-		cout << "Current Node name" << currentNode->nodeName() << endl;
+		cout << "Current Node name" << currentNode->NodeName() << endl;
+		currentNode = currentNode->FirstChild();
+		cout << "Current Node name" << currentNode->NodeName() << endl;
 		return true;
 	}
 		
 	while (!parents.empty())
 	{
 		cout << "Parents not empty :" << parents.size() << endl;
-		currentNode = parents.top()->nextChild();
+		currentNode = parents.top()->NextChild();
 		
 		if (currentNode)
 			return true;
@@ -117,23 +119,23 @@ XmlNode * XslTransform::searchForTemplate()
 {
 	cout << "Search for templates" << endl;
 	
-	if (currentNode->isContent())
+	if (currentNode->IsContent())
 		return NULL;
 		
-	XmlNode * xslChild = xslRoot->firstChild();
+	XmlNode * xslChild = xslRoot->FirstChild();
 	while (xslChild != NULL)
 	{
-		if (xslChild->hasAttributes())
+		if (xslChild->HasAttributes())
 		{
-			cout << xslChild->attribute("match")->value
-				<< " != " << currentNode->nodeName() << endl;
-			if (xslChild->attribute("match")->value == currentNode->nodeName())
+			cout << xslChild->GetAttribute("match")->Value
+				<< " != " << currentNode->NodeName() << endl;
+			if (xslChild->GetAttribute("match")->Value == currentNode->NodeName())
 				return xslChild;
-			else if (xslChild->attribute("match")->value == "/"
+			else if (xslChild->GetAttribute("match")->Value == "/"
 					&& xmlRoot == currentNode)
 				return xslChild;
 		}
-		xslChild = xslRoot->nextChild();
+		xslChild = xslRoot->NextChild();
 	}
 	return NULL;
 }
@@ -141,34 +143,34 @@ XmlNode * XslTransform::searchForTemplate()
 void XslTransform::printTemplate(XmlNode * templateNode)
 {
 	cout << "Print templates" << endl;
-	XmlNode * xslNode = templateNode->firstChild();
+	XmlNode * xslNode = templateNode->FirstChild();
 	
 	while (xslNode != NULL)
 	{
 		cout << "In while" << endl;
 		
-		if (xslNode->nodeName() == "apply-templates")
+		if (xslNode->NodeName() == "apply-templates")
 		{
 			applyTemplates();
 		}
-		else if (xslNode->nodeName() == "value-of")
+		else if (xslNode->NodeName() == "value-of")
 		{
-			cout << "#### value of #########" << currentNode->nodeName() << endl;
-			XmlNode * currentContent = currentNode->firstChild();
-			if (currentContent->isContent())
-				*out << ((XmlContent*)currentContent)->content();
+			cout << "#### value of #########" << currentNode->NodeName() << endl;
+			XmlNode * currentContent = currentNode->FirstChild();
+			if (currentContent->IsContent())
+				*out << ((XmlContent*)currentContent)->Content();
 		}
-		else if (xslNode->isContent())
+		else if (xslNode->IsContent())
 		{
-			*out << ((XmlContent*)xslNode)->content();
+			*out << ((XmlContent*)xslNode)->Content();
 		} 
 		else
 		{
-			cout << "Node : " << xslNode->nodeName() << endl;
-			if (!xslNode->hasChild())
+			cout << "Node : " << xslNode->NodeName() << endl;
+			if (!xslNode->HasChild())
 			{
-				*out << "<" << xslNode->nodeName() << "/>" << endl;	
-				xslNode = templateNode->nextChild();
+				*out << "<" << xslNode->NodeName() << "/>" << endl;	
+				xslNode = templateNode->NextChild();
 				continue;	
 			}
 				
@@ -176,6 +178,6 @@ void XslTransform::printTemplate(XmlNode * templateNode)
 			printTemplate(xslNode);
 			end(xslNode);
 		}
-		xslNode = templateNode->nextChild();	
+		xslNode = templateNode->NextChild();	
 	}
 }
