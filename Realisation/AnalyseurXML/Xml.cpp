@@ -178,7 +178,7 @@ bool XmlElement::Validate( DTDDocument * dtdDoc ) const
 
         while( result && ( nodeIt != nodeList.end() ) )
         {
-            if( ( *nodeIt )->isElement() )
+            if( ( *nodeIt )->IsElement() )
             {
                 result &= ( ( XmlElement * )( *nodeIt ) )->Validate( dtdDoc );
             }

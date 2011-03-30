@@ -149,11 +149,7 @@ bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode,
     
     vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
-<<<<<<< HEAD
     if( *xmlNode == nodeVector->end() )
-=======
-    if( ( *( *xmlNode ) )->IsElement() == false )
->>>>>>> 7a096e44a757d02383ecb2c46faa4943886e03c1
     {
         return false;
     }
@@ -340,25 +336,17 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode,
 {
     bool result;
 
-<<<<<<< HEAD
     if( *xmlNode == nodeVector->end() )
     {
         result = false;
-=======
-    if( ( *( *xmlNode ) )->IsElement() )
-    {
-        XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
-
-        result = ( name.compare( elem->NodeName() ) == 0 ); 
->>>>>>> 7a096e44a757d02383ecb2c46faa4943886e03c1
     }
     else
     {
-        if( ( *( *xmlNode ) )->isElement() )
+        if( ( *( *xmlNode ) )->IsElement() )
         {
             XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
 
-            result = ( name.compare( elem->nodeName() ) == 0 ); 
+            result = ( name.compare( elem->NodeName() ) == 0 ); 
         }
         else
         {
