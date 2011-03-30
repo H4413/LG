@@ -1,0 +1,113 @@
+\subsection{Validation sémantique d'un document XML}
+
+La validation sémantique d'un document XML consiste à vérifier : 
+
+\begin{itemize}
+\item que toutes les balises utilisées dans le document sont définies dans
+la DTD associée
+\item que les noeuds fils de chaque balise sont ordonnés selon la
+définition de la balise mère dans la DTD
+\end{itemize}
+
+La procédure de validation d'un document consiste à valider son élément
+racine.\\
+La classe XMLElement est dotée d'une fonction ValidateElement :
+
+\begin{algorithmic}
+\STATE Recherche de l'élément DTD associé à l'élément XML
+
+\IF {Élément non trouvé}
+\RETURN Faux
+\ENDIF
+
+\STATE result $\gets$ Validation de l'élément DTD
+
+\IF{result}
+
+\FORALL{Élément XML fils de l'élément courant e}
+\STATE result $\gets$ result \AND e.Validate
+\ENDFOR
+
+\RETURN result
+
+\ELSE
+\RETURN Faux
+\ENDIF
+\end{algorithmic}
+
+
+\subsection{Algorithme de validation d'un élément DTD}
+
+L'algorithme de validation d'un élément DTD valide l'objet DTDContentSpec
+associé, en se basant sur la liste des noeuds fils de l'élément XML en
+cours de validation. La fonction prend également en entrée un itérateur sur
+ce vecteur de noeuds.
+
+\subsubsection{DTDAny, DTDEmpty}
+
+La fonction Validate de DTDAny renvoie toujours vraie. Celle de DTDEmpty
+renvoie vraie si le vecteur d'éléments XML passé en argument est vide.
+
+\subsubsection{DTDName}
+
+La fonction renvoie vraie si l'élément XML du vecteur sur lequel pointe
+l'itérateur a le même nom que l'élément DTD appelant la fonction Validate.
+Si l'élément XML est de type XMLContent (chaîne de caractère), la fonction
+renvoie vrai si l'élément DTD a pour nom #PCDATA.
+
+\begin{algorithmic}
+\STATE input arguments : nodeVector, nodeIt
+\STATE bool result
+\IF{nodeIt = nodeVector.end}
+\STATE result $\gets$ faux
+\ELSE
+\STATE result $\gets$ ( name = nodeIt.getName )
+\ENDIF
+
+\IF{result}
+\STATE nodeIt $\gets$ nodeIt + 1
+\ENDIF
+
+\IF{mark = M\_Q}
+    \IF{result}
+    \STATE IsValidated( nodeVector, nodeIt )
+    \ENDIF
+    \RETURN vrai
+\ELSIF{mark = M\_PLUS}
+    \IF{result}
+    \STATE IsValidated( nodeVector, nodeIt )
+    \ENDIF
+    \RETURN result
+\ELSIF{mark = M\_AST}
+    \IF{result}
+    \STATE IsValidated( nodeVector, nodeIt )
+    \ENDIF
+    \RETURN vrai
+\ENDIF
+
+\RETURN result
+
+\end{algorithmic}
+
+
+\subsubsection{DTDSequence}
+
+La fonction fonctionne sur le même principe que celle de DTDName, à deux
+différences près : 
+\begin{itemize}
+\item le critère de validation est différent : si tous les éléments DTD
+contenus dans la séquence sont validés, la fonction renvoie vrai également.
+\item le nodeIt n'est pas incrémenté en cas de validation ; en revanche on
+en fait une sauvegarde en début de fonction afin de le restaurer si la
+séquence n'est pas validée. Il s'agit d'une sorte de "point de reprise" (si
+la séquence est une possibilité d'un choix, la fonction IsValidated de
+l'élément choix peut essayer une autre possibilité en repartant du même
+point).
+\end{itemize}
+
+\subsubsection{DTDChoice}
+
+La fonction de validation est similaire à celle de DTDSequence sauf pour ce
+qui est du critère de validation : si un des éléments DTD contenus dans le choix est validé, la fonction
+renvoie vrai.
+
