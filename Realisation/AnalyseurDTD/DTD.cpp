@@ -140,6 +140,8 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
 bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
     bool result = true;
+    
+    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
     if( *xmlNode == nodeVector->end() )
     {
@@ -147,8 +149,6 @@ bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vecto
     }
     else
     {
-        vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
-
         vector<DTDChildren *>::const_iterator childrenIt;
 
         for( childrenIt = seq.begin() ; childrenIt != seq.end() ; childrenIt++ )
@@ -251,14 +251,14 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
 {
     bool result = false;
 
+    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
+
     if( *xmlNode == nodeVector->end() )
     {
         result = false;
     }
     else
     {
-        vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
-
         vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
 
         while( !result && choiceIt != choice.end() )
