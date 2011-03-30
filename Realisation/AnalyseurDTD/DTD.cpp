@@ -184,7 +184,7 @@ bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vecto
             // let's try to validate this sequence another time !
             // No need to backup *xmlNode because it is done in the
             // next level of recurrence (it's complicated)
-            bool nestedResult = IsValidated( xmlNode , nodeVector);
+            IsValidated( xmlNode , nodeVector);
 
             return true;
         }
@@ -196,7 +196,7 @@ bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vecto
                 // let's try to validate this sequence another time !
                 // No need to backup *xmlNode because it is done in the
                 // next level of recurrence (it's complicated)
-                bool nestedResult = IsValidated( xmlNode, nodeVector );
+                IsValidated( xmlNode, nodeVector );
 
                 return true;
             }
@@ -296,7 +296,7 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
             // let's try to validate this sequence another time !
             // No need to backup *xmlNode because it is done in the
             // next level of recurrence (it's complicated)
-            bool nestedResult = IsValidated( xmlNode, nodeVector );
+            IsValidated( xmlNode, nodeVector );
 
             return true;
         }
@@ -308,7 +308,7 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
                 // let's try to validate this sequence another time !
                 // No need to backup *xmlNode because it is done in the
                 // next level of recurrence (it's complicated)
-                bool nestedResult = IsValidated( xmlNode, nodeVector );
+                IsValidated( xmlNode, nodeVector );
 
                 return true;
             }
