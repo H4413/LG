@@ -257,11 +257,6 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
         return false;
     }
 
-    if( ( *( *xmlNode ) )->isElement() == false )
-    {
-        return false;
-    }
-
     vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
     vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
@@ -271,6 +266,8 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
     while( !result && choiceIt != choice.end() )
     {
         result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
+
+        ( *xmlNode )++;
     }
 
     switch( mark )
