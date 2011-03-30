@@ -9,7 +9,5 @@ projet.
    Bison et Flex). Partie *3.1.1* du sujet
  - AnalyseurDTD/ : analyseur lexico-syntaxique pour un fichier DTD (basé sur
    Bison et Flex). Partie *3.1.2* du sujet
- - AXD/ : analyseur d'un fichier XML faisant référence à une DTD. Partie
-   *3.1.3* du sujet
-
-*TODO* : Créer les dossiers des différents programmes
+ - Xslt/ : Classe responsable pour la transforamation XML -> HTML
+ - analyser.cpp : Application générale
