@@ -139,7 +139,7 @@ int main (int argc, char ** argv)
 		}
 		if (!xsltName)
 		{
-			cout << "You need to specify XSLT file name usign -x" << endl;
+			cout << "You need to specify XSLT file name using -x" << endl;
 			print_usage();
 			return 1;
 		}
