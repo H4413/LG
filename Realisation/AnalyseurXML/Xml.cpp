@@ -169,6 +169,7 @@ bool XmlElement::Validate( DTDDocument * dtdDoc ) const
 
     // Then, if all children are where we expect them to be, we go deeper
     // and try to validate every child.
+/*
     if( result )
     {
         NodeList::const_iterator nodeIt = nodeList.begin();
@@ -183,7 +184,7 @@ bool XmlElement::Validate( DTDDocument * dtdDoc ) const
             nodeIt++;
         }
     }
-
+*/
     return result;
 
 #else

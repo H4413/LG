@@ -433,19 +433,7 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
 /************************** DTDEmpty ******************************/
 bool DTDEmpty::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
-    if( ( *( *xmlNode ) )->isContent() )
-    {
-        return false;
-    }
-    
-    XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
-
-    if( !elem->hasChild() );
-    {
-        ( *xmlNode )++;
-
-        return true;
-    }
+    return nodeVector->empty();
 }
 
 /************************** DTDAny ******************************/
