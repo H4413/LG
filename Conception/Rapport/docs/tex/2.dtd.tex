@@ -1,0 +1,22 @@
+\section{L'analyseur de DTD}
+
+	\subsection{Les différentes classes}
+	
+	\begin{centrer}
+	\begin{figure}[h]
+		\includegraphics[width=15cm]{\PIXPATH/uml_dtd}
+		\caption{Diagramme UML simplifié de l'analyseur de DTD}
+	\end{figure}
+	\end{center}
+	
+	\subsection{Fonctionnement}
+	
+	L'analyseur prend en entrée un fichier *.dtd. Il stocke ensuite
+	les éléments et les attributs et leur contenu dans une classe
+	DTDDocument.
+	Le contenu d'un élément est un DTDContentSpec qui peut être soit un DTDEmpty,
+	un DTDAny ou un DTDChildren qui lui même peut être un DTDSequence, 
+	un DTDName ou un DTDChoice. Lorsqu'on a un DTDChildren(DTDChoice ou 
+	DTDSequence), l'appel se fait récursivement sur ce que celui-ci contient 
+	jusqu'à DTDName qui est la seule classe ne contenant pas de DTDChildren.
+	
