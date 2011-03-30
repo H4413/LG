@@ -267,7 +267,7 @@ bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<
     {
         result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
 
-        ( *xmlNode )++;
+        choiceIt++;
     }
 
     switch( mark )
@@ -350,6 +350,8 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
     else
     {
         XmlContent * cont = ( XmlContent * )( *( *xmlNode ) );
+
+        result = ( name.compare( "#PCDATA" ) == 0 );
     }
 
 
