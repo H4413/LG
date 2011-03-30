@@ -2,8 +2,6 @@
 
 <xsl:stylesheet version="1.0">
 
-
- 
   <xsl:template match="persons">
     <html>
       <head> <title>Testing XML Example</title> </head>

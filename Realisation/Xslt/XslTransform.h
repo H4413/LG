@@ -28,7 +28,9 @@ class XslTransform
 		void end(XmlNode * node);
 		
 		bool nextNode();
-		void applyTemplates();
+		void applyTemplates(bool isRoot = false);
+		void valueOf(XmlNode * node);
+		
 		XmlNode * searchForTemplate();
 		void printTemplate(XmlNode * templateNode);
 	

@@ -6,8 +6,8 @@
 #include "DTD.h"
 #include "XslTransform.h"
 
-#define VERSION		0
-#define SVERSION	1
+#define VERSION		1
+#define SVERSION	0
 
 using namespace std;
 

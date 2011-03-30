@@ -123,6 +123,5 @@ closespecial "?>"{nl}?
 
 <CONTENT>{ws}?{pcdata}	{PRINT_XXTEXT;xxlval.s = strdup(skipSpace(xxtext)); return DATA;}
 
-{nl}					{printf("\n");}
 .						{printf("%s",xxtext);fprintf(stderr, "!ERROR(%c)\n", *xxtext);}
 

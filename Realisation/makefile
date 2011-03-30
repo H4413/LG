@@ -22,5 +22,5 @@ analyseXML:
 clean:
 	make -C AnalyseurDTD clean
 	make -C AnalyseurXML clean
-	rm -f analyse Xslt/*.o
+	rm -f analyse Xslt/*.o Tests/*.htm* *.htm*
 

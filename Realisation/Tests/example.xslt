@@ -11,16 +11,17 @@
 
 <xsl:template match="titre">
 <h3>Titre: <span style="color:#ff0000">
-<xsl:value-of select="."/></span></h3>
+<xsl:value-of/>
+</span></h3>
 </xsl:template>
 
 <xsl:template match="prenom">
-<xsl:value-of select="."/>
+<xsl:value-of/>
 </xsl:template>
 
 <xsl:template match="nom">
 <span style="color:#ff0000">
-<xsl:value-of select="."/></span>
+<xsl:value-of/></span>
 <br/>
 </xsl:template>
 
@@ -30,11 +31,11 @@
 
 <xsl:template match="resume">
 <span>Resume: </span>
-  <xsl:value-of select="."/>
+  <xsl:value-of/>
 </xsl:template>
 
 <xsl:template match="p">
-  <xsl:value-of select="."/>
+  <xsl:value-of/>
   <br />
 </xsl:template>
 

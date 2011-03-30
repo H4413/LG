@@ -52,16 +52,17 @@ class DTD
 
 /**********************************************************************
  * This class holds the StyleSheet information contained in the XML file
+ * @warning This class wasn't well implemented
  **********************************************************************/
 class StyleSheet
 {
     public:
         std::string FileName;
-        std::string type;
+        std::string styleType;
 
         // [Cons,Des]tructors 
         StyleSheet( std::string f, std::string t )
-                    : FileName( f ), type( t ) {};
+                    : FileName( f ), styleType( t ) {};
                             
         void Display() const {};
 };

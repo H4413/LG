@@ -31,6 +31,8 @@ extern FILE * yyin;
 	Mark mrk;
 }
 
+%error-verbose
+
 %type <dtdd> dtd
 %type <elem> element
 %type <list_child> liste_seq liste_choice
