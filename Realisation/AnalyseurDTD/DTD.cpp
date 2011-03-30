@@ -139,25 +139,22 @@ void DTDSequence::AddList(vector<DTDChildren*>* list)
 
 bool DTDSequence::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
-     if( *xmlNode == nodeVector->end() )
-    {
-        return false;
-    }
-
-    if( ( *( *xmlNode ) )->isElement() == false )
-    {
-        return false;
-    }
-
-    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
-
-    vector<DTDChildren *>::const_iterator childrenIt;
-
     bool result = true;
 
-    for( childrenIt = seq.begin() ; childrenIt != seq.end() ; childrenIt++ )
+    if( *xmlNode == nodeVector->end() )
     {
-        result &= ( *childrenIt )->IsValidated( xmlNode, nodeVector );
+        return false;
+    }
+    else
+    {
+        vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
+
+        vector<DTDChildren *>::const_iterator childrenIt;
+
+        for( childrenIt = seq.begin() ; childrenIt != seq.end() ; childrenIt++ )
+        {
+            result &= ( *childrenIt )->IsValidated( xmlNode, nodeVector );
+        }
     }
 
     switch( mark )
@@ -252,22 +249,24 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 
 bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
-    if( *xmlNode == nodeVector->end() )
-    {
-        return false;
-    }
-
-    vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
-
-    vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
-
     bool result = false;
 
-    while( !result && choiceIt != choice.end() )
+    if( *xmlNode == nodeVector->end() )
     {
-        result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
+        result = false;
+    }
+    else
+    {
+        vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
-        choiceIt++;
+        vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
+
+        while( !result && choiceIt != choice.end() )
+        {
+            result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
+
+            choiceIt++;
+        }
     }
 
     switch( mark )
@@ -334,24 +333,24 @@ void DTDName::display() const
 
 bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
-    if( *xmlNode == nodeVector->end() )
-    {
-        return false;
-    }
-
     bool result;
 
-    if( ( *( *xmlNode ) )->isElement() )
+    if( *xmlNode == nodeVector->end() )
     {
-        XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
-
-        result = ( name.compare( elem->nodeName() ) == 0 ); 
+        result = false;
     }
     else
     {
-        XmlContent * cont = ( XmlContent * )( *( *xmlNode ) );
+        if( ( *( *xmlNode ) )->isElement() )
+        {
+            XmlElement * elem = ( XmlElement * )( *( *xmlNode ) );
 
-        result = ( name.compare( "#PCDATA" ) == 0 );
+            result = ( name.compare( elem->nodeName() ) == 0 ); 
+        }
+        else
+        {
+            result = ( name.compare( "#PCDATA" ) == 0 );
+        }
     }
 
 
