@@ -9,10 +9,6 @@ using namespace std;
 #include "DTD.h"
 #define YYDEBUG 1
 
-#ifdef NDEBUG
-#	include "parser.h"
-#endif
-
 void yyerror(const char *msg);
 int yywrap(void);
 int yylex(void);

@@ -10,10 +10,6 @@ using namespace std;
 #include "commun.h"
 #include "xx.tab.h"
 
-#ifndef NDEBUG
-#	include "parser.h"
-#endif
-
 int xxwrap(void);
 void xxerror(const char *msg);
 int xxlex(void);
