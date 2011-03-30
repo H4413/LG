@@ -14,6 +14,7 @@ class XmlNode;
 using namespace std;
 
 /* Type declarations */
+/* Mark is either *,?,+ or nothing*/
 enum Mark
 {
     NO_MARK,
@@ -22,6 +23,7 @@ enum Mark
     M_Q
 };
 
+/*Type is the type of a contentspec*/
 enum Type
 {
     T_ANY,
@@ -32,7 +34,8 @@ enum Type
 };
 
 /*****************************************************************************/
-/*!
+/* DTDContentspec is a pure virtual class which represents any content in an 
+element.
 ******************************************************************************/
 class DTDContentspec 
 {
@@ -50,7 +53,7 @@ class DTDContentspec
 };
 
 /*****************************************************************************/
-/*!
+/* DTDAttribute is an attribute in the DTD.
 ******************************************************************************/
 class DTDAttribute 
 {
@@ -66,7 +69,7 @@ class DTDAttribute
 };
 
 /*****************************************************************************/
-/*!
+/* DTDAttList is a list of DTDAttribute.
 ******************************************************************************/
 class DTDAttList 
 {
@@ -82,7 +85,8 @@ class DTDAttList
 };
 
 /*****************************************************************************/
-/*!
+/* DTDChildren is a pure virtual class which can be a DTDSequence, DTDChoice
+or DTDName.
 ******************************************************************************/
 class DTDChildren : public DTDContentspec 
 {
@@ -99,7 +103,7 @@ class DTDChildren : public DTDContentspec
 };
 
 /*****************************************************************************/
-/*!
+/* DTDSequence is a sequence which contains DTDChildren separated by commas.
 ******************************************************************************/
 class DTDSequence : public DTDChildren 
 {
@@ -117,7 +121,7 @@ class DTDSequence : public DTDChildren
 };
 
 /*****************************************************************************/
-/*!
+/* DTDChoice is a choice which contains DTDChildren separated by pipes.
 ******************************************************************************/
 class DTDChoice : public DTDChildren 
 {
@@ -136,7 +140,7 @@ class DTDChoice : public DTDChildren
 };
 
 /*****************************************************************************/
-/*!
+/* DTDName is a simple string contained in a DTDChildren.
 ******************************************************************************/
 class DTDName : public DTDChildren 
 {
@@ -151,7 +155,7 @@ class DTDName : public DTDChildren
 };
 
 /*****************************************************************************/
-/*!
+/* DTDEmpty represents an empty DTDContentspec.
 ******************************************************************************/
 class DTDEmpty : public DTDContentspec 
 {
@@ -163,7 +167,7 @@ class DTDEmpty : public DTDContentspec
 };
 
 /*****************************************************************************/
-/*!
+/* DTDAny represents a DTDContentspec which can be anything.
 ******************************************************************************/
 class DTDAny : public DTDContentspec 
 {
@@ -177,7 +181,7 @@ class DTDAny : public DTDContentspec
 };
 
 /*****************************************************************************/
-/*!
+/* DTDElement is an element in a DTDDocument which contains DTDContentspec.
 ******************************************************************************/
 class DTDElement 
 {
@@ -196,7 +200,8 @@ class DTDElement
 };
 
 /*****************************************************************************/
-/*!
+/* DTDDocument is the DTD main class, contains all the DTD : elements and
+attributes.
 ******************************************************************************/
 class DTDDocument 
 {
