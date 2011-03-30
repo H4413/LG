@@ -1,10 +1,4 @@
-/* Xml.h */
-
-/*TODO
- *   display
- *   Validation du document XML
- */
-
+/** Xml Interface */
 
 #ifndef XML_H
 #define XML_H
@@ -13,15 +7,18 @@
 #include <vector>
 #include <map>
 
+//using namespace std;
+
+/* Forward declarations */
 class DTDDocument;
-
-using namespace std;
-
 class XmlNode;
 class XmlElement;
 class XmlContent;
 class XmlAtt;
 
+/**
+ * Type is the type of a contentspec
+ **/
 typedef enum
 {
     XmlElementNode,
@@ -30,162 +27,169 @@ typedef enum
     XmlNullNode
 } NodeType;
 
-typedef vector<XmlNode*>                NodeList;
-typedef vector <XmlNode*>::iterator     NodeIterator;
-typedef vector<XmlElement*>             ElementList;
-typedef map<string,XmlAtt*>             AttributeList;
-typedef pair<string,XmlAtt*>            Attribute;
+/* Helper types defenitions */
+typedef std::vector<XmlNode*>                NodeList;
+typedef std::vector <XmlNode*>::iterator     NodeIterator;
+typedef std::vector<XmlElement*>             ElementList;
+typedef std::map<std::string,XmlAtt*>        AttributeList;
+typedef std::pair<std::string,XmlAtt*>       Attribute;
 
-/* Classes */
-
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class holds the DTD information contained in the XML file
+ **********************************************************************/
 class DTD
 {
     public:
-        string fileName;
-        string name;
+        std::string FileName;
+        std::string Name;
 
         // [Cons,Des]tructors 
-        DTD( string n = "", string fn = "" )
-                            : name( n ), fileName( fn ) {};
+        DTD( std::string n = "", std::string fn = "" )
+                            : Name( n ), FileName( fn ) {};
                             
-        void display() const;
+        void Display() const;
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class holds the StyleSheet information contained in the XML file
+ **********************************************************************/
 class StyleSheet
 {
     public:
-        string fileName;
-        string type;
+        std::string FileName;
+        std::string type;
 
         // [Cons,Des]tructors 
-        StyleSheet( string f, string t )
-                    : fileName( f ), type( t ) {};
+        StyleSheet( std::string f, std::string t )
+                    : FileName( f ), type( t ) {};
                             
-        void display() const {};
+        void Display() const {};
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class implements a XML attribute
+ **********************************************************************/
 class XmlAtt
 {
     public:
-        string name;
-        string value;
+        std::string Name;
+        std::string Value;
         
         // [Cons,Des]tructors 
-        XmlAtt( string n, string v ) : name( n ), value( v ){};
+        XmlAtt(std::string n, std::string v) : Name( n ), Value( v ){}
         
-        virtual void display(int ident = 0) const;
+        virtual void Display(int ident = 0) const;
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This is the abstract class for the XML nodes in the XML Tree
+ * structure
+ **********************************************************************/
 class XmlNode
 {
     protected:
-        string name;
+        std::string name;
         
     public:
         // [Cons,Des]tructors 
-        XmlNode(const string name = "noname") : name(name) {}
+        XmlNode(const std::string name = "noname") : name(name) {}
         ~XmlNode() {}
                 
-        virtual bool isElement() const { return false; }
-        virtual bool isContent() const { return false; }
-        virtual NodeType nodeType() const { return XmlNullNode; }
+        virtual bool IsElement() const { return false; }
+        virtual bool IsContent() const { return false; }
+        virtual NodeType GetNodeType() const { return XmlNullNode; }
         
-        virtual bool addAttribute(XmlAtt * newAtt) {return false;}
-        virtual bool hasAttributes() const { return false; }
-        virtual const AttributeList * attributes() const { return NULL; }
-        virtual const XmlAtt * attribute (const string & attName) const {return NULL;}
+        virtual bool AddAttribute(XmlAtt * newAtt) {return false;}
+        virtual bool HasAttributes() const { return false; }
+        virtual const AttributeList * Attributes() const {return NULL;}
+        virtual const XmlAtt * GetAttribute 
+					(const std::string & attName) const {return NULL;}
         
-        virtual bool addChild (XmlNode * newChild) {return false;}
-        virtual bool hasChild() const { return false; }
-        virtual XmlNode * firstChild() { return NULL; }
-        virtual XmlNode * nextChild() { return NULL; }
-        virtual const NodeList * children() const { return NULL; }
+        virtual bool AddChild (XmlNode * newChild) {return false;}
+        virtual bool HasChild() const { return false; }
+        virtual XmlNode * FirstChild() { return NULL; }
+        virtual XmlNode * NextChild() { return NULL; }
+        virtual const NodeList * Children() const { return NULL; }
         
-        virtual void setNodeName (const string nodeName) { name = nodeName; }
-        virtual const string nodeName () const { return name; }
+        virtual void SetNodeName 
+					(const std::string nodeName) { name = nodeName; }
+        virtual const std::string NodeName () const { return name; }
                 
-        virtual void display(int ident = 0) const = 0;
+        virtual void Display(int ident = 0) const = 0;
 
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class implements a XML element
+ * It's a node in the XML Tree structure
+ **********************************************************************/
 class XmlElement : public XmlNode
 {
     private:
         NodeIterator iterator;
                 
     protected:
-        AttributeList    attributeList;
+        AttributeList   attributeList;
         NodeList        nodeList;
                 
     public:
         // [Cons,Des]tructors 
-        XmlElement(const string name);
+        XmlElement(const std::string name);
         ~XmlElement();        
         
-        virtual bool addAttribute(XmlAtt * newAtt);
-        virtual bool hasAttributes() const { return attributeList.size() > 0; }
-        void setAttributsList(AttributeList * list) { attributeList = *list; } 
-        virtual const AttributeList * attributes() const { return &attributeList; }
-        virtual const XmlAtt * attribute (const string & attName) const;
+        virtual bool AddAttribute(XmlAtt * newAtt);
+        virtual bool HasAttributes() const 
+									{ return attributeList.size() > 0; }
+        void SetAttributsList(AttributeList * list) 
+									{ attributeList = *list; } 
+        virtual const AttributeList * Attributes() const 
+									{ return &attributeList; }
+        virtual const XmlAtt * GetAttribute (const std::string & attName) const;
         
-        virtual bool addChild (XmlNode * newChild);
-        virtual bool hasChild() const { return nodeList.size() > 0; }
-        virtual XmlNode * firstChild();
-        virtual XmlNode * nextChild();
-        void setChildren (NodeList * children) { nodeList = *children; }
-        virtual const NodeList * children() const { return &nodeList; }
-        ElementList * elementChildren() const;
+        virtual bool AddChild (XmlNode * newChild);
+        virtual bool HasChild() const { return nodeList.size() > 0; }
+        virtual XmlNode * FirstChild();
+        virtual XmlNode * NextChild();
+        void SetChildren (NodeList * children) { nodeList = *children; }
+        virtual const NodeList * Children() const { return &nodeList; }
+        ElementList * ElementChildren() const;
         
         bool Validate( DTDDocument * dtdDoc ) const;
         
         // Override
-        virtual bool isElement() const { return true; };
-        virtual NodeType nodeType() const { return XmlElementNode; }
-        virtual void display(int ident = 0) const;
+        virtual bool IsElement() const { return true; };
+        virtual NodeType GetNodeType() const { return XmlElementNode; }
+        virtual void Display(int ident = 0) const;
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class implements a PCDATA element
+ * It's a node in the XML Tree structure
+ **********************************************************************/
 class XmlContent : public XmlNode
 {
     private:
-        string data;
+        std::string data;
         
     public:
         // [Cons,Des]tructors 
-        XmlContent(const string data )
+        XmlContent(const std::string data )
                     : XmlNode("xmlContent"), data ( data ) {}
                     
-        const string & content() const { return data; }
-        void setContent (const string cont) { data = cont; }
-        const unsigned int size () const { return data.size(); }
+        const std::string & Content() const { return data; }
+        void SetContent (const std::string cont) { data = cont; }
+        const unsigned int Size () const { return data.size(); }
         
         // Override
-        virtual bool isContent() const { return true; };
-        virtual NodeType nodeType() const { return XmlContentNode; }
-        virtual void display(int ident = 0) const;
+        virtual bool IsContent() const { return true; };
+        virtual NodeType GetNodeType() const { return XmlContentNode; }
+        virtual void Display(int ident = 0) const;
 
 };
 
-/****************************************************************************/
-/*!
-*****************************************************************************/
+/**********************************************************************
+ * This class implements a XML document
+ **********************************************************************/
 class XmlDoc
 {
     private: 
@@ -197,18 +201,18 @@ class XmlDoc
         XmlDoc( XmlNode * toor = NULL ) { root = toor; dtd = NULL;};
         ~XmlDoc();
 
-        void setRoot( XmlNode * nRoot ) { root = nRoot; };
-        XmlNode * getRoot(){ return root; };
+        void SetRoot( XmlNode * nRoot ) { root = nRoot; };
+        XmlNode * GetRoot(){ return root; };
 
-        DTD * getDTD() { return dtd; }
-        void setDTD( DTD * dtd ) {this->dtd = dtd;}
+        DTD * GetDTD() { return dtd; }
+        void SetDTD( DTD * dtd ) {this->dtd = dtd;}
 
-        void display() const;
+        void Display() const;
         
         bool Validate( DTDDocument * dtdDoc ) const;
 
         // static functions
-        static XmlDoc * parse(const string & filename);
+        static XmlDoc * Parse(const std::string & filename);
 };
 
 #endif // XML_H

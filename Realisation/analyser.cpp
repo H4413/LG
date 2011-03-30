@@ -82,9 +82,9 @@ int main (int argc, char ** argv)
 				output = optarg;
 				break;
 			case 'V':
-				if( (xml = XmlDoc::parse(optarg)) )
+				if( (xml = XmlDoc::Parse(optarg)) )
 				{
-					if ( (dtd = DTDDocument::parse(xml->getDTD()->fileName.c_str())) )	
+					if ( (dtd = DTDDocument::Parse(xml->GetDTD()->FileName.c_str())) )	
 					{			
 						if (xml->Validate(dtd))
 							cout << "XML is validated" << endl << endl;
@@ -100,7 +100,7 @@ int main (int argc, char ** argv)
 				}
 				break;
 			case 'd':
-				if ( (dtd = DTDDocument::parse(optarg)) )
+				if ( (dtd = DTDDocument::Parse(optarg)) )
 				{
 					cout << optarg << ": is a well-formed DTD document." << endl << endl;
 					delete dtd;
@@ -109,7 +109,7 @@ int main (int argc, char ** argv)
 				}
 				break;
 			case 'w':
-				if ( (xml = XmlDoc::parse(optarg)) )
+				if ( (xml = XmlDoc::Parse(optarg)) )
 				{
 					cout << optarg << ": is a well-formed XML document." << endl << endl;
 					delete xml;
@@ -145,8 +145,8 @@ int main (int argc, char ** argv)
 		}
 		xslt = new XslTransform();
 		if (output)
-			xslt->setOutputFile(output);
-		xslt->transform(xmlName, xsltName);
+			xslt->SetOutputFile(output);
+		xslt->Transform(xmlName, xsltName);
 	}
 
 	if (optind < argc)

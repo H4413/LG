@@ -44,7 +44,7 @@ extern FILE * xxin;
 %%
 
 document
- : declarations element misc_seq_opt 	{xmlDoc->setRoot($2);}
+ : declarations element misc_seq_opt 	{xmlDoc->SetRoot($2);}
  ;
 
 misc_seq_opt
@@ -61,15 +61,15 @@ declarations
  ;
  
 declaration
- : DOCTYPE NAME NAME VALUE CLOSE		{xmlDoc->setDTD (new DTD($2, $4));}
+ : DOCTYPE NAME NAME VALUE CLOSE		{xmlDoc->SetDTD (new DTD($2, $4));}
  | STARTSPECIAL attribut CLOSESPECIAL
  ;
 
 element
  : start attribut					
    empty_or_content 				{$$ = new XmlElement($1->second);
-									 ((XmlElement*)$$)->setAttributsList($2);
-									 ((XmlElement*)$$)->setChildren($3);
+									 ((XmlElement*)$$)->SetAttributsList($2);
+									 ((XmlElement*)$$)->SetChildren($3);
 									 }
  ;
 start
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 {
 	XmlDoc * xml;
 	xmlparse(argv[1], xml);
-	xml->display();
+	xml->Display();
 	return 0;
 }
 
