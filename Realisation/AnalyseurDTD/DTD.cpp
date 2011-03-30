@@ -249,24 +249,17 @@ void DTDChoice::AddList(vector<DTDChildren*>* list)
 
 bool DTDChoice::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<XmlNode*> const * nodeVector ) const
 {
-    bool result = false;
+    bool result;
 
     vector<XmlNode *>::const_iterator xmlNodeBackup = *xmlNode;
 
-    if( *xmlNode == nodeVector->end() )
-    {
-        result = false;
-    }
-    else
-    {
-        vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
+    vector<DTDChildren *>::const_iterator choiceIt = choice.begin();
 
-        while( !result && choiceIt != choice.end() )
-        {
-            result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
+    while( !result && choiceIt != choice.end() )
+    {
+        result = ( *choiceIt )->IsValidated( xmlNode, nodeVector );
 
-            choiceIt++;
-        }
+        choiceIt++;
     }
 
     switch( mark )
