@@ -45,6 +45,11 @@ echo "
 \usepackage{eurosym}
 " >> ${FILE}
 
+# algo
+echo "
+\usepackage{algorithmic}
+" >> ${FILE}
+
 # Language setting
 echo "
 % Language settings:

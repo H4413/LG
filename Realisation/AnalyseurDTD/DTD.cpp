@@ -408,13 +408,9 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode,
                 ( *xmlNode )++;
 
                 IsValidated( xmlNode, nodeVector );
+            }
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return result;
         }
     }
 
