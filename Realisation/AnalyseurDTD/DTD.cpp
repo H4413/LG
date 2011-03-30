@@ -339,7 +339,7 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
         return false;
     }
 
-     bool result;
+    bool result;
 
     if( ( *( *xmlNode ) )->isElement() )
     {
