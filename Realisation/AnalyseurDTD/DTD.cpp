@@ -389,15 +389,12 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
         {
             // 0 to n matching elements : consumming them all.
             // No problem if no element found : returning always true.
-            while( result )
+
+            if( result )
             {
                 ( *xmlNode )++;
 
-                //while( *( *xmlNode ) != nodeVector.end() )
-                //{
-                //    result = ( name.compare( ( *( *xmlNode ) )->GetName() ) == 0 ); 
-                    result = IsValidated( xmlNode, nodeVector );
-                //}
+                IsValidated( xmlNode, nodeVector );
             }
 
             return true;
@@ -406,23 +403,18 @@ bool DTDName::IsValidated( vector<XmlNode*>::const_iterator * xmlNode, vector<Xm
         case M_PLUS:
         {
             // We must have at least one matching element
-            if( !result )
-            {
-                return false;
-            }
-
-            while( result )
+            if( result )
             {
                 ( *xmlNode )++;
 
-                //while( *( *xmlNode ) != nodeVector.end() )
-                //{
-                //    result = ( name.compare( ( *( *xmlNode ) )->GetName() ) == 0 ); 
-                    result = IsValidated( xmlNode, nodeVector );
-                //}
-            }
+                IsValidated( xmlNode, nodeVector );
 
-            return true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
