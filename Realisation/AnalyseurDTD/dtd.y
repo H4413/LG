@@ -15,6 +15,7 @@ int yylex(void);
 
 DTDDocument * document;
 extern FILE * yyin;
+bool dtdErr;
 %}
 
 %union 
@@ -51,12 +52,20 @@ main: dtd
 
 dtd: dtd ATTLIST NAME att_definition CLOSE 	{$4->SetName($3); 
 											 document->AddAttList($4);}
+   | dtd ATTLIST NAME att_definition error 	{$4->SetName($3); 
+											 document->AddAttList($4);
+											 printf("ERROR: Missing : \">\" \n");  
+   											dtdErr = true}
    | dtd element 							{document->AddElement($2);}
    | /* empty */                     		{$$ = document;}
    ;
-
+   									
 element: ELEMENT NAME contentspec CLOSE 	{$$ = new DTDElement($2);
 											 $$->Add($3);}
+	| ELEMENT NAME contentspec error	 	{$$ = new DTDElement($2);
+											 $$->Add($3);
+											 printf("ERROR: Missing : \">\" \n");  
+   											dtdErr = true}
 	;
 
 contentspec: EMPTY 							{$$ = new DTDEmpty();}
@@ -153,6 +162,7 @@ bool dtdparse(const char * dtdname, DTDDocument ** dtd)
 {
 	int err;
 	FILE * dtdfile = NULL;
+	dtdErr = false;
 	document = new DTDDocument();
 	
 	if (dtdname)
@@ -179,6 +189,12 @@ bool dtdparse(const char * dtdname, DTDDocument ** dtd)
 	if (err != 0) 
 	{
 		printf("Parse ended with %d error(s)\n", err);
+		return false;
+	}
+	else if (dtdErr)
+	{
+		printf("Parse ended with not critical error(s).\n");
+		printf("All error(s) was recovered.\n");
 		return false;
 	}
 	else
