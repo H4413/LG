@@ -1,0 +1,166 @@
+\section{L'algorithme de transformation}
+	\subsection {Fonctionnement}
+	L'algorithme de transforamation a été implementé avec la 
+	technique algorithmique \og Diviser pour régner \fg. Nous avons
+	encapsulé toutes les fonctions nécessaires à la transformation 
+	dans la classe \textit {XslTransform}. 
+	L'algorithme suit les étapes suivantes: \\
+
+	\begin{itemize}
+	\item Parcours de l'arbre XML à partir de l'appel à la fonction 
+		\textbf{nextNode}.
+	\item Recherche d'un template applicable en utilisant la fonction 
+		\textbf{searchForTemplate}.
+	\item Si template applicable, on affiche les nodes fils du 
+		template trouvé (\textbf{printTemplate}).
+	\item Si un des nodes fils est \textit{apply-templates}, on
+		appelle la méthode \textbf{applyTemplates} récursivement.
+	\item Si un des nodes fils est \textit{value-of}, on
+		affiche l'élément XML courant en appelant la fonction
+		\textbf{valueOf}. \\
+	\end{itemize}	
+	
+	Nous avons quelques variables communs à l'ensemble des méthodes:
+	
+	\begin{itemize}
+		\item[- currentNode] Pointeur vers l'élément courant
+		\item[- xmlRoot] Pointeur vers l'élément root du fichier XML
+		\item[- xslRoot] Pointeur vers l'élément root du fichier XSL
+		\item[- parents] Profondeur de l'arbre, cela
+		correspond à la sauvegarde temporaire des noeuds parents. \\
+	\end{itemize}
+	
+	
+	Pour initialiser l'algorithme, on récupère les éléments roots
+	des deux arbres (XML et XSL), on pointe l'élément courant vers
+	l'élément root de l'arbre XML et on appelle la méthode 
+	\textit{applyTemplate(true)}.
+	\subsection {Listing}
+	\lstset{language=c++} 
+	\lstset{commentstyle=\textit} 
+		
+	\subsubsection {Apply-Templates}
+	\begin{lstlisting} 
+void XslTransform::applyTemplates(bool isRoot)
+{
+	XmlNode * templateNode;	
+
+	if (!isRoot)
+		nextNode();
+	
+	do {
+		templateNode = searchForTemplate();
+		if (templateNode)
+			printTemplate(templateNode);
+	} while(nextNode());
+}
+	\end{lstlisting} 
+
+	\subsubsection {Prochain noeud}
+	\begin{lstlisting} 
+bool XslTransform::nextNode()
+{
+	if (!currentNode)
+		return false;
+		
+	if (currentNode->HasChild())
+	{
+		parents.push(currentNode);
+		currentNode = currentNode->FirstChild();
+		return true;
+	}
+		
+	while (!parents.empty())
+	{
+		currentNode = parents.top()->NextChild();
+		
+		if (currentNode)
+			return true;
+		
+		parents.pop();
+	}
+	
+	currentNode = NULL;
+	return false;
+}
+	\end{lstlisting} 
+
+	\subsubsection {Rechercher template}
+	\begin{lstlisting} 
+XmlNode * XslTransform::searchForTemplate()
+{	
+	if (currentNode->IsContent())
+		return NULL;
+		
+	XmlNode * xslChild = xslRoot->FirstChild();
+	while (xslChild != NULL)
+	{
+		if (xslChild->HasAttributes())
+		{
+			if (xslChild->GetAttribute("match")->Value 
+				== currentNode->NodeName())
+				return xslChild;
+			else if (xslChild->GetAttribute("match")->Value == "/"
+					&& xmlRoot == currentNode)
+				return xslChild;
+		}
+		xslChild = xslRoot->NextChild();
+	}
+	return NULL;
+}
+	\end{lstlisting} 
+
+	\subsubsection {Afficher template}
+	\begin{lstlisting} 
+void XslTransform::printTemplate(XmlNode * templateNode)
+{
+	XmlNode * xslNode = templateNode->FirstChild();
+	
+	while (xslNode != NULL)
+	{		
+		if (xslNode->NodeName() == "apply-templates")
+		{
+			applyTemplates();
+		}
+		else if (xslNode->NodeName() == "value-of")
+		{
+			valueOf(currentNode);
+		}
+		else if (xslNode->IsContent())
+		{
+			*out << ((XmlContent*)xslNode)->Content();
+		} 
+		else
+		{
+			if (!xslNode->HasChild())
+			{
+				*out << "<" << xslNode->NodeName() << "/>" << endl;	
+			} else {
+				begin(xslNode);
+				printTemplate(xslNode);
+				end(xslNode);			
+			}
+		}
+		xslNode = templateNode->NextChild();	
+	}
+}
+	\end{lstlisting} 
+	
+	\subsubsection {Value-Of}
+	\begin{lstlisting} 
+void XslTransform::valueOf(XmlNode * node)
+{
+	if (node->IsContent())
+		*out << " " << ((XmlContent*)node)->Content();
+	
+	if (node->HasChild())
+	{
+		NodeList::const_iterator it;
+		for ( it = node->Children()->begin(); 
+				it != node->Children()->end(); ++it )
+		{
+			valueOf(*it);
+		}
+	}
+}
+	\end{lstlisting} 

@@ -16,6 +16,7 @@ int xxlex(void);
 
 XmlDoc * xmlDoc;
 extern FILE * xxin;
+bool xmlErr;
 
 %}
 
@@ -36,6 +37,7 @@ extern FILE * xxin;
 %type <att> attribut
 %type <list_cont> empty_or_content close_content_and_end content
 %type <en> start
+%type <s> name_or_nsname_opt
 
 %token EQ SLASH CLOSE END CLOSESPECIAL DOCTYPE
 %token <s> ENCODING VALUE DATA COMMENT NAME NSNAME
@@ -81,16 +83,32 @@ empty_or_content
  : SLASH CLOSE						{$$ = new vector<XmlNode*>;}
  | close_content_and_end 			
    name_or_nsname_opt CLOSE 		{$$ = $1;}
+ | close_content_and_end 			
+   name_or_nsname_opt error			{printf("ERROR: Missing "
+   										"\">\" in the markup %s! \n", $2); 
+   									xmlErr = true;
+   									$$ = $1;}
+ | close_content_and_end 			
+   error							{printf("ERROR: You forget to close "
+   										"the markup! \n"); 
+   									xmlErr = true;
+   									$$ = $1;}
  ;
 name_or_nsname_opt 
- : NAME     
- | NSNAME  
+ : NAME     						{$$ = $1;}
+ | NSNAME  							{$$ = $1;}
  | /* empty */
  ;
 close_content_and_end
  : CLOSE			
    content 
    END 								{$$ = $2;}
+ | error content END				{printf("ERROR: Missing : \">\" \n");  
+   									xmlErr = true;
+   									$$ = $2;}
+ | CLOSE content error				{printf("ERROR: Missing : \"<\" \n"); 
+   									xmlErr = true;
+   									$$ = $2;}
  ;
 content 
  : content DATA						{$$ = $1; $$->push_back(new XmlContent($2));}
@@ -102,6 +120,15 @@ content
 attribut
  : attribut NAME EQ VALUE			{$$ = $1;
 									 $$->insert(Attribute($2, new XmlAtt($2, $4)));}
+ | attribut NAME EQ error			{$$ = $1;
+									 $$->insert(Attribute($2, new XmlAtt($2, "")));
+									printf("ERROR: Missing attribute value"
+										" for %s.\n", $2); 
+   									xmlErr = true;}
+ | attribut error EQ VALUE			{$$ = $1;
+									printf("ERROR: Attribute with value,"
+										" but no name.\n"); 
+   									xmlErr = true;}
  | /* empty */						{$$ = new AttributeList;}
  ;
 %%
@@ -110,6 +137,7 @@ bool xmlparse(const char * xmlname, XmlDoc ** xml)
 {
 	int err;
 	FILE * xmlfile = NULL;
+	xmlErr = false;
 	xmlDoc = new XmlDoc();
 	
 	if (xmlname)
@@ -133,10 +161,16 @@ bool xmlparse(const char * xmlname, XmlDoc ** xml)
 		*xml = xmlDoc;
 	else
 		delete xmlDoc;
-	
+		
 	if (err != 0) 
 	{
-		printf("Parse ended with %d error(s)\n", err);
+		printf("Parse ended with %d error(s).\n", err);
+		return false;
+	}
+	else if (xmlErr)
+	{
+		printf("Parse ended with not critical error(s).\n");
+		printf("All error(s) was recovered.\n");
 		return false;
 	}
 	else	

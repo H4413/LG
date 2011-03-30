@@ -21,6 +21,11 @@ echo "
 \usepackage{placeins}
 " >> $FILE
 
+# To include listing
+echo "
+\usepackage{listings} 
+" >> $FILE
+
 # Encoding settings
 if [ $CENC == "utf-8" ]
 then

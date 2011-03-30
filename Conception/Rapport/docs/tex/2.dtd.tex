@@ -11,7 +11,7 @@
 	
 	\subsection{Fonctionnement}
 	
-	\subsubsection{Parser une dtd}
+	\subsubsection{Parser une DTD}
 	Ceci se fait par l'appel de {\tt DTDDocument::parse(const \& nomFichier )}
 	L'analyseur prend en entrée un fichier *.dtd. Il stocke ensuite
 	les éléments et les attributs et leur contenu dans une classe
@@ -22,7 +22,7 @@
 	DTDSequence), l'appel se fait récursivement sur ce que celui-ci contient 
 	jusqu'à DTDName qui est la seule classe ne contenant pas de DTDChildren.
 	
-	\subsubsection{Afficher une dtd}
+	\subsubsection{Afficher une DTD}
 	Ceci fait par l'appel de {\tt DTDDocument::display( )}
 	La classe DTDDocument va afficher les informations relatives au docuement, 
 	puis appelera les méthodes display() des éléments et attributs qu'elle 
