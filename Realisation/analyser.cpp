@@ -16,9 +16,10 @@ bool verbose_flag = false;
 void print_usage()
 {
     cout << "Usage : analyse ";
-    cout << " [--version] [-v, --verbose] [-h,--help] " << endl
+    cout << " [--version] [--display] [-v, --verbose] [-h,--help] " << endl
             << "\tCOMMAND [ARGS] [-o OUTPUT_FILE] [-x XSLT_FILE]" << endl;
     cout << endl << "The commands can be: " << endl;
+    cout << "  -D, --display \t\t Call display functions to see the memory structure" << endl;
     cout << "  -w, --well-formed \t\t Tells if a XML file is well-formed" << endl;
     cout << "  -d, --dtd-well-formed \t Tells if a DTD file is well-formed" << endl;
     cout << "  -V, --validate \t\t Validate an XML file " << endl;
@@ -30,17 +31,23 @@ void print_usage()
 int main (int argc, char ** argv)
 {
 	int c;
+	
 	char * xmlName = NULL;
 	char * xsltName = NULL;
 	char * output = NULL;
+	
 	XmlDoc * xml = NULL;
 	DTDDocument * dtd = NULL;
+	XslTransform * xslt = NULL;
+	
 	int option_index = 0;
 	bool transform_flag = false;
-	XslTransform * xslt = NULL;
+	bool display_flag = false;
+	
 	
 	static struct option long_options[] = 
 	{
+		{"display", no_argument,	0, 'D'},
 		{"verbose",	no_argument,	0, 'v'},
 		{"version",	no_argument,	0, 'a'},
 		{"about",	no_argument,	0, 'a'},
@@ -62,12 +69,15 @@ int main (int argc, char ** argv)
 	
 	for (;;)
 	{
-		c = getopt_long (argc, argv, "vahV:d:w:o:t:x:",
+		c = getopt_long (argc, argv, "DvahV:d:w:o:t:x:",
 			long_options, &option_index);
 		if (c == -1)
 			break;
 		switch (c)
 		{
+			case 'D':
+				display_flag = true;
+				break;
 			case 'v':
 				verbose_flag = true;
 				break;
@@ -103,6 +113,8 @@ int main (int argc, char ** argv)
 				if ( (dtd = DTDDocument::Parse(optarg)) )
 				{
 					cout << optarg << ": is a well-formed DTD document." << endl << endl;
+					if (display_flag)
+						dtd->Display();
 					delete dtd;
 				} else {
 					cout << optarg << ": is not a well-formed DTD document." << endl << endl;
@@ -112,6 +124,8 @@ int main (int argc, char ** argv)
 				if ( (xml = XmlDoc::Parse(optarg)) )
 				{
 					cout << optarg << ": is a well-formed XML document." << endl << endl;
+					if (display_flag)
+						xml->Display();
 					delete xml;
 				} else {
 					cout << optarg << ": is not a well-formed XML document." << endl << endl;
