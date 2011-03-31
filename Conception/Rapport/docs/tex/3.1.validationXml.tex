@@ -6,12 +6,13 @@ La validation sémantique d'un document XML consiste à vérifier :
 \item que toutes les balises utilisées dans le document sont définies dans
 la DTD associée
 \item que les noeuds fils de chaque balise sont ordonnés selon la
-définition de la balise mère dans la DTD
+définition de la balise mère dans la DTD \\
 \end{itemize}
 
 La procédure de validation d'un document consiste à valider son élément
 racine.\\
-La classe XMLElement est dotée d'une fonction ValidateElement :
+
+La classe XMLElement est dotée d'une fonction ValidateElement : \\
 
 \begin{algorithmic}
 \STATE Recherche de l'élément DTD associé à l'élément XML
@@ -53,7 +54,7 @@ renvoie vraie si le vecteur d'éléments XML passé en argument est vide.
 La fonction renvoie vraie si l'élément XML du vecteur sur lequel pointe
 l'itérateur a le même nom que l'élément DTD appelant la fonction Validate.
 Si l'élément XML est de type XMLContent (chaîne de caractère), la fonction
-renvoie vrai si l'élément DTD a pour nom #PCDATA.
+renvoie vrai si l'élément DTD a pour nom \#PCDATA. \\
 
 \begin{algorithmic}
 \STATE input arguments : nodeVector, nodeIt
